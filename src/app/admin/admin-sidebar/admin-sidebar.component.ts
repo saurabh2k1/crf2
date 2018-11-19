@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import PerfectScrollbar from 'perfect-scrollbar';
- 
+
 declare const $: any;
 // Metadata
 export interface RouteInfo {
@@ -26,28 +26,30 @@ export const ROUTES: RouteInfo[] = [
     type: 'link',
     icontype: 'dashboard'
   },
-  {path: './patients', title: 'Patients', type: 'link', icontype: 'assignment_ind'},
+  { path: './studies', title: 'Studies', type: 'link', icontype: 'school'},
+  { path: './sites', title: 'Sites', type: 'link', icontype: 'place'},
+  { path: './users', title: 'Users', type: 'link', icontype: 'person'},
+  
 ];
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  selector: 'app-admin-sidebar',
+  templateUrl: './admin-sidebar.component.html',
+  styleUrls: ['./admin-sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class AdminSidebarComponent implements OnInit {
   public menuItems: any[];
+  constructor() { }
+
+  ngOnInit() {
+    this.menuItems = ROUTES.filter(menuItem => menuItem);
+  }
 
   isMobileMenu() {
     if ($(window).width() > 991) {
       return false;
     }
     return true;
-  }
-
-  constructor() {}
-
-  ngOnInit() {
-    this.menuItems = ROUTES.filter(menuItem => menuItem);
   }
 
   updatePS(): void  {
