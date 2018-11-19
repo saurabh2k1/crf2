@@ -1,0 +1,52 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-10 offset-md-1">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-rose">
+              <div class="card-icon">
+                <i class="material-icons">assignment_ind</i>
+              </div>
+              <h4 class="card-title ">Enrolled Patients</h4>
+              <span class="pull-right">
+                <a [routerLink]="['/site/patient/new']" class="btn btn-primary " mat-raised-button type="button" >
+                  <i class="material-icons">add_box</i>Add</a></span>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="text-primary">
+                    <tr><th>Patient ID</th>
+                      <th>Initials</th>
+                      <th>Date of Birth</th>
+                      <th>Enrollment Date</th>
+                      <th class="text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let patient of patients">
+                      <td>{{getRefNumber(patient.pat_id)}}</td>
+                      <td>{{patient.initials}}</td>
+                      <td>{{patient.dob | date}}</td>
+                      <td>{{patient.icf_date | date}}</td>
+                      <td class="td-actions text-right">
+                        <button mat-raised-button type="button" class="btn btn-info ">
+                          <i class="material-icons">person</i>
+                      </button>
+                      <button mat-raised-button type="button" class="btn btn-success ">
+                          <i class="material-icons">edit</i>
+                      </button>
+                      <button mat-raised-button type="button" class="btn btn-danger">
+                          <i class="material-icons">close</i>
+                      </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
