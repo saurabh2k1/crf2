@@ -1,3 +1,40 @@
-<p>
-  manage-users works!
-</p>
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-10 offset-md-1">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-rose">
+              <div class="card-icon">
+                <i class="material-icons">person</i>
+              </div>
+              <h4 class="card-title ">Users</h4>
+              <span class="pull-right">
+                <a [routerLink]="['/site/patient/new']" class="btn btn-primary " mat-raised-button type="button" >
+                  <i class="material-icons">add_box</i>Add</a></span>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead class="text-primary">
+                      <tr><th>Site Code</th><th>Site Name</th><th>Address</th><th>Users</th><th>Action</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor='let user of users'>
+                        <td>{{user.username}}</td><td>{{user.first_name}} {{user.last_name}}</td>
+                        <td>
+                          <span *ngIf='site.contact_person'>{{site.contact_person}}, <br></span>
+                          <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>
+                        <td>{{site.users}}</td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                    </table>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
