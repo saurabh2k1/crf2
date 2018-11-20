@@ -1,3 +1,40 @@
-<p>
-  manage-site works!
-</p>
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <div class="card">
+          <div class="card-header card-header-icon card-header-rose">
+            <div class="card-icon">
+              <i class="material-icons">place</i>
+            </div>
+            <h4 class="card-title ">Sites</h4>
+            <span class="pull-right">
+              <a [routerLink]="['/site/patient/new']" class="btn btn-primary " mat-raised-button type="button" >
+                <i class="material-icons">add_box</i>Add</a></span>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="text-primary">
+                    <tr><th>Site Code</th><th>Site Name</th><th>Address</th><th>Users</th><th>Action</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor='let site of sites'>
+                      <td>{{site.code}}</td><td>{{site.name}}</td>
+                      <td>
+                        <span *ngIf='site.contact_person'>{{site.contact_person}}, <br></span>
+                        <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>
+                      <td>{{site.users}}</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                  </table>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

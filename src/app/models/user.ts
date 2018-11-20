@@ -6,5 +6,7 @@ export class User {
     email: string;
     is_verified?: number;
     confirmed?: boolean;
+    roles?: any;
+    site?: any;
 
 }

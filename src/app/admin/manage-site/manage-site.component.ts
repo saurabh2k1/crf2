@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AdminService } from 'src/app/admin.service';
+import { Site } from 'src/app/models/site';
 
 @Component({
   selector: 'app-manage-site',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ManageSiteComponent implements OnInit {
 
-  constructor() { }
+  sites: Site[] = [];
+  constructor(private adminService: AdminService) { }
 
   ngOnInit() {
+    this.adminService.getSites().subscribe((site: Site[]) => {
+      this.sites = site;
+    });
   }
+
 
 }
