@@ -11,19 +11,23 @@ import { MaterialModule } from '../material.module';
 import { AdminSidebarComponent } from './admin-sidebar/admin-sidebar.component';
 import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
 import { StudiesComponent } from './studies/studies.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
-    AdminComponent, 
-    AdminDashboardComponent, 
-    ManageSiteComponent, 
-    ManageUsersComponent, 
-    AdminSidebarComponent, 
-    AdminNavbarComponent, 
+    AdminComponent,
+    AdminDashboardComponent,
+    ManageSiteComponent,
+    ManageUsersComponent,
+    AdminSidebarComponent,
+    AdminNavbarComponent,
     StudiesComponent
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     SharedModule,
     MaterialModule,
     AdminRoutingModule

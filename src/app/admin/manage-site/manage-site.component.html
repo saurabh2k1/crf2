@@ -16,7 +16,7 @@
             <div class="table-responsive">
                 <table class="table table-hover">
                   <thead class="text-primary">
-                    <tr><th>Site Code</th><th>Site Name</th><th>Address</th><th>Users</th><th>Action</th></tr>
+                    <tr><th>Site Code</th><th>Site Name</th><th>Address</th><th>Users</th><th>Studies</th><th>Action</th></tr>
                   </thead>
                   <tbody>
                     <tr *ngFor='let site of sites'>
@@ -24,13 +24,16 @@
                       <td>
                         <span *ngIf='site.contact_person'>{{site.contact_person}}, <br></span>
                         <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>
-                      <td>{{site.users}}</td>
+                      <td><span *ngFor='let user of site.users'>{{user.first_name}} {{user.last_name}}</span></td>
+                      <td><span *ngFor='let study of site.studies'>
+                        {{study.name}},
+                      </span></td>
                       <td></td>
                     </tr>
                   </tbody>
                   </table>
             </div>
-            
+
           </div>
         </div>
       </div>

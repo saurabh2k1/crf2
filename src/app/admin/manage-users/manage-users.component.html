@@ -1,6 +1,6 @@
 <div class="main-content">
     <div class="container-fluid">
-      <div class="row">
+      <div class="row" *ngIf='showList'>
         <div class="col-md-10 offset-md-1">
           <div class="card">
             <div class="card-header card-header-icon card-header-rose">
@@ -9,32 +9,64 @@
               </div>
               <h4 class="card-title ">Users</h4>
               <span class="pull-right">
-                <a [routerLink]="['/site/patient/new']" class="btn btn-primary " mat-raised-button type="button" >
+                <a [routerLink]="['/admin/user/new']" class="btn btn-primary " mat-raised-button type="button" >
                   <i class="material-icons">add_box</i>Add</a></span>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                   <table class="table table-hover">
                     <thead class="text-primary">
-                      <tr><th>Site Code</th><th>Site Name</th><th>Address</th><th>Users</th><th>Action</th></tr>
+                      <tr><th>Full Name</th><th>Roles</th><th>Assigned Site</th><th>Action</th></tr>
                     </thead>
                     <tbody>
                       <tr *ngFor='let user of users'>
-                        <td>{{user.username}}</td><td>{{user.first_name}} {{user.last_name}}</td>
+
+                       <td>{{user.first_name}} {{user.last_name}} <span class="badge badge-primary" *ngIf="user.roles | contains:'admin'">Admin</span></td>
+                        <td><span *ngFor="let role of user.roles">{{role.name}},</span></td>
                         <td>
-                          <span *ngIf='site.contact_person'>{{site.contact_person}}, <br></span>
-                          <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>
-                        <td>{{site.users}}</td>
+                          <span *ngIf='user.site'>{{user.site.name}}, <br></span>
+                          <!-- <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>
+                        <td>{{site.users}}</td> -->
                         <td></td>
                       </tr>
                     </tbody>
                     </table>
               </div>
-              
+
             </div>
           </div>
         </div>
       </div>
-  
+      <div class="row" *ngIf='!showList'>
+        <div class="col-md-10 mb-auto">
+          <div class="card">
+            <form [formGroup]="frmUser">
+                <div class="card-header card-header-icon card-header-rose">
+                    <div class="card-icon">
+                      <i class="material-icons">person</i>
+                    </div>
+                    <h4 class="card-title ">New Users</h4>
+                  </div>
+                  <div class="card-body">
+                    <br/>
+                    <mat-form-field class="example-full-width">
+                      <input type="email" matInput placeholder="Email Address" />
+                    </mat-form-field>
+                    <mat-form-field >
+                        <input type="text" matInput placeholder="First Name" />
+                      </mat-form-field>
+                      <mat-form-field >
+                          <input type="text" matInput placeholder="Last Name" />
+                        </mat-form-field>
+                  </div>
+                  <div class="card-footer text-right">
+                    <a [routerLink]="['/admin/users']" class="btn btn-default">Back</a>
+                    <button mat-raised-button class="btn btn-rose ">Save</button>
+                  </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
     </div>
   </div>

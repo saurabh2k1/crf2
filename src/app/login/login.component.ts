@@ -36,16 +36,20 @@ export class LoginComponent implements OnInit {
   }
 
   get f() { return this.frmLogin.controls; }
-  
+
   onLogin() {
     this.submitted = true;
-    if(this.frmLogin.invalid) { return; }
+    if (this.frmLogin.invalid) { return; }
     this.loading = true;
     this.authService.login(this.f.email.value, this.f.password.value)
       .pipe(first())
       .subscribe(
         data => {
-          
+          if (data && 'admin' in data.user.roles) {
+            this.returnUrl = '/admin';
+          } else {
+            this.returnUrl = '/site';
+          }
           this.router.navigate([this.returnUrl]);
         },
         error => {
@@ -53,6 +57,6 @@ export class LoginComponent implements OnInit {
           this.loading = false;
         });
 
-    
+
   }
 }

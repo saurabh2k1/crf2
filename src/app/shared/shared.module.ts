@@ -5,13 +5,15 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { FieldErrorDisplayComponent } from './field-error-display/field-error-display.component';
+import { ContainsPipe } from '../contains.pipe';
 
 @NgModule({
   declarations: [
     FooterComponent,
     SidebarComponent,
     NavbarComponent,
-    FieldErrorDisplayComponent
+    FieldErrorDisplayComponent,
+    ContainsPipe,
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,8 @@ import { FieldErrorDisplayComponent } from './field-error-display/field-error-di
     FooterComponent,
     SidebarComponent,
     NavbarComponent,
-    FieldErrorDisplayComponent
+    FieldErrorDisplayComponent,
+    ContainsPipe,
   ]
 })
 export class SharedModule { }

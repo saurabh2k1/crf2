@@ -1,3 +1,40 @@
-<p>
-  studies works!
-</p>
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-10 offset-md-1">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-rose">
+              <div class="card-icon">
+                <i class="material-icons">school</i>
+              </div>
+              <h4 class="card-title ">Studies</h4>
+              <span class="pull-right">
+                <a [routerLink]="['']" class="btn btn-primary " mat-raised-button type="button" >
+                  <i class="material-icons">add_box</i>Add</a></span>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead class="text-primary">
+                      <tr><th>Study Name</th><th>Description</th><th>Sites</th><th>Action</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor='let study of studies'>
+                        <td>{{study.name}}</td><td>{{study.description}}</td>
+
+                        <td><span *ngFor='let site of study.sites'>
+                          {{site.name}} ,</span></td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                    </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+

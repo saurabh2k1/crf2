@@ -16,7 +16,9 @@ const adminRoutes: Routes = [
         path: '',
         //canActivateChild: [AuthGuard],
         children: [
-          { path: 'users', component: ManageUsersComponent },
+          { path: 'users', component: ManageUsersComponent, data: {kind: 'list'}},
+          { path: 'user/new', component: ManageUsersComponent, data: {kind: 'create'}},
+
           { path: 'sites', component: ManageSiteComponent },
           { path: 'studies', component: StudiesComponent },
           { path: '', component: AdminDashboardComponent },

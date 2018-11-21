@@ -8,7 +8,7 @@ import { HttpHeaders } from '@angular/common/http';
 const httpOptions = {
   headers: new HttpHeaders({
     'App': '1267aa3f-11fd-4771-af3e-060bbee11681'
-  })  
+  }),
 };
 
 @Injectable({
@@ -21,7 +21,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
- 
+
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
@@ -35,7 +35,7 @@ export class AuthService {
   login(email: string, password: string) {
     return this.http.post<any>(`http://lumen-api.test/login`, {email, password}, httpOptions)
     .pipe(map(data => {
-      if(data && data.jwt) {
+      if (data && data.jwt) {
         localStorage.setItem('currentUser', JSON.stringify(data.user));
         localStorage.setItem('token', data.jwt);
         this.currentUserSubject.next(data.user);

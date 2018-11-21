@@ -12,14 +12,14 @@ export class AdminService {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbHVtZW4tYXBpLnRlc3QvbG9naW4iLCJpYXQiOjE1NDIyNzA4MDUsImV4cCI6MTU0Mjg3NTYwNSwibmJmIjoxNTQyMjcwODA1LCJqdGkiOiJWV3RxOWNpdms4UEg4ZUxRIiwic3ViIjozLCJwcnYiOiI4N2UwYWYxZWY5ZmQxNTgxMmZkZWM5NzE1M2ExNGUwYjA0NzU0NmFhIn0.G5KHwxWO5AxKzVrysELJ5p5TOBq6PQi9A8vs3ApvaVo',
+      'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbHVtZW4tYXBpLnRlc3QvbG9naW4iLCJpYXQiOjE1NDI4MTA3NzgsImV4cCI6MTU0MzQxNTU3OCwibmJmIjoxNTQyODEwNzc4LCJqdGkiOiJoRGpuZENWaklzaTM4eXp4Iiwic3ViIjozLCJwcnYiOiI4N2UwYWYxZWY5ZmQxNTgxMmZkZWM5NzE1M2ExNGUwYjA0NzU0NmFhIn0.JMlRXh5UM224L3XoViY8hRqGrbOrE68WSGvOGEp2e24',
     })
   };
 
   token = '';
 
   constructor(private http: HttpClient) {
-    
+
    }
 
   getSites(): Observable<any> {
@@ -28,5 +28,9 @@ export class AdminService {
 
   getUsers(): Observable<any> {
     return this.http.get<any>(`http://lumen-api.test/users`, this.httpOptions);
+  }
+
+  getStudies(): Observable<any> {
+    return this.http.get<any>(`http://lumen-api.test/studies`);
   }
 }

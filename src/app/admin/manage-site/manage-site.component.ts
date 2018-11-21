@@ -15,6 +15,7 @@ export class ManageSiteComponent implements OnInit {
   ngOnInit() {
     this.adminService.getSites().subscribe((site: Site[]) => {
       this.sites = site;
+      console.log(site);
     });
   }
 

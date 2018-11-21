@@ -10,7 +10,7 @@ const siteRoutes: Routes = [
   {
     path: 'site',
     component: SiteComponent,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
     children: [
       {
         path: '',

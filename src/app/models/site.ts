@@ -1,4 +1,5 @@
-import { User } from "./user";
+import { User } from './user';
+import { Study } from './study';
 
 export class Site {
     _id: any;
@@ -8,4 +9,5 @@ export class Site {
     contact_person?: string;
     address: string;
     users?: User[];
+    studies?: Study[];
 }
