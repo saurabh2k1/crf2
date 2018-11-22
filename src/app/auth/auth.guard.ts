@@ -9,10 +9,13 @@ import { AuthService } from './auth.service';
 })
 export class AuthGuard implements CanActivate, CanActivateChild {
   
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router) { }
+
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): boolean {
+    state: RouterStateSnapshot) {
     console.log('Auth CanActive Called');
     const currentUser = this.authService.currentUserValue;
     if (currentUser) {
@@ -27,13 +30,13 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     return this.canActivate(route, state);
   }
 
-  checkLogin(url: string): boolean {
-    if (this.authService.isLoggedIn) {
-      return true;
-    }
-    this.authService.redirectUrl = url;
-    this.router.navigate(['/login']);
-    return false;
-  }
+  // checkLogin(url: string): boolean {
+  //   if (this.authService.isLoggedIn) {
+  //     return true;
+  //   }
+  //   this.authService.redirectUrl = url;
+  //   this.router.navigate(['/login']);
+  //   return false;
+  // }
 
 }

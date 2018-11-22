@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          if (data && 'admin' in data.user.roles) {
+          if (data && 'admin' === data.role) {
             this.returnUrl = '/admin';
           } else {
             this.returnUrl = '/site';

@@ -21,8 +21,8 @@
                     <tbody>
                       <tr *ngFor='let user of users'>
 
-                       <td>{{user.first_name}} {{user.last_name}} <span class="badge badge-primary" *ngIf="user.roles | contains:'admin'">Admin</span></td>
-                        <td><span *ngFor="let role of user.roles">{{role.name}},</span></td>
+                       <td>{{user.first_name}} {{user.last_name}} </td>
+                        <td><span >{{user.role.name |  uppercase }},</span></td>
                         <td>
                           <span *ngIf='user.site'>{{user.site.name}}, <br></span>
                           <!-- <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>

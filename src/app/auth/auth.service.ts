@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
-import { delay, map} from 'rxjs/operators';
+import { map} from 'rxjs/operators';
 import { User } from '../models/user';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
@@ -16,12 +16,8 @@ const httpOptions = {
 })
 export class AuthService {
 
-  isLoggedIn = false;
-  redirectUrl: string;
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
-
-
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
@@ -33,22 +29,21 @@ export class AuthService {
    }
 
   login(email: string, password: string) {
-    return this.http.post<any>(`http://lumen-api.test/login`, {email, password}, httpOptions)
-    .pipe(map(data => {
-      if (data && data.jwt) {
-        localStorage.setItem('currentUser', JSON.stringify(data.user));
-        localStorage.setItem('token', data.jwt);
-        this.currentUserSubject.next(data.user);
+    return this.http.post<any>(`http://lumen-api.test/login`, {email, password})
+    .pipe(map(user => {
+      if (user && user.token) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.currentUserSubject.next(user);
       }
 
-      return data;
+      return user;
     }));
   }
 
   logout(): void {
     localStorage.removeItem('currentUser');
-    localStorage.removeItem('token');
+    
     this.currentUserSubject.next(null);
-    this.isLoggedIn = false;
+    
   }
 }
