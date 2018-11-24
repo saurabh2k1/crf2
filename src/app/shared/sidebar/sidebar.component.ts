@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import PerfectScrollbar from 'perfect-scrollbar';
- 
+
 declare const $: any;
 // Metadata
 export interface RouteInfo {

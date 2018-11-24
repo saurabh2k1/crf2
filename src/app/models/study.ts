@@ -4,6 +4,6 @@ export class Study {
   id: number;
   name: string;
   description?: string;
-  status: number;
+  status?: number;
   sites?: Site[];
 }

@@ -37,7 +37,7 @@
           </div>
         </div>
       </div>
-      <div class="row" *ngIf='!showList'>
+      <div class="row" *ngIf='showNew'>
         <div class="col-md-10 mb-auto">
           <div class="card">
             <form [formGroup]="frmUser">
@@ -49,19 +49,69 @@
                   </div>
                   <div class="card-body">
                     <br/>
-                    <mat-form-field class="example-full-width">
-                      <input type="email" matInput placeholder="Email Address" />
-                    </mat-form-field>
-                    <mat-form-field >
-                        <input type="text" matInput placeholder="First Name" />
-                      </mat-form-field>
-                      <mat-form-field >
-                          <input type="text" matInput placeholder="Last Name" />
+                    <div class="row">
+                      <div class="col-md-11">
+                          <mat-form-field class="example-full-width">
+                              <input type="email" matInput placeholder="Email Address" formControlName="email"  required />
+                              <app-field-error-display></app-field-error-display>
+                            </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-5 mr-auto">
+                          <mat-form-field class="example-full-width">
+                              <input type="text" matInput placeholder="First Name" formControlName="first_name" required />
+                              <app-field-error-display></app-field-error-display>
+                            </mat-form-field>
+                      </div>
+                      <div class="col-md-5 mr-auto">
+                          <mat-form-field class="example-full-width">
+                              <input type="text" matInput placeholder="Last Name" formControlName="last_name" required />
+                              <app-field-error-display></app-field-error-display>
+                            </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-5 mr-auto">
+                        <mat-form-field class="example-full-width">
+                          <input type="password" matInput placeholder="Password" formControlName="password" required />
+                          <app-field-error-display></app-field-error-display>
                         </mat-form-field>
+                      </div>
+                      <div class="col-md-5 mr-auto">
+                        <mat-form-field class="example-full-width">
+                          <input type="password" matInput placeholder="Confirm Password" required />
+                          <app-field-error-display></app-field-error-display>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-5 mr-auto">
+                        <mat-form-field class="example-full-width">
+                          <mat-select placeholder="Affiliated to Site" formControlName="site_id"  >
+                            <mat-option *ngFor="let site of sites" [value]="site.id" >
+                              {{site.name}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-5 mr-auto">
+                          <mat-form-field class="example-full-width">
+                            <mat-select placeholder="Role" formControlName="role_id" >
+                              <mat-option *ngFor="let role of roles" [value]="role.id" >
+                                {{role.name | titlecase}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                    </div>
+
+
                   </div>
                   <div class="card-footer text-right">
                     <a [routerLink]="['/admin/users']" class="btn btn-default">Back</a>
-                    <button mat-raised-button class="btn btn-rose ">Save</button>
+                    <button mat-raised-button class="btn btn-rose "  (click)="onSave()" >Save</button>
                   </div>
             </form>
 

@@ -2,6 +2,7 @@ import { User } from './user';
 import { Study } from './study';
 
 export class Site {
+    id: string;
     _id: any;
     name: string;
     code: string;

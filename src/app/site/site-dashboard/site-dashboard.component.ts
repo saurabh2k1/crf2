@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { StudyService } from 'src/app/study.service';
+import { Study } from 'src/app/models/study';
+import { AdminService } from 'src/app/admin.service';
+import { SiteService } from '../site.service';
 
 @Component({
   selector: 'app-site-dashboard',
@@ -8,19 +11,30 @@ import { StudyService } from 'src/app/study.service';
 })
 export class SiteDashboardComponent implements OnInit {
 
+  siteId = '';
   studyName = '';
-  studies = [
-    {id: '1', name: 'Vivinex Study', description: ''}
-  ];
+  studies: Study[] = [];
 
-  constructor(private studyService: StudyService) { }
+  constructor(private studyService: StudyService,
+    private adminService: AdminService,
+    private siteService: SiteService) { }
 
   ngOnInit() {
-    if (localStorage.getItem('Study')) {
-      this.studyName = localStorage.getItem('studyName');
-    }
+    this.studyService.study.subscribe((study: any) => {
+      this.studyName = study.name;
+  });
+  this.siteService.site.subscribe((site: any) => {
+    this.siteId = site.id;
+  });
+
+   this.getStudies();
   }
 
+  getStudies() {
+    this.adminService.getStudies(+this.siteId).subscribe(studies => {
+      this.studies = studies;
+    });
+  }
   enterStudy(study: any) {
     this.studyName = study.name;
     this.studyService.setStudy(study.id, study.name);

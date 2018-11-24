@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
+import { Site } from './models/site';
+import { User } from './models/user';
+import { Study } from './models/study';
 
 
 
@@ -9,28 +12,47 @@ import { HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AdminService {
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbHVtZW4tYXBpLnRlc3QvbG9naW4iLCJpYXQiOjE1NDI4MTA3NzgsImV4cCI6MTU0MzQxNTU3OCwibmJmIjoxNTQyODEwNzc4LCJqdGkiOiJoRGpuZENWaklzaTM4eXp4Iiwic3ViIjozLCJwcnYiOiI4N2UwYWYxZWY5ZmQxNTgxMmZkZWM5NzE1M2ExNGUwYjA0NzU0NmFhIn0.JMlRXh5UM224L3XoViY8hRqGrbOrE68WSGvOGEp2e24',
-    })
-  };
 
-  token = '';
+  apiUrl = 'http://lumen-api.test';
 
   constructor(private http: HttpClient) {
 
    }
 
   getSites(): Observable<any> {
-    return this.http.get<any>(`http://lumen-api.test/sites`, this.httpOptions);
+    return this.http.get<any>(`${this.apiUrl}/sites`);
   }
 
   getUsers(): Observable<any> {
-    return this.http.get<any>(`http://lumen-api.test/users`, this.httpOptions);
+    return this.http.get<any>(`${this.apiUrl}/users`);
   }
 
-  getStudies(): Observable<any> {
-    return this.http.get<any>(`http://lumen-api.test/studies`);
+  getStudies(siteId?: number): Observable<any> {
+    if (siteId) {
+      return this.http.get<any>(`${this.apiUrl}/sites/${siteId}/studies`);
+    } else {
+      return this.http.get<any>(`${this.apiUrl}/studies`);
+    }
+
+  }
+
+  getRoles(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/roles`);
+  }
+
+  saveSite(newSite: Site): Observable<any> {
+    return this.http.post(`${this.apiUrl}/sites/new`, newSite);
+  }
+
+  saveUser(newUser: User): Observable<any> {
+    const headers = new HttpHeaders({
+      'Registration-Access-Key' : 'e156a30c-6c57-4490-a8a2-c280da6ebff8',
+    });
+    const options = {headers: headers};
+    return this.http.post(`${this.apiUrl}/register/email`, newUser, options);
+  }
+
+  saveStudy(newStudy: Study): Observable<any> {
+    return this.http.post(`${this.apiUrl}/studies/new`, newStudy);
   }
 }

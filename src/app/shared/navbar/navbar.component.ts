@@ -5,6 +5,8 @@ import { filter } from 'rxjs/operators';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { ROUTES } from '../sidebar/sidebar.component';
 import { StudyService } from 'src/app/study.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { SiteService } from 'src/app/site/site.service';
 
 const misc: any = {
   navbar_menu_visible: 0,
@@ -29,20 +31,24 @@ export class NavbarComponent implements OnInit {
   private sidebarVisible: boolean;
   private _router: Subscription;
   studyName = '';
+  siteName = '';
   @ViewChild('app-navbar') button: any;
 
   constructor(location: Location,
       private renderer: Renderer,
       private element: ElementRef,
       private router: Router,
-      private studyService: StudyService
+      private studyService: StudyService,
+      private authService: AuthService,
+      private siteService: SiteService,
       ) {
       this.location = location;
       this.nativeElement = element.nativeElement;
       this.sidebarVisible = false;
-      studyService.study.subscribe((study: any) => {
+      this.studyService.study.subscribe((study: any) => {
           this.studyName = study.name;
       });
+
   }
   minimizeSidebar() {
     const body = document.getElementsByTagName('body')[0];
@@ -103,6 +109,10 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.siteService.site.subscribe((site: any) => {
+      this.siteName = site.name;
+    });
       this.listTitles = ROUTES.filter(listTitle => listTitle);
 
       const navbar: HTMLElement = this.element.nativeElement;
@@ -218,6 +228,11 @@ export class NavbarComponent implements OnInit {
   }
   getPath() {
       return this.location.prepareExternalUrl(this.location.path());
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 }

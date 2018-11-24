@@ -1,6 +1,6 @@
 <div class="main-content">
   <div class="container-fluid">
-    <div class="row">
+    <div class="row" *ngIf="showList">
       <div class="col-md-10 offset-md-1">
         <div class="card">
           <div class="card-header card-header-icon card-header-rose">
@@ -9,35 +9,105 @@
             </div>
             <h4 class="card-title ">Sites</h4>
             <span class="pull-right">
-              <a [routerLink]="['/site/patient/new']" class="btn btn-primary " mat-raised-button type="button" >
+              <a [routerLink]="['/admin/site/new']" class="btn btn-primary " mat-raised-button type="button">
                 <i class="material-icons">add_box</i>Add</a></span>
           </div>
           <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
-                  <thead class="text-primary">
-                    <tr><th>Site Code</th><th>Site Name</th><th>Address</th><th>Users</th><th>Studies</th><th>Action</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor='let site of sites'>
-                      <td>{{site.code}}</td><td>{{site.name}}</td>
-                      <td>
-                        <span *ngIf='site.contact_person'>{{site.contact_person}}, <br></span>
-                        <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>
-                      <td><span *ngFor='let user of site.users'>{{user.first_name}} {{user.last_name}}</span></td>
-                      <td><span *ngFor='let study of site.studies'>
+              <table class="table table-hover">
+                <thead class="text-primary">
+                  <tr>
+                    <th>Site Code</th>
+                    <th>Site Name</th>
+                    <th>Address</th>
+                    <th>Users</th>
+                    <th>Studies</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor='let site of sites'>
+                    <td>{{site.code}}</td>
+                    <td>{{site.name}}</td>
+                    <td>
+                      <span *ngIf='site.contact_person'>{{site.contact_person}}, <br></span>
+                      <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>
+                    <td><span *ngFor='let user of site.users'>{{user.first_name}} {{user.last_name}}</span></td>
+                    <td><span *ngFor='let study of site.studies'>
                         {{study.name}},
                       </span></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                  </table>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
           </div>
         </div>
       </div>
     </div>
+
+    <!--New-->
+    <div class="row" *ngIf="showNew">
+      <div class="col-sm-12 mb-auto">
+        <div class="card">
+          <form [formGroup]="frmSite">
+            <div class="card-header card-header-icon card-header-rose">
+              <div class="card-icon">
+                <i class="material-icons">place</i>
+              </div>
+              <h4 class="card-title">New Site</h4>
+            </div>
+            <div class="card-body">
+              <br>
+              <div class="row">
+                <div class="col-md-5 mr-auto">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Site Name" formControlName="name" required />
+                    <app-field-error-display></app-field-error-display>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-5 mr-auto">
+                  <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Site Code" formControlName="code" required />
+                    <app-field-error-display></app-field-error-display>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-5 mr-auto">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Contact Person" formControlName="contact_person"  />
+                        <app-field-error-display></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-5 mr-auto">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Department" formControlName="department"  />
+                        <app-field-error-display></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+              </div>
+              <div class="row">
+                <div class="col-md-11 mr-auto">
+                  <mat-form-field class="example-full-width">
+                    <textarea matInput placeholder="Address" formControlName="address" required></textarea>
+                    <app-field-error-display></app-field-error-display>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="category form-category">* Required fields</div>
+            </div>
+            <div class="card-footer">
+                <div class="mr-auto"><a routerLink="/admin/sites" class="btn btn-default">Cancel</a></div>
+              <button mat-raised-button type="submit" class="btn btn-fill btn-rose mat-raised-button" (click)="onSubmit()">Submit</button>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!--./New-->
 
   </div>
 </div>

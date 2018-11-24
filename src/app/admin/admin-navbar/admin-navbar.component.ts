@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { ROUTES } from '../admin-sidebar/admin-sidebar.component';
 import { StudyService } from 'src/app/study.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 const misc: any = {
   navbar_menu_visible: 0,
@@ -34,12 +35,13 @@ export class AdminNavbarComponent implements OnInit {
     private renderer: Renderer,
     private element: ElementRef,
     private router: Router,
-    
+    private authService: AuthService
+
     ) {
     this.location = location;
     this.nativeElement = element.nativeElement;
     this.sidebarVisible = false;
-    
+
 }
 
 ngOnInit() {
@@ -216,6 +218,11 @@ ngOnInit() {
   }
   getPath() {
       return this.location.prepareExternalUrl(this.location.path());
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 

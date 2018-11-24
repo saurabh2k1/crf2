@@ -1,6 +1,6 @@
 <div class="main-content">
     <div class="container-fluid">
-      <div class="row">
+      <div class="row" *ngIf="showList">
         <div class="col-md-10 offset-md-1">
           <div class="card">
             <div class="card-header card-header-icon card-header-rose">
@@ -9,7 +9,7 @@
               </div>
               <h4 class="card-title ">Studies</h4>
               <span class="pull-right">
-                <a [routerLink]="['']" class="btn btn-primary " mat-raised-button type="button" >
+                <a [routerLink]="['/admin/study/new']" class="btn btn-primary " mat-raised-button type="button" >
                   <i class="material-icons">add_box</i>Add</a></span>
             </div>
             <div class="card-body">
@@ -34,6 +34,60 @@
           </div>
         </div>
       </div>
+      <!--New-->
+      <div class="row" *ngIf="showNew">
+          <div class="col-sm-12 mb-auto">
+            <div class="card">
+              <form [formGroup]="frmStudy">
+                <div class="card-header card-header-icon card-header-rose">
+                  <div class="card-icon">
+                    <i class="material-icons">school</i>
+                  </div>
+                  <h4 class="card-title">New Study</h4>
+                </div>
+                <div class="card-body">
+                  <br>
+                  <div class="row">
+                    <div class="col-md-11 mr-auto">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Study Name" formControlName="name" required />
+                        <app-field-error-display></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                  <div class="row">
+                      <div class="col-md-11 mr-auto">
+                          <mat-form-field class="example-full-width">
+                            <textarea matInput placeholder="Description" formControlName="description"  ></textarea>
+                            <app-field-error-display></app-field-error-display>
+                          </mat-form-field>
+                        </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-11 mr-auto">
+                      <mat-form-field class="example-full-width">
+                        <mat-select multiple placeholder="Sites (select multiple)" formControlName="sites" >
+                          <mat-option *ngFor="let site of sites" [value]="site">
+                            {{site.name | titlecase}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="category form-category">* Required fields</div>
+                </div>
+                <div class="card-footer">
+                    <div class="mr-auto"><a routerLink="/admin/studies" class="btn btn-default">Cancel</a></div>
+                  <button mat-raised-button type="submit" class="btn btn-fill btn-rose mat-raised-button" (click)="onSave()">Submit</button>
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      <!--./New-->
 
     </div>
   </div>
