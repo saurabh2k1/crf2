@@ -1,0 +1,119 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 ">
+        <mat-card class="py-0">
+          <div class="col-md-4 mr-auto">
+            <mat-form-field>
+              <mat-select placeholder="Select Patient" (selectionChange)="onPatChange($event)" required>
+
+                <mat-option *ngFor="let patient of patients" [value]="patient._id">{{getRefNumber(patient.pat_id,
+                  patient.prefix)}} ({{patient.initials }})</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-card>
+
+        <div class="card" *ngIf="patient_id">
+
+          <div class="card-header card-header-icon card-header-rose">
+            <div class="card-icon">
+              <i class="material-icons">pets</i>
+            </div>
+            <h4 class="card-title ">{{cardHeader}}</h4>
+
+          </div>
+          <div class="card-body">
+            <div class="row">
+
+              <div class="col-md-12" *ngIf="!isExclusionDone">
+                <form [formGroup]="frmExclusion">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <legend>Date of Visit</legend>
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="picker" [max]="maxDate" placeholder="choose date"
+                          formControlName="dov" (click)="picker.open()" required>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                      <legend>Patient met inclusion/exclusion criteria</legend>
+                      <mat-radio-group formControlName="exclusion">
+                        <mat-radio-button value="1">Yes</mat-radio-button>
+                        <mat-radio-button value="0">No</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="col-md-4 mr-auto" *ngIf="exclusion.value === '0'">
+                      <legend>Give Reason</legend>
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="reason" formControlName="reason" type="text" required />
+                        <app-field-error-display [displayError]="" errorMsg=""></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <hr>
+
+                  <div>
+                    <button mat-raised-button class="btn btn-primary" (click)="saveExclusion()">Save</button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-md-12" *ngIf="isExclusionDone">
+                <div *ngIf="!isExclusionMet">
+                  Patient did not met Inclusion/Exclusion criteria. Reason was <dl>{{crfExclusion.reason}}</dl>
+                </div>
+                <div class="row" *ngIf="isExclusionMet">
+                  <div id="accordion" role="tablist" class="col-md-3 border-right">
+                    <div class="card-collapse" *ngFor="let visit of visits; let i = index">
+                      <div class="card-header pt-0" role="tab" id="heading{{i}}">
+                        <h5 class="mb-0">
+                          <a data-toggle="collapse" href="#collapse{{i}}" [attr.aria-expanded]="(i == 0)? 'true': 'false'"
+                            [attr.aria-controls]="'collapse' + i" class="collapsed">
+                            {{visit.description}} <i class="material-icons">keyboard_arrow_down</i>
+                          </a>
+                        </h5>
+                      </div>
+                      <div id="collapse{{i}}" class="collapse" [class.show]="i == 0" role="tabpanel"
+                        [attr.aria-labeledby]="'heading' + i" data-parent="#accordion">
+                        <div class="card-body p-0">
+                          <ul dense class="list-group">
+                            <li class="list-item" *ngFor="let form of visit.forms">
+                              <a class="btn btn-link p-0 m-0" (click)="openForm(form)">
+                                <mat-icon matListIcon>library_books</mat-icon> {{form.name}}
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-9" *ngIf="theForm">
+                    <div class="card ">
+                      <form>
+                        <div class="card-header card-header-rose card-header-icon">
+                          <!-- <div class="card-text">
+                              <h4 class="card-title">{{theForm.name}}</h4>
+                            </div> -->
+                          <div class="card-icon">
+                            <mat-icon>library_books</mat-icon>
+                          </div>
+                          <h4 class="card-title">{{theForm.name}}</h4>
+                        </div>
+                        <div class="card-body">
+
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

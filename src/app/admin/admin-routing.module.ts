@@ -7,6 +7,11 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { StudiesComponent } from './studies/studies.component';
 import { AuthGuard } from '../auth/auth.guard';
 import { Role } from '../models/role';
+import { ManageVisitComponent } from './manage-visit/manage-visit.component';
+import { CrfsComponent } from './crfs/crfs.component';
+import { CrfDetailComponent } from './crf-detail/crf-detail.component';
+import { CrfAddComponent } from './crf-add/crf-add.component';
+import { CrfEditComponent } from './crf-edit/crf-edit.component';
 
 const adminRoutes: Routes = [
   {
@@ -23,10 +28,17 @@ const adminRoutes: Routes = [
 
           { path: 'sites', component: ManageSiteComponent, data: {kind: 'list'} },
           { path: 'site/new', component: ManageSiteComponent, data: {kind: 'create'}},
+          { path: 'visits', component: ManageVisitComponent, data: {kind: 'list'} },
+          { path: 'visit/new', component: ManageVisitComponent, data: {kind: 'create'}},
+          { path: 'visit/edit/:id', component: ManageVisitComponent, data: {kind: 'edit'}},
           { path: 'studies', component: StudiesComponent, data: {kind: 'list'} },
           { path: 'study/new', component: StudiesComponent, data: {kind: 'create'}},
           { path: '', component: AdminDashboardComponent },
           { path: 'dashboard', component: AdminDashboardComponent},
+          { path: 'crfs', component: CrfsComponent, data: { title: 'List of CRFs'}},
+          { path: 'crf-details/:id', component: CrfDetailComponent, data: { title: 'CRF Details'}},
+          { path: 'crf-add', component: CrfAddComponent, data: { title: 'Add CRF'}},
+          { path: 'crf-edit/:id', component: CrfEditComponent, data: { title: 'Edit CRF'}},
         ]
       }
     ]

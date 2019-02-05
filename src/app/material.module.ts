@@ -34,7 +34,7 @@ import {
   MatStepperModule,
 } from '@angular/material';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-
+import {MatTreeModule} from '@angular/material/tree';
 @NgModule({
   exports: [
     MatAutocompleteModule,
@@ -68,7 +68,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatTreeModule
   ],
   declarations: []
 })

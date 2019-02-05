@@ -1,0 +1,108 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row" *ngIf="showNew">
+      <div class="col-md-10">
+        <div class="card">
+          <form [formGroup]="frmVisit">
+          <div class="card-header card-header-icon card-header-rose">
+            <div class="card-icon">
+              <i class="material-icons">pets</i>
+            </div>
+            <h4 class="card-title ">New Visit</h4>
+          </div>
+          <div class="card-body">
+            <br/>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-select placeholder="Select Study" formControlName="study">
+                    <mat-option *ngFor="let study of studies" [value]="study._id">{{study.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3 mr-auto">
+                <mat-form-field>
+                  <input type="text" matInput formControlName="code" placeholder="Visit Code" required />
+                  <app-field-error-display></app-field-error-display>
+                </mat-form-field>
+              </div>
+              <div class="col-md-7 mr-auto">
+                  <mat-form-field>
+                      <input type="text" matInput formControlName="name" placeholder="Visit Description" required />
+                      <app-field-error-display></app-field-error-display>
+                    </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 mr-auto">
+                  <mat-form-field>
+                    <input type="number" matInput formControlName="min_days" placeholder="DayRange Min" required />
+                    <app-field-error-display></app-field-error-display>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3 mr-auto">
+                    <mat-form-field>
+                        <input type="number" matInput formControlName="max_days" placeholder="DayRange Max" required />
+                        <app-field-error-display></app-field-error-display>
+                      </mat-form-field>
+                </div>
+                <div class="col-md-3 mr-auto">
+                  <!-- <mat-form-field> -->
+                    <mat-checkbox  class="checkbox" matInput formControlName="isRepeating">Repeating Visit?</mat-checkbox>
+                  <!-- </mat-form-field> -->
+                </div>
+              </div>
+          </div>
+          <div class="card-footer">
+              <a [routerLink]="['/admin/visits']" matRaisedButton class="btn btn-default">Back</a>
+            <button type="submit" matRaisedButton class="mat-raised-button btn btn-rose" (click)="save()">Save</button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- List -->
+    <div class="row" *ngIf="!showNew">
+      <div class="col">
+        <div class="card">
+          <div class="card-header card-header-icon card-header-rose">
+            <div class="card-icon">
+              <i class="material-icons">pets</i>
+            </div>
+            <h4 class="card-title ">Visits</h4>
+            <span class="text-right">
+                <a [routerLink]="['/admin/visit/new']" class="btn btn-primary " mat-raised-button type="button">
+                  <i class="material-icons">add_box</i>Add</a></span>
+          </div>
+          <div class="card-body">
+              <div class="table-responsive">
+            <table class="table  table-hover">
+              <thead class="text-rose">
+                <tr><th>Code</th><th>Visit Name</th><th>Study</th>
+                  <th class="text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let visit of visits">
+                  <td>{{visit.code}}</td>
+                  <td>{{visit.description}}</td>
+                  <td>{{visit.study.name}}</td>
+                  <td class="text-right">
+                    <a href="admin/visit/edit/{{visit._id}}" class="btn btn-icon btn-danger" mat-raised-button >
+                      <i class="material-icons">edit</i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ./List -->
+  </div>
+</div>

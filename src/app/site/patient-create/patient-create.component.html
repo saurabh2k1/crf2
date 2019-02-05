@@ -32,22 +32,22 @@
               <div class="row">
                   <div class="col-md-5 mr-auto">
                       <mat-form-field>
-                          <mat-select placeholder="Gender" formControlName="Gender" name="gender" required>
+                          <mat-select placeholder="Gender" formControlName="gender" name="gender" required>
                             <mat-option value="Male">Male</mat-option>
                             <mat-option value="Female">Female</mat-option>
                           </mat-select>
-                          <app-field-error-display [displayError]="isFieldValid(frmRegister,'Gender')" errorMsg="Gender is required"></app-field-error-display>
+                          <app-field-error-display [displayError]="isFieldValid(frmRegister,'gender')" errorMsg="Gender is required"></app-field-error-display>
                       </mat-form-field>
                   </div>
                   <div class="col-md-5 mr-auto">
                       <mat-form-field>
-                          <mat-select placeholder="Race" formControlName="Race" name="race" required>
-                              <mat-option value=1>Asian</mat-option>
-                              <mat-option value=2>Caucasian</mat-option>
-                              <mat-option value=3>Mixed</mat-option>
-                              <mat-option value=4>Undisclosed</mat-option>
+                          <mat-select placeholder="Race" formControlName="race" name="race" required>
+                              <mat-option value="Asian">Asian</mat-option>
+                              <mat-option value="Caucasian">Caucasian</mat-option>
+                              <mat-option value="Mixed">Mixed</mat-option>
+                              <mat-option value="Undisclosed">Undisclosed</mat-option>
                           </mat-select>
-                          <app-field-error-display [displayError]="isFieldValid(frmRegister, 'Race')" errorMsg="Input is required"></app-field-error-display>
+                          <app-field-error-display [displayError]="isFieldValid(frmRegister, 'race')" errorMsg="Input is required"></app-field-error-display>
                       </mat-form-field>
                   </div>
               </div>
@@ -58,12 +58,12 @@
 
                     <div class="form-check mr-auto">
                         <label class="form-check-label">
-                          <input class="form-check-input" formControlName="ICF" type="checkbox" value="" required> ICF Signed? *
+                          <input class="form-check-input" formControlName="icf" type="checkbox" value="1" required> ICF Signed? *
                           <span class="form-check-sign">
                             <span class="check"></span>
                           </span>
                         </label>
-                        <app-field-error-display [displayError]="isFieldValid(frmRegister, 'ICF')" errorMsg="Input is required"></app-field-error-display>
+                        <app-field-error-display [displayError]="isFieldValid(frmRegister, 'icf')" errorMsg="Input is required"></app-field-error-display>
                       </div>
                 </div>
                 <div class="col-md-5 mr-auto">
@@ -80,7 +80,7 @@
             </div>
             <div class="card-footer text-right">
               <div class="mr-auto"><a routerLink="/site/patients" class="btn btn-default">Cancel</a></div>
-              <button mat-raised-button type="submit" class="btn btn-rose" (click)="onRegister()">Register</button>
+              <button mat-raised-button type="submit" class="btn btn-rose" (click)="onRegister()">{{btnText}}</button>
             </div>
           </form>
           </div>

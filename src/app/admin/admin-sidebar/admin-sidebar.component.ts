@@ -29,7 +29,9 @@ export const ROUTES: RouteInfo[] = [
   { path: './studies', title: 'Studies', type: 'link', icontype: 'school'},
   { path: './sites', title: 'Sites', type: 'link', icontype: 'place'},
   { path: './users', title: 'Users', type: 'link', icontype: 'person'},
-  
+  { path: './visits', title: 'Visits', type: 'link', icontype: 'pets'},
+  { path: './crfs', title: 'CRF Forms', type: 'link', icontype: 'assignment'},
+
 ];
 
 @Component({

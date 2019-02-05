@@ -1,0 +1,24 @@
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
+
+.list-item {
+  list-style: none;
+}
+
+.forms {
+  min-height: 36px;
+  display: block;
+  border-left: 1px solid #f90;
+  list-style: none;
+}
+
+.form {
+  padding: 10px 0 10px 10px;
+}
+
+.form.active {
+  background: #ddd;
+  font-weight: bold;
+  margin: 0 -1px 0 0;
+}

@@ -12,6 +12,11 @@ import { AdminSidebarComponent } from './admin-sidebar/admin-sidebar.component';
 import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
 import { StudiesComponent } from './studies/studies.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ManageVisitComponent } from './manage-visit/manage-visit.component';
+import { CrfsComponent } from './crfs/crfs.component';
+import { CrfDetailComponent } from './crf-detail/crf-detail.component';
+import { CrfAddComponent } from './crf-add/crf-add.component';
+import { CrfEditComponent } from './crf-edit/crf-edit.component';
 
 
 @NgModule({
@@ -22,7 +27,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ManageUsersComponent,
     AdminSidebarComponent,
     AdminNavbarComponent,
-    StudiesComponent
+    StudiesComponent,
+    ManageVisitComponent,
+    CrfsComponent,
+    CrfDetailComponent,
+    CrfAddComponent,
+    CrfEditComponent
   ],
   imports: [
     CommonModule,

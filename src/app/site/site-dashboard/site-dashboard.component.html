@@ -1,47 +1,25 @@
 <div class="main-content">
     <div class="container-fluid">
-      <div class="row" *ngIf="!studyName">
-        <div class="col-md-4" *ngFor="let study of studies">
-          <div class="card card-product">
-            <div class="card-header card-header-image" data-header-animation="true">
-              <a href="#pablo">
-                <img class="img" src="./assets/img/card-2.jpg">
-              </a>
-            </div>
-            <div class="card-body">
-
-              <h4 class="card-title">
-                <a href="#pablo">{{study.name}}</a>
-              </h4>
-              <div class="card-description">
-                {{study.description}}
-              </div>
-            </div>
-            <div class="card-footer">
-             <button (click)="enterStudy(study)" style="margin: auto;" class="btn btn-success mat-raised-button" mat-raised-button   >Enter</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <br/>
       <div class="row" *ngIf="studyName">
-        <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="col-lg-4 col-md-6 col-sm-6">
           <div class="card card-stats">
             <div class="card-header card-header-warning card-header-icon">
               <div class="card-icon">
                 <i class="material-icons">assignment_ind</i>
               </div>
               <p class="card-category">Enrolled Patients</p>
-              <h3 class="card-title">184</h3>
+              <h3 class="card-title">{{patientCount}}</h3>
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons text-danger">add</i>
-                <a [routerLink]="['/patients']" routerLinkActive="router-link-active" >Add Patients</a>
+                <i class="material-icons text-danger">pageview</i>
+                <a [routerLink]="['/patients']" routerLinkActive="router-link-active" >View Patients</a>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="col-lg-4 col-md-6 col-sm-6">
           <div class="card card-stats">
             <div class="card-header card-header-rose card-header-icon">
               <div class="card-icon">

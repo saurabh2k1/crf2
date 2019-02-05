@@ -12,7 +12,7 @@ export class StudyService {
 
   setStudy(id: string, name: string) {
     this.studyChange.next({id: id, name: name});
-    localStorage.setItem('studyID', id);
-    localStorage.setItem('studyName', name);
+    localStorage.setItem('study', JSON.stringify({id: id, name: name}));
+
   }
 }

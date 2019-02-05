@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, ElementRef, Input } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { filter } from 'rxjs/operators';
@@ -23,6 +23,8 @@ declare var $: any;
 })
 export class NavbarComponent implements OnInit {
 
+
+
   private listTitles: any[];
   location: Location;
   mobile_menu_visible: any = 0;
@@ -45,9 +47,6 @@ export class NavbarComponent implements OnInit {
       this.location = location;
       this.nativeElement = element.nativeElement;
       this.sidebarVisible = false;
-      this.studyService.study.subscribe((study: any) => {
-          this.studyName = study.name;
-      });
 
   }
   minimizeSidebar() {
@@ -110,9 +109,26 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
 
-    this.siteService.site.subscribe((site: any) => {
+    const site = JSON.parse(localStorage.getItem('site'));
+    const study = JSON.parse(localStorage.getItem('study'));
+    if (site) {
       this.siteName = site.name;
+      this.siteService.setSite(site.id, site.name);
+    } else {
+      this.siteService.site.subscribe((data: any) => {
+        this.siteName = data.name;
+      });
+    }
+
+    if (study) {
+      this.studyName = study.name;
+    } else {
+      this.studyService.study.subscribe((s: any) => {
+        this.studyName = s.name;
     });
+    }
+
+
       this.listTitles = ROUTES.filter(listTitle => listTitle);
 
       const navbar: HTMLElement = this.element.nativeElement;
@@ -132,6 +148,7 @@ export class NavbarComponent implements OnInit {
           $layer.remove();
         }
       });
+
   }
   onResize(event) {
     if ($(window).width() > 991) {

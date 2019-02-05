@@ -1,0 +1,217 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="loading-shade" *ngIf="isLoadingResult">
+      <mat-spinner *ngIf="isLoadingResult"></mat-spinner>
+    </div>
+    <div class="row" *ngIf="!isAddField">
+      <div class="col-md-10">
+        <div class="card">
+          <div class="card-header card-header-icon card-header-rose">
+            <div class="card-icon">
+              <i class="material-icons">assignment</i>
+            </div>
+            <h4 class="card-title ">CRF: {{dForm.name}} ({{dForm.code}})</h4>
+            <mat-card-subtitle>Study: {{dForm.study.name}} </mat-card-subtitle>
+          </div>
+          <div class="card-body">
+            <p>Visits: <mat-chip-list>
+                <mat-chip *ngFor="let visit of dForm.visits" color="accent" selected>{{visit.description}}</mat-chip>
+              </mat-chip-list>
+            </p>
+          </div>
+          <div class="card-footer">
+            <a mat-raised-button class=" btn btn-primary mat-raised-button" [routerLink]="['/admin/crf-edit', dForm._id]"
+              routerLinkActive="router-link-active">
+              <mat-icon>edit</mat-icon>
+            </a>
+            <a mat-raised-button class="mat-raised-button btn btn-warning" (click)="isAddField = true;">
+              <mat-icon>add</mat-icon> Add Fields
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isAddField">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header card-header-icon card-header-rose">
+            <div class="card-icon">
+              <i class="material-icons">how_to_vote</i>
+            </div>
+            <h4 class="card-title ">{{ isFieldEdit? 'Edit': 'Add'}} Field</h4>
+            <mat-card-subtitle>CRF: {{dForm.name}} </mat-card-subtitle>
+          </div>
+          <div class="card-body">
+            <!-- <mat-horizontal-stepper labelPosition="bottom" linear="isLinear" #stepper> -->
+              <!-- <mat-step [stepControl]="firstFormGroup"> -->
+                <form [formGroup]="firstFormGroup">
+                  <!-- <ng-template matStepLabel>Field Type</ng-template> -->
+                  <div class="row">
+                    <div class="col-md-4">
+                      <mat-form-field>
+                        <mat-select placeholder="Choose Field Type" formControlName="field_type" (selectionChange)="onFieldTypeChange($event)">
+                          <mat-option value="textfield">Text Field</mat-option>
+                          <mat-option value="checkbox">Checkbox</mat-option>
+                          <mat-option value="radio">Radio</mat-option>
+                          <mat-option value="select">Dropdown</mat-option>
+                          <mat-option value="Date">Date Field</mat-option>
+                          <mat-option value="unit">Unit Field</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field>
+                        <input type="text" matInput formControlName="field_code" placeholder="Field Code" required />
+                        <app-field-error-display></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field>
+                        <input type="text" matInput formControlName="field_title" placeholder="Field Title" required />
+                        <app-field-error-display></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field>
+                        <input matInput placeholder="Default Value" formControlName="field_value">
+                        <app-field-error-display></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field>
+                        <input matInput placeholder="Unit " formControlName="field_unit">
+                        <app-field-error-display></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div>
+                    <!-- <button mat-button matStepperNext>Next</button> -->
+                  </div>
+                <!-- </form>
+              </mat-step>
+              <mat-step [stepControl]="secondFormGroup">
+                <form [formGroup]="secondFormGroup">
+                  <ng-template matStepLabel>Field Options</ng-template> -->
+                  <div class="row">
+
+                    <div class="col-md-4">
+                      <div class="togglebutton">
+                        <label>
+                          <input type="checkbox" [checked]="hasOption" formControlName="hasOption">
+                          <span class="toggle"></span>
+                          Field {{ firstFormGroup.controls['hasOption'].value == true ? 'has Options' : 'has no
+                          Options'}}
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="togglebutton">
+                        <label>
+                          <input type="checkbox" [checked]="field_required" formControlName="field_required">
+                          <span class="toggle"></span>
+                          {{ firstFormGroup.controls['field_required'].value == true ? 'Required' : 'Optional'}} Field
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row" *ngIf="!hasOption">
+                    <div class="col-md-4">
+                      <mat-form-field>
+                        <input matInput placeholder="Minimum Value" formControlName="min">
+                        <app-field-error-display></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field>
+                        <input matInput placeholder="Maximum Value" formControlName="max">
+                        <app-field-error-display></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field>
+                        <input matInput placeholder="Regular Expression" formControlName="regex">
+                        <app-field-error-display></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="hasOption">
+                    <h5>Options for the field: </h5><br>
+                    <div formArrayName="options" *ngFor="let option of options.controls; let i = index">
+                      <div [formGroupName]="i" class="row">
+                        <div class="col-md-1">
+                          {{i + 1}}.
+
+                        </div>
+                        <div class="col-md-3">
+                          <mat-form-field>
+                            <input matInput placeholder="Option title" formControlName="option_title">
+                            <app-field-error-display></app-field-error-display>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                          <mat-form-field>
+                            <input matInput placeholder="Option Value" formControlName="option_value">
+                            <app-field-error-display></app-field-error-display>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                          <button class="btn btn-success" mat-raised-button (click)="addOptions()" [disabled]="!options.valid">Add another option</button>
+                          <button class="btn btn-danger" (click)="removeOption(i)">Remove</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+                  </div>
+                  <!-- {{secondFormGroup.value | json}} -->
+
+                  <!-- <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                  </div> -->
+                <!-- </form>
+              </mat-step>
+              <mat-step [stepControl]="thirdFormGroup">
+                <ng-template matStepLabel>Save</ng-template>
+                <form [formGroup]="thirdFormGroup">
+
+                </form> -->
+                <div>
+                  <!-- <button mat-button matStepperPrevious>Back</button> -->
+                  <button class="btn btn-primary mat-raised-button" mat-raised-button (click)="onAddingField()" >Save</button>
+                  <button class="btn btn-default mat-raised-button" mat-raised-button (click)="resetForm()" > Clear</button>
+                </div>
+              <!-- </mat-step>
+
+            </mat-horizontal-stepper> -->
+
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h4>CRF: {{dForm.name}}</h4>
+          </div>
+          <div class="card-body">
+            Fields: <button class="btn btn-round btn-fab btn-primary" title="Add new field" mat-min-fab mat-raised-button (click)="addNewField()"><mat-icon>add</mat-icon></button>
+            <table class="table table-responsive table-striped">
+              <tbody>
+                <tr *ngFor="let field of fields; let i = index">
+                  <td>{{i +1 }}</td>
+                  <td>{{field.field_title}}</td>
+                  <td>{{field.field_type | uppercase}}</td>
+                  <td><button (click)="editField(i)" title="Edit" class="btn btn-round btn-fab btn-danger" mat-min-fab mat-raised-button><mat-icon>edit</mat-icon></button></td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn btn-primary" mat-raised-button (click)="saveFormFields()">Save Form Fields</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

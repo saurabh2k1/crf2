@@ -3,6 +3,7 @@ import { StudyService } from 'src/app/study.service';
 import { Study } from 'src/app/models/study';
 import { AdminService } from 'src/app/admin.service';
 import { SiteService } from '../site.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-site-dashboard',
@@ -13,26 +14,32 @@ export class SiteDashboardComponent implements OnInit {
 
   siteId = '';
   studyName = '';
+  studyId = '';
   studies: Study[] = [];
+  patientCount = '';
 
   constructor(private studyService: StudyService,
-    private adminService: AdminService,
-    private siteService: SiteService) { }
+    private siteService: SiteService,
+    private router: Router) { }
 
   ngOnInit() {
-    this.studyService.study.subscribe((study: any) => {
+    const study = JSON.parse(localStorage.getItem('study'));
+    const site = JSON.parse(localStorage.getItem('site'));
+    if (study && site ) {
       this.studyName = study.name;
-  });
-  this.siteService.site.subscribe((site: any) => {
-    this.siteId = site.id;
-  });
+      this.studyId = study.id;
+      this.siteId = site.id;
+      this.getDashboard();
+    }
 
-   this.getStudies();
   }
 
-  getStudies() {
-    this.adminService.getStudies(+this.siteId).subscribe(studies => {
-      this.studies = studies;
+
+
+  getDashboard() {
+    this.siteService.getSiteStatics(this.siteId, this.studyId).subscribe((data: any) => {
+      console.log(data);
+      this.patientCount = data.pat_count;
     });
   }
   enterStudy(study: any) {

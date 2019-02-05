@@ -1,0 +1,56 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="loading-shade" *ngIf="isLoadingResult">
+      <mat-spinner *ngIf="isLoadingResult"></mat-spinner>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-icon card-header-rose">
+            <div class="card-icon">
+              <i class="material-icons">assignment</i>
+            </div>
+            <h4 class="card-title ">CRF Forms</h4>
+            <mat-card-subtitle></mat-card-subtitle>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-select placeholder="Select Study to get list of CRF" (selectionChange)="getForms($event)">
+                    <mat-option *ngFor="let study of studies" [value]="study._id">{{study.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <a href="/admin/crf-add" class="btn btn-success mat-raised-button" mat-raised-button>
+                  <mat-icon>add</mat-icon> Add CRF
+                </a>
+              </div>
+            </div>
+            <div class="row" *ngIf="studyId">
+              <div class="col-md-10">
+                <table class="table table-responsive table-striped" >
+                  <thead><tr>
+                    <th>#</th><th>CRF</th><th>Used in Visits</th><th>Actions</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr *ngFor="let form of forms; let i = index" >
+                      <td>{{i+1}}</td>
+                      <td>{{form.name}} ({{form.code}})</td>
+                      <td>
+                        <span *ngFor="let visit of form.visits">{{visit.description}}<br></span>
+                      </td>
+                      <td><a href="/admin/crf-details/{{form._id}}" class="btn btn-round btn-primary btn-fab" mat-min-fab mat-raised-button >
+                        <mat-icon>visibility</mat-icon></a> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

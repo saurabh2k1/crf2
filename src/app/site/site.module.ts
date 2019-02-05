@@ -9,13 +9,17 @@ import { PatientListComponent } from './patient-list/patient-list.component';
 import { SiteComponent } from './site/site.component';
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material.module';
+import { SelectStudyComponent } from './select-study/select-study.component';
+import { VisitsComponent } from './visits/visits.component';
 
 @NgModule({
   declarations: [
     SiteDashboardComponent,
     PatientCreateComponent,
     PatientListComponent,
-    SiteComponent
+    SiteComponent,
+    SelectStudyComponent,
+    VisitsComponent
   ],
   imports: [
     CommonModule,

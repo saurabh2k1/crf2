@@ -6,6 +6,7 @@ import { Location, PopStateEvent } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import PerfectScrollbar from 'perfect-scrollbar';
 import { SiteService } from '../site.service';
+import { Study } from 'src/app/models/study';
 
 @Component({
   selector: 'app-site',
@@ -18,6 +19,9 @@ export class SiteComponent implements OnInit, AfterViewInit {
   private _router: Subscription;
   private yScrollStack: number[] = [];
   location: Location;
+  site: any;
+  studyName = '';
+  studies: Study[] = [];
 
   @ViewChild('sidebar') sidebar: any;
   @ViewChild(NavbarComponent) navbar: NavbarComponent;
@@ -27,14 +31,16 @@ export class SiteComponent implements OnInit, AfterViewInit {
    }
 
    ngOnInit() {
-     const site = JSON.parse(localStorage.getItem('site'));
-     if (site) {
-       this.siteService.setSite(site.id, site.name);
+     this.site = JSON.parse(localStorage.getItem('site'));
+     if (this.site) {
+      // this.siteService.setSite(site.id, site.name);
      } else {
        this.siteService.getSite().subscribe((data: any) => {
-         this.siteService.setSite(data[0].id, data[0].name);
+         this.siteService.setSite(data[0]._id, data[0].name);
+         this.site = data;
        });
      }
+
     const elemMainPanel = <HTMLElement>document.querySelector('.main-panel');
     const elemSidebar = <HTMLElement>document.querySelector('.sidebar .sidebar-wrapper');
     this.location.subscribe((ev: PopStateEvent) => {

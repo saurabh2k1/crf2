@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import PerfectScrollbar from 'perfect-scrollbar';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Router } from '@angular/router';
 
 declare const $: any;
 // Metadata
@@ -27,6 +29,7 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'dashboard'
   },
   {path: './patients', title: 'Patients', type: 'link', icontype: 'assignment_ind'},
+  {path: './visits', title: 'Visits', type: 'link', icontype: 'pets'},
 ];
 
 @Component({
@@ -37,6 +40,7 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
   public menuItems: any[];
 
+  userName = '';
   isMobileMenu() {
     if ($(window).width() > 991) {
       return false;
@@ -44,10 +48,13 @@ export class SidebarComponent implements OnInit {
     return true;
   }
 
-  constructor() {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    this.userName = user.first_name + ' ' + user.last_name;
     this.menuItems = ROUTES.filter(menuItem => menuItem);
+
   }
 
   updatePS(): void  {
@@ -62,6 +69,11 @@ export class SidebarComponent implements OnInit {
         bool = true;
     }
     return bool;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 }
