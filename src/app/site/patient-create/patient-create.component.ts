@@ -30,7 +30,7 @@ export class PatientCreateComponent implements OnInit {
 
   ngOnInit() {
     this.frmRegister = this.fb.group({
-      initials: ['', [Validators.required, Validators.pattern('^[a-zA-Z][a-zA-Z_]{2}$')]],
+      initials: ['', [Validators.required, Validators.pattern('^[a-zA-Z][a-zA-Z/-]{2}$')]],
       dob: ['', [Validators.required]],
       gender: ['', Validators.required],
       race: ['', Validators.required],

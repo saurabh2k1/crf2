@@ -1,3 +1,12 @@
+import { ButtonComponent } from './../components/button/button.component';
+import { CheckboxComponent } from './../components/checkbox/checkbox.component';
+import { DateComponent } from './../components/date/date.component';
+import { UnitComponent } from './../components/unit/unit.component';
+import { SelectComponent } from './../components/select/select.component';
+import { RadiobuttonComponent } from './../components/radiobutton/radiobutton.component';
+import { InputComponent } from './../components/input/input.component';
+import { DynamicFormComponent } from './../components/dynamic-form/dynamic-form.component';
+import { DynamicFieldDirective } from './../components/dynamic-field/dynamic-field.directive';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +21,8 @@ import { MaterialModule } from '../material.module';
 import { SelectStudyComponent } from './select-study/select-study.component';
 import { VisitsComponent } from './visits/visits.component';
 
+
+
 @NgModule({
   declarations: [
     SiteDashboardComponent,
@@ -19,7 +30,16 @@ import { VisitsComponent } from './visits/visits.component';
     PatientListComponent,
     SiteComponent,
     SelectStudyComponent,
-    VisitsComponent
+    VisitsComponent,
+    DynamicFormComponent,
+    DynamicFieldDirective,
+    ButtonComponent,
+    CheckboxComponent,
+    DateComponent,
+    UnitComponent,
+    SelectComponent,
+    RadiobuttonComponent,
+    InputComponent
   ],
   imports: [
     CommonModule,
@@ -29,6 +49,15 @@ import { VisitsComponent } from './visits/visits.component';
     SharedModule,
     MaterialModule,
     SiteRoutingModule
+  ],
+  entryComponents: [
+    InputComponent,
+    ButtonComponent,
+    SelectComponent,
+    DateComponent,
+    RadiobuttonComponent,
+    CheckboxComponent,
+    UnitComponent
   ]
 })
 export class SiteModule { }

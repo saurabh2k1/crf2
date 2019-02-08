@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { DynamicFormComponent } from './../../components/dynamic-form/dynamic-form.component';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { SiteService } from '../site.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NestedTreeControl } from '@angular/cdk/tree';
-import { MatTreeNestedDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-visits',
@@ -15,6 +14,7 @@ export class VisitsComponent implements OnInit {
   study_id = '';
   patients = [];
   visits: any[];
+  visit_id = '';
   patient_id = '';
   isExclusionDone = false;
   isExclusionMet = false;
@@ -23,6 +23,10 @@ export class VisitsComponent implements OnInit {
   maxDate = new Date();
   cardHeader = '';
   theForm: any;
+  fields: [];
+  theCRFValue: any;
+
+  @ViewChild(DynamicFormComponent) form: any;
 
   // treeControl: NestedTreeControl<any>;
   // dataSource: MatTreeNestedDataSource<any>;
@@ -122,7 +126,29 @@ export class VisitsComponent implements OnInit {
     return `${prefix}/` + String('000' + patID).slice(-4);
   }
 
-  openForm(form): void {
+  openForm(form, visit): void {
+    this.siteService.getCRForm(form._id).subscribe(data => {
+      if (data.fields) {
+        console.log(data.fields);
+        this.fields = data.fields;
+        this.form = DynamicFormComponent;
+      }
+    });
+    this.visit_id = visit._id;
     this.theForm = form;
+  }
+
+  saveCrForm(value) {
+    const crfForm = {
+      'form_id': this.theForm._id,
+      'site_id': this.site_id,
+      'subject_id': this.patient_id,
+      'visit_id': this.visit_id,
+      'dov': new Date(),
+    };
+    this.theCRFValue = Object.assign(crfForm, value);
+    this.siteService.saveCRForm(this.theCRFValue).subscribe(data => {
+      alert(data);
+    });
   }
 }

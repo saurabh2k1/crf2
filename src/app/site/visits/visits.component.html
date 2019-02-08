@@ -80,7 +80,7 @@
                         <div class="card-body p-0">
                           <ul dense class="list-group">
                             <li class="list-item" *ngFor="let form of visit.forms">
-                              <a class="btn btn-link p-0 m-0" (click)="openForm(form)">
+                              <a class="btn btn-link p-0 m-0" (click)="openForm(form, visit)">
                                 <mat-icon matListIcon>library_books</mat-icon> {{form.name}}
                               </a>
                             </li>
@@ -101,10 +101,11 @@
                           </div>
                           <h4 class="card-title">{{theForm.name}}</h4>
                         </div>
-                        <div class="card-body">
-
+                        <div class="card-body" *ngIf="fields" >
+                            <dynamic-form [fields]="fields" (submit)="saveCrForm($event)" ></dynamic-form>
                         </div>
                       </form>
+                      {{theCRFValue | json}}
                     </div>
                   </div>
                 </div>

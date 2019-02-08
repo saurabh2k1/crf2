@@ -59,4 +59,12 @@ export class SiteService {
      return this.http.get(`${this.apiUrl}/site/patient/${id}/visits`);
    }
 
+   getCRForm(id): Observable<any> {
+     return this.http.get(`${this.apiUrl}/form/crf/${id}`);
+   }
+
+   saveCRForm(newForm): Observable<any> {
+     return this.http.post(`${this.apiUrl}/form/crf`, newForm);
+   }
+
 }
