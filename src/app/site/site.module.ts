@@ -1,3 +1,4 @@
+
 import { ButtonComponent } from './../components/button/button.component';
 import { CheckboxComponent } from './../components/checkbox/checkbox.component';
 import { DateComponent } from './../components/date/date.component';
@@ -20,6 +21,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material.module';
 import { SelectStudyComponent } from './select-study/select-study.component';
 import { VisitsComponent } from './visits/visits.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 
@@ -39,7 +41,8 @@ import { VisitsComponent } from './visits/visits.component';
     UnitComponent,
     SelectComponent,
     RadiobuttonComponent,
-    InputComponent
+    InputComponent,
+    ProfileComponent,
   ],
   imports: [
     CommonModule,

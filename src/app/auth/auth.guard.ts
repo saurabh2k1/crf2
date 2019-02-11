@@ -14,13 +14,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     private router: Router) { }
 
   canActivate(
-    next: ActivatedRouteSnapshot,
+    route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot) {
     console.log('Auth CanActive Called');
     const currentUser = this.authService.currentUserValue;
     if (currentUser) {
-      if (next.data.roles && next.data.roles.indexOf(currentUser.role) === -1) {
-        this.router.navigate(['/login']);
+      // check if route is restricted by role
+      if (route.data.roles && route.data.roles.indexOf(currentUser.role) === -1) {
+        this.router.navigate(['/']);
         return false;
       }
       return true;

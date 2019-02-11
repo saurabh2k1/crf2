@@ -1,3 +1,4 @@
+import { AlertComponent } from './../_components/alert.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './footer/footer.component';
@@ -14,6 +15,7 @@ import { ContainsPipe } from '../contains.pipe';
     NavbarComponent,
     FieldErrorDisplayComponent,
     ContainsPipe,
+    AlertComponent
   ],
   imports: [
     CommonModule,
@@ -25,6 +27,7 @@ import { ContainsPipe } from '../contains.pipe';
     NavbarComponent,
     FieldErrorDisplayComponent,
     ContainsPipe,
+    AlertComponent
   ]
 })
 export class SharedModule { }

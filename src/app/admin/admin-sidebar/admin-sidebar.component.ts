@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import PerfectScrollbar from 'perfect-scrollbar';
+import { AuthService } from 'src/app/auth/auth.service';
 
 declare const $: any;
 // Metadata
@@ -41,10 +42,13 @@ export const ROUTES: RouteInfo[] = [
 })
 export class AdminSidebarComponent implements OnInit {
   public menuItems: any[];
-  constructor() { }
+  user: any;
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
+    this.user = this.authService.currentUserValue;
     this.menuItems = ROUTES.filter(menuItem => menuItem);
+
   }
 
   isMobileMenu() {

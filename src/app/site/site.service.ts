@@ -66,6 +66,10 @@ export class SiteService {
      return this.http.get(`${this.apiUrl}/form/crf/${form_id}`, {params});
    }
 
+   saveProfile(newForm, userId): Observable<any> {
+     return this.http.post(`${this.apiUrl}/users/${userId}`, newForm);
+   }
+
    saveCRForm(newForm): Observable<any> {
      return this.http.post(`${this.apiUrl}/form/crf`, newForm);
    }

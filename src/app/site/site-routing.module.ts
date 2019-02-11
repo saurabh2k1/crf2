@@ -1,3 +1,4 @@
+import { ProfileComponent } from './profile/profile.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SiteComponent } from './site/site.component';
@@ -12,7 +13,7 @@ const siteRoutes: Routes = [
   {
     path: 'site',
     component: SiteComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -23,6 +24,7 @@ const siteRoutes: Routes = [
           { path: 'patient/new', component: PatientCreateComponent, data: {kind: 'new'}},
           { path: 'patient/:id', component: PatientCreateComponent, data: {kind: 'edit'}},
           { path: 'visits', component: VisitsComponent},
+          { path: 'profile', component: ProfileComponent},
           {path: 'dashboard', component: SiteDashboardComponent},
           { path: '', component: SelectStudyComponent},
         ]

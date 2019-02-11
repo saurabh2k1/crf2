@@ -1,0 +1,82 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <app-alert></app-alert>
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <div class="card card-wizard" data-color="rose">
+          <form [formGroup]="frmProfile">
+            <div class="card-header card-header-rose card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">face</i>
+                  </div>
+                  <h4 class="card-title">My Profile</h4>
+            </div>
+            <div class="card-body">
+              <div class="row justify-content-center">
+                <div class="col-sm-4">
+                  <div class="picture-container">
+                    <div class="picture">
+                      <img
+                        [src]="imageURL"
+                        class="picture-src"
+                        id="wizardPicturePreview"
+                      />
+                      <input type="file" id="wizard-picture" accept='image/*' formControlName="profile"  (change)="onFileChange($event)" />
+                    </div>
+                    <h6 class="description">Change Picture</h6>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group form-control-lg">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <i class="material-icons">face</i>
+                          </span>
+                        </div>
+                        <mat-form-field class="example-full-width has-label" [ngClass]="displayFieldCss(frmProfile, 'firstName')">
+                          <input type="text"
+                          name="firstname"
+                          matInput
+                          id="text"
+                          placeholder="First Name"
+                          formControlName="firstName">
+                        </mat-form-field>
+                      </div>
+                      <div class="input-group form-control-lg">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">
+                              <i class="material-icons">record_voice_over</i>
+                            </span>
+                          </div>
+                          <mat-form-field class="example-full-width has-label" [ngClass]="displayFieldCss(frmProfile, 'lastName')">
+                            <input type="text"
+                            name="lastname"
+                            matInput
+                            id="text"
+                            placeholder="last Name"
+                            formControlName="lastName">
+                          </mat-form-field>
+                        </div>
+                        <div class="input-group form-control-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                <i class="material-icons">email</i>
+                              </span>
+                            </div>
+                            <mat-form-field class="example-full-width"  >
+                               <input  matInput placeholder="Email" [value]="email"  disabled
+                                 type="text" >
+                             </mat-form-field>
+                          </div>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <button class="btn btn-fill btn-rose btn-wd" (click)="onSave()" >Save</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

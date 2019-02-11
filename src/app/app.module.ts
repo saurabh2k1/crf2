@@ -17,6 +17,9 @@ import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
 import { JwtInterceptor } from './helpers/jwt-interceptor';
 import { ErrorInterceptor } from './helpers/error-interceptor';
+import { HomeComponent } from './home/home.component';
+
+
 
 
 
@@ -25,6 +28,7 @@ import { ErrorInterceptor } from './helpers/error-interceptor';
     AppComponent,
     LoginComponent,
     ResetPasswordComponent,
+    HomeComponent,
   ],
   imports: [
     CommonModule,
