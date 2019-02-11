@@ -31,6 +31,7 @@ export class AdminNavbarComponent implements OnInit {
   private _router: Subscription;
   studyName = '';
   @ViewChild('app-admin-navbar') button: any;
+
   constructor(location: Location,
     private renderer: Renderer,
     private element: ElementRef,

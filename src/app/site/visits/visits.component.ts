@@ -25,6 +25,8 @@ export class VisitsComponent implements OnInit {
   theForm: any;
   fields: [];
   theCRFValue: any;
+  crfFormDone = false;
+  dov: Date;
 
   @ViewChild(DynamicFormComponent) form: any;
 
@@ -127,15 +129,27 @@ export class VisitsComponent implements OnInit {
   }
 
   openForm(form, visit): void {
-    this.siteService.getCRForm(form._id).subscribe(data => {
+    this.visit_id = visit._id;
+    this.theForm = form;
+    this.siteService.getCRForm(form._id, this.site_id, this.patient_id, this.visit_id).subscribe(data => {
+      if (data.value) {
+        console.log(data.value);
+        this.theCRFValue = data.value;
+        this.dov = new Date(data.value.dov);
+        this.crfFormDone = true;
+      } else {
+        this.crfFormDone = false;
+      }
       if (data.fields) {
         console.log(data.fields);
         this.fields = data.fields;
         this.form = DynamicFormComponent;
+      } else {
+        this.fields = null;
       }
     });
-    this.visit_id = visit._id;
-    this.theForm = form;
+
+
   }
 
   saveCrForm(value) {

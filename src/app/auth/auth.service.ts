@@ -4,6 +4,7 @@ import { map} from 'rxjs/operators';
 import { User } from '../models/user';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -18,6 +19,7 @@ export class AuthService {
 
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
+  apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
@@ -29,7 +31,7 @@ export class AuthService {
    }
 
   login(email: string, password: string) {
-    return this.http.post<any>(`http://lumen-api.test/login`, {email, password})
+    return this.http.post<any>(`${this.apiUrl}/login`, {email, password})
     .pipe(map(user => {
       if (user && user.token) {
         localStorage.setItem('currentUser', JSON.stringify(user));

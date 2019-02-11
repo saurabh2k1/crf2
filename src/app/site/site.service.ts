@@ -3,13 +3,15 @@ import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class SiteService {
 
-  apiUrl = 'http://lumen-api.test';
+  apiUrl = environment.apiUrl;
   private siteChange = new BehaviorSubject({id: '', name: ''});
   public site = this.siteChange.asObservable();
   constructor(private http: HttpClient) { }
@@ -59,8 +61,9 @@ export class SiteService {
      return this.http.get(`${this.apiUrl}/site/patient/${id}/visits`);
    }
 
-   getCRForm(id): Observable<any> {
-     return this.http.get(`${this.apiUrl}/form/crf/${id}`);
+   getCRForm(form_id, site_id, pat_id, visit_id): Observable<any> {
+     const params = new HttpParams().set('site_id', site_id).set('subject_id', pat_id).set('visit_id', visit_id);
+     return this.http.get(`${this.apiUrl}/form/crf/${form_id}`, {params});
    }
 
    saveCRForm(newForm): Observable<any> {

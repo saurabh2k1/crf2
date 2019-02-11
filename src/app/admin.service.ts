@@ -5,7 +5,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { Site } from './models/site';
 import { User } from './models/user';
 import { Study } from './models/study';
-import { Form } from './models/form';
+import { environment } from '../environments/environment';
 import { catchError, tap, map } from 'rxjs/operators';
 
 
@@ -15,7 +15,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 })
 export class AdminService {
 
-  apiUrl = 'http://lumen-api.test';
+  apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) {
 

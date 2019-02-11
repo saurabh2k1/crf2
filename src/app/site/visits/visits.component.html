@@ -100,12 +100,33 @@
                             <mat-icon>library_books</mat-icon>
                           </div>
                           <h4 class="card-title">{{theForm.name}}</h4>
+                          <h6 class="card-subtitle mb-2 text-muted" *ngIf="dov">Date of Visit: {{dov | date}}</h6>
+                          <div *ngIf="!dov">
+                              <mat-form-field >
+                                  <input matInput #dov [matDatepicker]="picker" placeholder="Choose a date" (click)="picker.open()">
+                                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                  <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                          </div>
                         </div>
                         <div class="card-body" *ngIf="fields" >
-                            <dynamic-form [fields]="fields" (submit)="saveCrForm($event)" ></dynamic-form>
+                            <div *ngIf="crfFormDone">
+                              <table class="table table-bordered">
+                                <thead></thead>
+                                <tbody>
+                                  <tr *ngFor="let field of fields">
+                                    <td>{{field.label}} </td><td>{{theCRFValue[field.name]}}</td>
+                                  </tr>
+                                </tbody>
+                                <tfoot>
+                                  <tr class="bg-primary text-white"><td colspan="2">Data submitted by <b>{{theCRFValue.created_by}}</b>  at <em>{{theCRFValue.created_at | date:'medium'}}</em> from ip address: {{theCRFValue.created_on}}</td></tr>
+                                </tfoot>
+                              </table>
+                            </div>
+                            <div *ngIf="!crfFormDone"><dynamic-form [fields]="fields" (submit)="saveCrForm($event)" ></dynamic-form></div>
+
                         </div>
                       </form>
-                      {{theCRFValue | json}}
                     </div>
                   </div>
                 </div>
