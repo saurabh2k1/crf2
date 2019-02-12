@@ -42,6 +42,10 @@ export class AuthService {
     }));
   }
 
+  sendResetLink(frm): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset`, frm);
+  }
+
   logout(): void {
     localStorage.removeItem('currentUser');
     localStorage.clear();

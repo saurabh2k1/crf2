@@ -67,7 +67,7 @@ export class SiteService {
    }
 
    saveProfile(newForm, userId): Observable<any> {
-     return this.http.post(`${this.apiUrl}/users/${userId}`, newForm);
+     return this.http.post(`${this.apiUrl}/api/users/${userId}`, newForm);
    }
 
    saveCRForm(newForm): Observable<any> {

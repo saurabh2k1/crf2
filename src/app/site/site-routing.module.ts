@@ -8,12 +8,14 @@ import { SiteDashboardComponent } from './site-dashboard/site-dashboard.componen
 import { AuthGuard } from '../auth/auth.guard';
 import { SelectStudyComponent } from './select-study/select-study.component';
 import { VisitsComponent } from './visits/visits.component';
+import { Role } from '../models/role';
 
 const siteRoutes: Routes = [
   {
     path: 'site',
     component: SiteComponent,
     canActivate: [AuthGuard],
+    data: {roles: [Role.User]},
     children: [
       {
         path: '',
