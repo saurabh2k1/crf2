@@ -3,7 +3,7 @@ import { AdminService } from 'src/app/admin.service';
 import { User } from 'src/app/models/user';
 import { ActivatedRoute } from '@angular/router';
 import { MatListSubheaderCssMatStyler } from '@angular/material';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Site } from 'src/app/models/site';
 import { getMatScrollStrategyAlreadyAttachedError } from '@angular/cdk/overlay/typings/scroll/scroll-strategy';
 
@@ -20,6 +20,12 @@ export class ManageUsersComponent implements OnInit {
   showList = false;
   showNew = false;
   frmUser: FormGroup;
+
+  emailFormControl = new FormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
+
   constructor(private adminService: AdminService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder ) { }
@@ -30,6 +36,7 @@ export class ManageUsersComponent implements OnInit {
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      confirm_password: [null, [Validators.required, Validators.minLength(6)]],
       site_id: [''],
       role_id: [''],
     });
@@ -50,6 +57,16 @@ export class ManageUsersComponent implements OnInit {
       }
     });
 
+  }
+
+  isFieldValid(form: FormGroup, field: string) {
+    return !form.get(field).valid && form.get(field).touched;
+  }
+  displayFieldCss(form: FormGroup, field: string) {
+    return {
+      'has-error': this.isFieldValid(form, field),
+      'has-feedback': this.isFieldValid(form, field)
+    };
   }
 
   listUser() {

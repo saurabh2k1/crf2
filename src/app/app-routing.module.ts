@@ -1,3 +1,4 @@
+import { ChangePasswordComponent } from './change-password/change-password.component';
 import { AuthGuard } from './auth/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { NgModule } from '@angular/core';
@@ -10,6 +11,7 @@ const routes: Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
   {path: 'resetpassword', component: ResetPasswordComponent},
   {path: 'passwordreset/:token', component: ResetPasswordComponent},
+  {path: 'changepassword', component: ChangePasswordComponent},
   {path: 'login', component: LoginComponent},
 
   {path: '**', redirectTo: ''}

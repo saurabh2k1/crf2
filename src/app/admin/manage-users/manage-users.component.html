@@ -16,7 +16,7 @@
               <div class="table-responsive">
                   <table class="table table-hover">
                     <thead class="text-primary">
-                      <tr><th>Full Name</th><th>Roles</th><th>Assigned Site</th><th>Action</th></tr>
+                      <tr><th>Full Name</th><th>Roles</th><th>Assigned Site</th><th class="text-right">Action</th></tr>
                     </thead>
                     <tbody>
                       <tr *ngFor='let user of users'>
@@ -27,7 +27,17 @@
                           <span *ngIf='user.site'>{{user.site.name}}, <br></span>
                           <!-- <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>
                         <td>{{site.users}}</td> -->
-                        <td></td>
+                        <td class="td-actions text-right">
+                          <button mat-raised-button type="button" class="btn btn-info btn-round ">
+                            <i class="material-icons">person</i>
+                        </button>
+                        <button mat-raised-button type="button" class="btn btn-success btn-round">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <button mat-raised-button type="button" class="btn btn-danger btn-round">
+                            <i class="material-icons">close</i>
+                        </button>
+                        </td>
                       </tr>
                     </tbody>
                     </table>
@@ -51,38 +61,43 @@
                     <br/>
                     <div class="row">
                       <div class="col-md-11">
-                          <mat-form-field class="example-full-width">
+                          <mat-form-field class="example-full-width" >
                               <input type="email" matInput placeholder="Email Address" formControlName="email"  required />
-                              <app-field-error-display></app-field-error-display>
+                              <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                                Please enter a valid email address
+                              </mat-error>
+                              <mat-error *ngIf="emailFormControl.hasError('required')">
+                                Email is <strong>required</strong>
+                              </mat-error>
                             </mat-form-field>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-md-5 mr-auto">
-                          <mat-form-field class="example-full-width">
+                          <mat-form-field class="example-full-width has-label" [ngClass]="displayFieldCss(frmUser, 'first_name')">
                               <input type="text" matInput placeholder="First Name" formControlName="first_name" required />
-                              <app-field-error-display></app-field-error-display>
+                              <app-field-error-display [displayError]="isFieldValid(frmUser, 'first_name')" errorMsg="First name is required."></app-field-error-display>
                             </mat-form-field>
                       </div>
                       <div class="col-md-5 mr-auto">
-                          <mat-form-field class="example-full-width">
+                          <mat-form-field class="example-full-width has-label" [ngClass]="displayFieldCss(frmUser, 'last_name')">
                               <input type="text" matInput placeholder="Last Name" formControlName="last_name" required />
-                              <app-field-error-display></app-field-error-display>
+                              <app-field-error-display [displayError]="isFieldValid(frmUser, 'last_name')" errorMsg="Last name is required."></app-field-error-display>
                             </mat-form-field>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-5 mr-auto">
-                        <mat-form-field class="example-full-width">
+                        <mat-form-field class="example-full-width has-label" [ngClass]="displayFieldCss(frmUser, 'password')">
                           <input type="password" matInput placeholder="Password" formControlName="password" required />
-                          <app-field-error-display></app-field-error-display>
+                          <app-field-error-display  [displayError]="isFieldValid(frmUser, 'password')" errorMsg="Password is required."></app-field-error-display>
                         </mat-form-field>
                       </div>
                       <div class="col-md-5 mr-auto">
-                        <mat-form-field class="example-full-width">
-                          <input type="password" matInput placeholder="Confirm Password" required />
-                          <app-field-error-display></app-field-error-display>
+                        <mat-form-field class="example-full-width has-label" [ngClass]="displayFieldCss(frmUser, 'confirm_password')">
+                          <input type="password" matInput formControlName="confirm_password" placeholder="Confirm Password" required />
+                          <app-field-error-display  [displayError]="isFieldValid(frmUser, 'confirm_password')" errorMsg="Confirm Password is required."></app-field-error-display>
                         </mat-form-field>
                       </div>
                     </div>
@@ -90,7 +105,7 @@
                       <div class="col-md-5 mr-auto">
                         <mat-form-field class="example-full-width">
                           <mat-select placeholder="Affiliated to Site" formControlName="site_id"  >
-                            <mat-option *ngFor="let site of sites" [value]="site.id" >
+                            <mat-option *ngFor="let site of sites" [value]="site._id" >
                               {{site.name}}
                             </mat-option>
                           </mat-select>

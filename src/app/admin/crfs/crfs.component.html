@@ -41,7 +41,7 @@
                       <td>
                         <span *ngFor="let visit of form.visits">{{visit.description}}<br></span>
                       </td>
-                      <td><a href="/admin/crf-details/{{form._id}}" class="btn btn-round btn-primary btn-fab" mat-min-fab mat-raised-button >
+                      <td><a routerLink="/admin/crf-details/{{form._id}}" mat-raised-button class="btn btn-primary btn-link" mat-min-fab mat-raised-button >
                         <mat-icon>visibility</mat-icon></a> </td>
                     </tr>
                   </tbody>

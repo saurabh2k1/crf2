@@ -50,6 +50,10 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/reset/${token}`, frm);
   }
 
+  changePassword(frm): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/users/change-password`, frm);
+  }
+
   logout(): void {
     localStorage.removeItem('currentUser');
     localStorage.clear();

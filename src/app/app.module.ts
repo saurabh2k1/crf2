@@ -18,6 +18,7 @@ import { AdminModule } from './admin/admin.module';
 import { JwtInterceptor } from './helpers/jwt-interceptor';
 import { ErrorInterceptor } from './helpers/error-interceptor';
 import { HomeComponent } from './home/home.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 
@@ -29,6 +30,7 @@ import { HomeComponent } from './home/home.component';
     LoginComponent,
     ResetPasswordComponent,
     HomeComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     CommonModule,

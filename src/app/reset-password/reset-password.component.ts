@@ -52,7 +52,7 @@ export class ResetPasswordComponent implements OnInit {
     this.frmPassword = this.fb.group({
       email: [null, [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')]],
       password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],
-      confirmPassword: [null, Validators.required],
+      password_confirmation: [null, Validators.required],
       token: [null],
     }, {
       validator: PasswordValidation.MatchPassword // your validation method
@@ -122,7 +122,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   emailValidationRegister(e) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(String(e).toLowerCase())) {
         this.validEmailRegister = true;
     } else {
@@ -141,7 +141,11 @@ export class ResetPasswordComponent implements OnInit {
     if (this.frmPassword.valid) {
       this.frmPassword.controls['token'].setValue(this.token);
       this.authService.resetPassword(this.frmPassword.value, this.token).subscribe(data => {
-        this.alertService.success(data);
+        if (data.success) {
+          this.alertService.success('Password reset successful. Please login');
+        } else {
+          this.alertService.error('Wrong Information');
+        }
       }, err => {
         if (err) {
           this.alertService.error('Wrong Information');
