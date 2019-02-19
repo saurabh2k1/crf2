@@ -38,8 +38,6 @@ export class AdminService {
 
   }
 
-
-
   getRoles(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/roles`);
   }
