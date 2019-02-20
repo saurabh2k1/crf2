@@ -13,15 +13,16 @@ import { CheckboxComponent } from './checkbox/checkbox.component';
 import { DynamicFieldDirective } from './dynamic-field/dynamic-field.directive';
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 @NgModule({
-  declarations: [InputComponent,
-    UnitComponent,
-    ButtonComponent,
-    SelectComponent,
-    DateComponent,
-    RadiobuttonComponent,
-    CheckboxComponent,
-    DynamicFieldDirective,
-    DynamicFormComponent,
+  declarations: [
+    // InputComponent,
+    // UnitComponent,
+    // ButtonComponent,
+    // SelectComponent,
+    // DateComponent,
+    // RadiobuttonComponent,
+    // CheckboxComponent,
+    // DynamicFieldDirective,
+    // DynamicFormComponent,
   ],
   imports: [
     CommonModule,

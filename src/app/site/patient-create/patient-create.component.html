@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-md-5 mr-auto" [ngClass]="displayFieldCss(frmRegister, 'dob')">
                     <mat-form-field class="example-full-width">
-                        <input matInput [matDatepicker]="picker" formControlName="dob" [errorStateMatcher]="matcher" placeholder="Date of Birth" (click)="picker.open()" required>
+                        <input matInput [matDatepicker]="picker" formControlName="dob"  placeholder="Date of Birth" (click)="picker.open()" required>
                         <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                        <app-field-error-display [displayError]="isFieldValid(frmRegister, 'dob')" errorMsg="Date of Birth is required"></app-field-error-display>
