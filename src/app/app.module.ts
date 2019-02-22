@@ -1,3 +1,4 @@
+import { LoaderInterceptorService } from './helpers/loader-interceptor';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 
@@ -19,7 +20,7 @@ import { JwtInterceptor } from './helpers/jwt-interceptor';
 import { ErrorInterceptor } from './helpers/error-interceptor';
 import { HomeComponent } from './home/home.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
-
+import { LoaderComponent } from './shared/loader/loader.component';
 
 
 
@@ -31,6 +32,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     ResetPasswordComponent,
     HomeComponent,
     ChangePasswordComponent,
+    LoaderComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +48,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     AppRoutingModule,
   ],
   providers: [
-
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptorService, multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],

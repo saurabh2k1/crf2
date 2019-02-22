@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+// import { HTTPStatus } from './helpers/jwt-interceptor';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'crf2';
+  title = 'QDATA EDC';
+  HTTPActivity: boolean;
+
+  // constructor(private httpStatus: HTTPStatus) {
+  //   this.httpStatus.getHttpStatus().subscribe((status: boolean) => {
+  //     this.HTTPActivity = status;
+  //     console.log(status);
+  //   });
+  // }
 }
