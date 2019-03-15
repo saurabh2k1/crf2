@@ -1,3 +1,4 @@
+import { MonitorModule } from './monitor/monitor.module';
 import { LoaderInterceptorService } from './helpers/loader-interceptor';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
@@ -46,6 +47,7 @@ import { LoaderComponent } from './shared/loader/loader.component';
     SiteModule,
     AdminModule,
     AppRoutingModule,
+    MonitorModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptorService, multi: true},
