@@ -25,6 +25,9 @@ export class HomeComponent implements OnInit {
       case Role.User:
         this.router.navigate(['/site']);
         break;
+      case Role.Monitor:
+        this.router.navigate(['/monitor']);
+        break;
       default:
         this.alertService.error('You are not authorised to access any pages. Please contact system administrator.!');
         break;

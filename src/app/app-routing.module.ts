@@ -7,18 +7,18 @@ import { LoginComponent } from './login/login.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
+
 const routes: Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
   {path: 'resetpassword', component: ResetPasswordComponent},
   {path: 'passwordreset/:token', component: ResetPasswordComponent},
   {path: 'changepassword', component: ChangePasswordComponent},
   {path: 'login', component: LoginComponent},
-
-  {path: '**', redirectTo: ''}
+  // {path: '**', redirectTo: ''}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,  {enableTracing: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
