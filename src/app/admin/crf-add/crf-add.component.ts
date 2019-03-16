@@ -29,7 +29,6 @@ export class CrfAddComponent implements OnInit {
 
   studyChange(event) {
     const study_id = event;
-    alert(study_id);
     this.adminService.getVisit(study_id).subscribe((data: any) => {
       this.visits = data;
     });

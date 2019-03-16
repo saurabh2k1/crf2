@@ -14,7 +14,7 @@ import { StudyService } from 'src/app/study.service';
 })
 export class PatientCreateComponent implements OnInit {
 
-  maxDate = new Date();
+
   frmRegister: FormGroup;
   showNew = false;
   btnText = 'Register';
@@ -22,6 +22,8 @@ export class PatientCreateComponent implements OnInit {
   patID = '';
   siteID = '';
   studyID = '';
+  age = 0;
+  showDobReason = false;
   constructor(private fb: FormBuilder,
     private siteService: SiteService,
     private studyService: StudyService,
@@ -80,6 +82,17 @@ export class PatientCreateComponent implements OnInit {
     };
   }
 
+  dobChange(val: Date) {
+    const dob = new Date(val);
+    const timeDiff = Math.abs(Date.now() - dob);
+    this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365);
+    // TODO: get the max, min age for study from study details
+    if (this.age < 55 || this.age > 75) {
+      this.showDobReason = true;
+    } else {
+      this.showDobReason = false;
+    }
+  }
 
 
   onRegister() {
@@ -133,5 +146,9 @@ export class PatientCreateComponent implements OnInit {
     const mDt = new Date(dt);
     return moment(mDt).format('YYYY-MM-DD');
   }
+
+  getToday(): string {
+    return new Date().toISOString().split('T')[0]
+ }
 
 }

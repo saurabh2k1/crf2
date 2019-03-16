@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-12 ">
         <mat-card class="py-0">
-          <div class="col-md-4 mr-auto">
+          <div class="col-md-4">
             <mat-form-field>
               <mat-select placeholder="Select Patient" (selectionChange)="onPatChange($event)" required>
 
@@ -12,8 +12,11 @@
               </mat-select>
             </mat-form-field>
           </div>
+          <!-- <div class="col-md-8">
+            <span *ngIf="isExclusionDone">Inclusion/Exclusion met: {{isExclusionMet? 'Yes' : 'No'}} </span>
+          </div> -->
         </mat-card>
- 
+
         <div class="card" *ngIf="patient_id">
 
           <div class="card-header card-header-icon card-header-rose">
@@ -70,7 +73,7 @@
                         <h5 class="mb-0">
                           <a data-toggle="collapse" href="#collapse{{i}}" [attr.aria-expanded]="(i == 0)? 'true': 'false'"
                             [attr.aria-controls]="'collapse' + i" class="collapsed">
-                            {{visit.description}} <i class="material-icons">keyboard_arrow_down</i>
+                            {{visit.description}} <span *ngIf="visit.dov">({{visit.dov | date}})</span> <i class="material-icons">keyboard_arrow_down</i>
                           </a>
                         </h5>
                       </div>
@@ -78,15 +81,49 @@
                         [attr.aria-labeledby]="'heading' + i" data-parent="#accordion">
                         <div class="card-body p-0">
                           <ul dense class="list-group">
+                            <li class="list-item" *ngIf="i == 0"><a class="btn btn-link p-0 m-0" (click)="openExclusionForm(visit)"><mat-icon matListIcon class="text-success">library_books</mat-icon>INCLUSION & EXCLUSION FORM</a></li>
                             <li class="list-item" *ngFor="let form of visit.forms">
                               <a class="btn btn-link p-0 m-0" (click)="openForm(form, visit)">
-                                <mat-icon matListIcon>library_books</mat-icon> {{form.name}}
+                                <mat-icon matListIcon [ngClass]="{'text-success': form.isDone}">library_books</mat-icon> {{form.name}}
                               </a>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div class="col-md-9" *ngIf="showExclusionDetails">
+                      <div class="card ">
+                          <form>
+                            <div class="card-header card-header-rose card-header-icon">
+                              <!-- <div class="card-text">
+                                  <h4 class="card-title">{{theForm.name}}</h4>
+                                </div> -->
+                              <div class="card-icon">
+                                <mat-icon>library_books</mat-icon>
+                              </div>
+                              <h4 class="card-title">INCLUSION & EXCLUSION FORM</h4>
+                              <h6 class="card-subtitle mb-2 text-muted" >Date of Visit: {{crfExclusion.dov | date}}</h6>
+                            </div>
+                            <div class="card-body" >
+
+                                  <table class="table table-bordered">
+                                    <thead></thead>
+                                    <tbody>
+                                      <tr>
+                                        <td>Patient met inclusion/exclusion criteria</td><td>{{crfExclusion.exclusion? 'Yes': 'No'}}</td>
+                                      </tr>
+                                    </tbody>
+                                    <tfoot>
+                                      <tr class="bg-primary text-white"><td colspan="2">Data submitted by <b>{{crfExclusion.created_by}}</b>  at <em>{{crfExclusion.created_at | date:'medium'}}</em> from ip address: {{crfExclusion.created_on}}</td></tr>
+                                    </tfoot>
+                                  </table>
+
+
+
+                            </div>
+                          </form>
+                        </div>
                   </div>
                   <div class="col-md-9" *ngIf="theForm">
                     <div class="card ">
@@ -101,8 +138,9 @@
                           <h4 class="card-title">{{theForm.name}}</h4>
                           <h6 class="card-subtitle mb-2 text-muted" *ngIf="dov">Date of Visit: {{dov | date}}</h6>
                           <div *ngIf="!dov">
+                              <legend>Date of Visit</legend>
                               <mat-form-field >
-                                  <input matInput #dov [matDatepicker]="picker" placeholder="Choose a date" (click)="picker.open()">
+                                  <input matInput #dov [matDatepicker]="picker" placeholder="Date of Visit" (click)="picker.open()">
                                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                   <mat-datepicker #picker></mat-datepicker>
                                 </mat-form-field>

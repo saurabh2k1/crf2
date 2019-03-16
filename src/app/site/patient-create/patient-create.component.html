@@ -1,9 +1,9 @@
 <div class="main-content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-10 offset-md-1">
-          <div class="card">
-              <form [formGroup]="frmRegister" >
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <div class="card">
+          <form [formGroup]="frmRegister">
             <div class="card-header card-header-rose card-header-icon">
               <div class="card-icon">
                 <i class="material-icons">create</i>
@@ -17,63 +17,71 @@
                 <div class="col-md-5 mr-auto" [ngClass]="displayFieldCss(frmRegister, 'initials')">
                   <mat-form-field class="example-full-width">
                     <input matInput placeholder="Initials" formControlName="initials" type="text" required />
-                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'initials')" errorMsg="Enter a valid Initials (e.g FML, F-L)" ></app-field-error-display>
+                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'initials')" errorMsg="Enter a valid Initials (e.g FML, F-L)"></app-field-error-display>
                   </mat-form-field>
                 </div>
                 <div class="col-md-5 mr-auto" [ngClass]="displayFieldCss(frmRegister, 'dob')">
-                    <mat-form-field class="example-full-width">
-                        <input matInput [matDatepicker]="picker" formControlName="dob"  placeholder="Date of Birth" (click)="picker.open()" required>
-                        <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                       <app-field-error-display [displayError]="isFieldValid(frmRegister, 'dob')" errorMsg="Date of Birth is required"></app-field-error-display>
-                    </mat-form-field>
-                  </div>
+                  <mat-form-field class="example-full-width">
+                    <input matInput #dob [matDatepicker]="picker" formControlName="dob" placeholder="Date of Birth" [max]="getToday()"
+                      (click)="picker.open()" (dateChange)="dobChange(dob.value)" required>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'dob')" errorMsg="Date of Birth is required"></app-field-error-display>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-5 mr-auto text-danger" *ngIf="showDobReason">Age of the patient ({{age}} years) is not in the approved limit.</div>
+                <div class="col-md-5 mr-auto" *ngIf="showDobReason">
+                <mat-form-field class="example-full-width" >
+                  <input matInput placeholder="Enter reason for exception in age of patient" />
+                </mat-form-field>
               </div>
-              <div class="row">
-                  <div class="col-md-5 mr-auto">
-                      <mat-form-field>
-                          <mat-select placeholder="Gender" formControlName="gender" name="gender" required>
-                            <mat-option value="Male">Male</mat-option>
-                            <mat-option value="Female">Female</mat-option>
-                          </mat-select>
-                          <app-field-error-display [displayError]="isFieldValid(frmRegister,'gender')" errorMsg="Gender is required"></app-field-error-display>
-                      </mat-form-field>
-                  </div>
-                  <div class="col-md-5 mr-auto">
-                      <mat-form-field>
-                          <mat-select placeholder="Race" formControlName="race" name="race" required>
-                              <mat-option value="Asian">Asian</mat-option>
-                              <mat-option value="Caucasian">Caucasian</mat-option>
-                              <mat-option value="Mixed">Mixed</mat-option>
-                              <mat-option value="Undisclosed">Undisclosed</mat-option>
-                          </mat-select>
-                          <app-field-error-display [displayError]="isFieldValid(frmRegister, 'race')" errorMsg="Input is required"></app-field-error-display>
-                      </mat-form-field>
-                  </div>
               </div>
               <div class="row">
                 <div class="col-md-5 mr-auto">
-
-                    <!-- <mat-checkbox formControlName="ICF" required>ICF Signed?</mat-checkbox> -->
-
-                    <div class="form-check mr-auto">
-                        <label class="form-check-label">
-                          <input class="form-check-input" formControlName="icf" type="checkbox" value="1" required> ICF Signed? *
-                          <span class="form-check-sign">
-                            <span class="check"></span>
-                          </span>
-                        </label>
-                        <app-field-error-display [displayError]="isFieldValid(frmRegister, 'icf')" errorMsg="Input is required"></app-field-error-display>
-                      </div>
+                  <mat-form-field>
+                    <mat-select placeholder="Gender" formControlName="gender" name="gender" required>
+                      <mat-option value="Male">Male</mat-option>
+                      <mat-option value="Female">Female</mat-option>
+                    </mat-select>
+                    <app-field-error-display [displayError]="isFieldValid(frmRegister,'gender')" errorMsg="Gender is required"></app-field-error-display>
+                  </mat-form-field>
                 </div>
                 <div class="col-md-5 mr-auto">
-                    <mat-form-field class="example-full-width">
-                        <input matInput [matDatepicker]="ICFpicker" formControlName="icf_date" placeholder="ICF Date"
-                        [max]="maxDate" (click)="ICFpicker.open()"  required>
-                        <mat-datepicker-toggle matSuffix [for]="ICFpicker"></mat-datepicker-toggle>
-                        <mat-datepicker #ICFpicker ></mat-datepicker>
-                        <app-field-error-display [displayError]="isFieldValid(frmRegister, 'icf_date')" errorMsg="Input is required"></app-field-error-display>
-                    </mat-form-field>
+                  <mat-form-field>
+                    <mat-select placeholder="Race" formControlName="race" name="race" required>
+                      <mat-option value="Asian">Asian</mat-option>
+                      <mat-option value="Caucasian">Caucasian</mat-option>
+                      <mat-option value="Mixed">Mixed</mat-option>
+                      <mat-option value="Undisclosed">Undisclosed</mat-option>
+                    </mat-select>
+                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'race')" errorMsg="Input is required"></app-field-error-display>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-5 mr-auto">
+
+                  <!-- <mat-checkbox formControlName="ICF" required>ICF Signed?</mat-checkbox> -->
+
+                  <div class="form-check mr-auto">
+                    <label class="form-check-label">
+                      <input class="form-check-input" formControlName="icf" type="checkbox" value="1" required> ICF
+                      Signed? *
+                      <span class="form-check-sign">
+                        <span class="check"></span>
+                      </span>
+                    </label>
+                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'icf')" errorMsg="Input is required"></app-field-error-display>
+                  </div>
+                </div>
+                <div class="col-md-5 mr-auto">
+                  <mat-form-field class="example-full-width">
+                    <input matInput [matDatepicker]="ICFpicker" formControlName="icf_date" placeholder="ICF Date" [max]="getToday()"
+                      (click)="ICFpicker.open()" required>
+                    <mat-datepicker-toggle matSuffix [for]="ICFpicker"></mat-datepicker-toggle>
+                    <mat-datepicker #ICFpicker></mat-datepicker>
+                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'icf_date')" errorMsg="Input is required"></app-field-error-display>
+                  </mat-form-field>
                 </div>
               </div>
               <div class="category form-category">* Required fields</div>
@@ -83,8 +91,8 @@
               <button mat-raised-button type="submit" class="btn btn-rose" (click)="onRegister()">{{btnText}}</button>
             </div>
           </form>
-          </div>
         </div>
       </div>
     </div>
   </div>
+</div>

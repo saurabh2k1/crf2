@@ -27,6 +27,8 @@ export class VisitsComponent implements OnInit {
   theCRFValue: any;
   crfFormDone = false;
   dov: Date;
+  showDOVForm = false;
+  showExclusionDetails = false;
 
   @ViewChild(DynamicFormComponent) form: any;
 
@@ -51,7 +53,7 @@ export class VisitsComponent implements OnInit {
   getVisits(patID): void {
     this.siteService.getVisitsOfPatient(patID).subscribe(data => {
       this.visits = data;
-      // this.treeControl = new NestedTreeControl(node => node.forms);
+      //  this.treeControl = new NestedTreeControl(node => node.forms);
       // this.dataSource = new MatTreeNestedDataSource();
       // this.dataSource.data = data;
     });
@@ -128,14 +130,27 @@ export class VisitsComponent implements OnInit {
     return `${prefix}/` + String('000' + patID).slice(-4);
   }
 
+  openExclusionForm(visit): void {
+    this.visit_id = visit._id;
+    this.dov = visit.dov;
+    this.showExclusionDetails = true;
+  }
+
   openForm(form, visit): void {
     this.visit_id = visit._id;
+    this.dov = visit.dov;
+    // if (!this.dov) {
+    //   this.showDOVForm = true;
+    //   return;
+    // }
+    this.showDOVForm = false;
+    this.showExclusionDetails = false;
     this.theForm = form;
     this.siteService.getCRForm(form._id, this.site_id, this.patient_id, this.visit_id).subscribe(data => {
       if (data.value) {
         console.log(data.value);
         this.theCRFValue = data.value;
-        this.dov = new Date(data.value.dov);
+
         this.crfFormDone = true;
       } else {
         this.crfFormDone = false;

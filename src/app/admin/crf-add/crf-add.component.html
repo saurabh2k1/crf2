@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-md-7" *ngIf="visits">
                     <mat-form-field>
-                      <mat-select placeholder="Select Visits for this CRF" formControlName="visits" multiple>
+                      <mat-select placeholder="Select Visits for this CRF (multiple select)s" formControlName="visits" multiple>
                         <mat-option *ngFor="let visit of visits" [value]="visit._id">{{visit.description}}</mat-option>
                       </mat-select>
                     </mat-form-field>
