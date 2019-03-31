@@ -9,6 +9,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { SharedModule } from '../shared/shared.module';
 import { MonitorNavbarComponent } from './monitor-navbar/monitor-navbar.component';
 import { MonitorSidebarComponent } from './monitor-sidebar/monitor-sidebar.component';
+import { SelectStudyComponent } from './select-study/select-study.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { MonitorSidebarComponent } from './monitor-sidebar/monitor-sidebar.compo
     MonitorDashboardComponent,
     MonitorNavbarComponent,
     MonitorSidebarComponent,
+    SelectStudyComponent,
   ],
   imports: [
     CommonModule,

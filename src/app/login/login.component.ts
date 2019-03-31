@@ -61,6 +61,9 @@ export class LoginComponent implements OnInit {
               case Role.User:
                 this.router.navigate(['/site']);
                 break;
+              case Role.Monitor:
+                this.router.navigate(['/monitor']);
+                break;
               default:
                 this.router.navigate(['/login']);
                 break;

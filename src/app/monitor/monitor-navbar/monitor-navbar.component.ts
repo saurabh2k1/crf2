@@ -5,6 +5,7 @@ import { ROUTES } from 'src/app/shared/sidebar/sidebar.component';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Location } from '@angular/common';
+import { StudyService } from 'src/app/study.service';
 
 const misc: any = {
   navbar_menu_visible: 0,
@@ -28,10 +29,12 @@ export class MonitorNavbarComponent implements OnInit {
   private sidebarVisible: boolean;
   mobile_menu_visible: any = 0;
   private nativeElement: Node;
+  studyName: string;
   constructor(
     private authService: AuthService,
     private router: Router,
     private element: ElementRef,
+    private studyService: StudyService,
     location: Location) {
       this.location = location;
       this.nativeElement = element.nativeElement;
@@ -39,7 +42,15 @@ export class MonitorNavbarComponent implements OnInit {
      }
 
   ngOnInit() {
+    const study = JSON.parse(localStorage.getItem('study'));
     this.listTitles = ROUTES.filter(listTitle => listTitle);
+    if (study) {
+      this.studyName = study.name;
+    } else {
+      this.studyService.study.subscribe((s: any) => {
+        this.studyName = s.name;
+      });
+    }
     const navbar: HTMLElement = this.element.nativeElement;
     const body = document.getElementsByTagName('body')[0];
     this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];

@@ -84,7 +84,7 @@ export class PatientCreateComponent implements OnInit {
 
   dobChange(val: Date) {
     const dob = new Date(val);
-    const timeDiff = Math.abs(Date.now() - dob);
+    const timeDiff = Math.abs(Date.now() - dob.getTime());
     this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365);
     // TODO: get the max, min age for study from study details
     if (this.age < 55 || this.age > 75) {

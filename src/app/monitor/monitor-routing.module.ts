@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { MonitorComponent } from './monitor/monitor.component';
 import { MonitorDashboardComponent } from './monitor-dashboard/monitor-dashboard.component';
 import { Role } from '../models/role';
+import { SelectStudyComponent } from './select-study/select-study.component';
 
 const monitorRoutes: Routes = [
   {
@@ -12,7 +13,10 @@ const monitorRoutes: Routes = [
     children: [
       {
         path: 'dashboard', component: MonitorDashboardComponent
-      }
+      },
+      {
+        path: '', component: SelectStudyComponent
+      },
     ]
   }
 ];
