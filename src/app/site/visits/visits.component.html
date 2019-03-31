@@ -140,7 +140,7 @@
                           <div *ngIf="!dov">
                               <legend>Date of Visit</legend>
                               <mat-form-field >
-                                  <input matInput #dov [matDatepicker]="picker" placeholder="Date of Visit" (click)="picker.open()">
+                                  <input matInput #dov style="color:black;" [matDatepicker]="picker" placeholder="Date of Visit" (click)="picker.open()">
                                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                   <mat-datepicker #picker></mat-datepicker>
                                 </mat-form-field>

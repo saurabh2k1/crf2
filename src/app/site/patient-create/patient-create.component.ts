@@ -23,6 +23,8 @@ export class PatientCreateComponent implements OnInit {
   siteID = '';
   studyID = '';
   age = 0;
+  isUpdated = false;
+  changes: any = [];
   showDobReason = false;
   constructor(private fb: FormBuilder,
     private siteService: SiteService,
@@ -37,7 +39,8 @@ export class PatientCreateComponent implements OnInit {
       gender: ['', Validators.required],
       race: ['', Validators.required],
       icf: ['', Validators.required],
-      icf_date: [null, Validators.required]
+      icf_date: [null, Validators.required],
+      reason: [null],
     });
     const study = JSON.parse(localStorage.getItem('study'));
     const site = JSON.parse(localStorage.getItem('site'));
@@ -120,7 +123,13 @@ export class PatientCreateComponent implements OnInit {
         console.error(err);
       });
     } else {
-      this.siteService.updatePatient(this.patID, pat).subscribe(data => {
+      let requestBody = {};
+      for (let control in frm) {
+        if (this.frmRegister.get(control).dirty) {
+          requestBody[control] = this.frmRegister.get(control).value;
+        }
+      }
+      this.siteService.updatePatient(this.patID, requestBody).subscribe(data => {
         if (data) {
           this.route.navigate(['/site/patients']);
         }
@@ -137,6 +146,8 @@ export class PatientCreateComponent implements OnInit {
       this.frmRegister.patchValue(data);
       this.frmRegister.get('dob').patchValue(new Date(data.dob));
       this.frmRegister.get('icf_date').patchValue(new Date(data.icf_date));
+      this.isUpdated = data.isUpdated;
+      this.changes = data.audits;
       // this.frmRegister.get('icf').patchValue(true);
       // this.frmRegister.controls['gender'].setValue(data.gender);
 

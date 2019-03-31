@@ -132,7 +132,7 @@ export class VisitsComponent implements OnInit {
 
   openExclusionForm(visit): void {
     this.visit_id = visit._id;
-    this.dov = visit.dov;
+    this.dov = visit.exdov;
     this.showExclusionDetails = true;
   }
 

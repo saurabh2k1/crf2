@@ -32,7 +32,7 @@
                 <div class="col-md-5 mr-auto text-danger" *ngIf="showDobReason">Age of the patient ({{age}} years) is not in the approved limit.</div>
                 <div class="col-md-5 mr-auto" *ngIf="showDobReason">
                 <mat-form-field class="example-full-width" >
-                  <input matInput placeholder="Enter reason for exception in age of patient" />
+                  <input matInput formControlName="reason" placeholder="Enter reason for exception in age of patient" />
                 </mat-form-field>
               </div>
               </div>
@@ -85,10 +85,19 @@
                 </div>
               </div>
               <div class="category form-category">* Required fields</div>
+              <div class="row" *ngIf="isUpdated" >
+                  See Change  Log <br/>
+                  <p *ngFor="let a of changes">
+                    Date: {{a.created_at  }}
+                    Changes in Field: {{a.field | uppercase}} Old Value: {{a.old_value}} => New Value: {{a.new_value}}
+                  </p>
+                </div>
             </div>
             <div class="card-footer text-right">
               <div class="mr-auto"><a routerLink="/site/patients" class="btn btn-default">Cancel</a></div>
               <button mat-raised-button type="submit" class="btn btn-rose" (click)="onRegister()">{{btnText}}</button>
+
+
             </div>
           </form>
         </div>

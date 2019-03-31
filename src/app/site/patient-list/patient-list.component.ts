@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SiteService } from '../site.service';
 import { StudyService } from 'src/app/study.service';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { Patient } from 'src/app/models/patient';
 
 @Component({
   selector: 'app-patient-list',
@@ -9,15 +11,14 @@ import { StudyService } from 'src/app/study.service';
 })
 export class PatientListComponent implements OnInit {
 
+  displayedColumn: string[] = ['patid', 'initials', 'dob', 'enrollment', 'actions'];
+  dataSource: MatTableDataSource<Patient>;
   patients: any = [];
   site_id = '';
   study_id = '';
   prefix = '';
-  temp = {'status': true, 'pats': [{'id': 3, 'study_id': 1, 'site_id': 1,
-  'pat_id': 1, 'initials': 'A_J', 'dob': '1947-06-22', 'Gender': 'F',
-  'Race': '1', 'created_at': '2018-06-12 14:03:15', 'created_by': 9,
-  'status': 1, 'willing': null, 'lifeexpect': null, 'icf_signed': 'Yes',
-  'icf_date': '2018-06-11', 'pat': null, 'created_on': '::1'}], 'pat_prefix': 'VIOL-IND-001-PMCF\/001'};
+
+  @ViewChild(MatPaginator) Paginator: MatPaginator;
 
   constructor(private siteService: SiteService,
     private studyService: StudyService) { }
@@ -39,6 +40,8 @@ export class PatientListComponent implements OnInit {
     this.siteService.getPatients(this.site_id, this.study_id).subscribe( data => {
       console.log(data);
       this.patients = data;
+      this.dataSource = new MatTableDataSource<Patient>(data);
+      this.dataSource.paginator = this.Paginator;
     });
   }
 
