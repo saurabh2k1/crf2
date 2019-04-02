@@ -8,7 +8,7 @@
               <div class="card-icon">
                 <i class="material-icons">create</i>
               </div>
-              <h4 class="card-title">Patient Registration</h4>
+              <h4 class="card-title">Patient Details {{btnText}}</h4>
             </div>
             <div class="card-body">
               <br>
@@ -85,19 +85,21 @@
                 </div>
               </div>
               <div class="category form-category">* Required fields</div>
-              <div class="row" *ngIf="isUpdated" >
-                  See Change  Log <br/>
-                  <p *ngFor="let a of changes">
-                    Date: {{a.created_at  }}
-                    Changes in Field: {{a.field | uppercase}} Old Value: {{a.old_value}} => New Value: {{a.new_value}}
-                  </p>
+              <hr>
+              <div class="row" *ngIf="isUpdated" class="" >
+                <button class="btn btn-primary" (click)="showChangeLog = !showChangeLog" >Show/Hide Change Log</button>
+                <table class="table table-striped changelog" *ngIf="showChangeLog" >
+                  <tr *ngFor="let a of changes" >
+                    <td>{{a.created_at | date: "medium" : '+0530' }}</td>
+                    <td>Changes in Field: {{a.field | uppercase}}</td>
+                    <td>Old Value: {{a.old_value}} => New Value: {{a.new_value}}</td>
+                  </tr>
+                </table>  
                 </div>
             </div>
             <div class="card-footer text-right">
               <div class="mr-auto"><a routerLink="/site/patients" class="btn btn-default">Cancel</a></div>
-              <button mat-raised-button type="submit" class="btn btn-rose" (click)="onRegister()">{{btnText}}</button>
-
-
+              <button mat-raised-button type="submit" *ngIf="frmRegister.dirty" class="btn btn-rose" (click)="onRegister()">{{btnText}}</button>
             </div>
           </form>
         </div>

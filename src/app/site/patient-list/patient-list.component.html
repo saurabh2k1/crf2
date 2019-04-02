@@ -34,9 +34,9 @@
                       <ng-container matColumnDef="actions">
                           <th mat-header-cell *matHeaderCellDef class="text-right">Action</th>
                           <td mat-cell class="td-actions text-right" *matCellDef="let patient">
-                            <a mat-raised-button type="button" class="btn btn-info ">
+                            <!-- <a mat-raised-button type="button" class="btn btn-info ">
                               <i class="material-icons">person</i>
-                            </a>
+                            </a> -->
                           <a routerLink="/site/patient/{{patient._id}}" mat-raised-button type="button" class="btn btn-success " >
                               <i class="material-icons">edit</i>
                           </a> </td>

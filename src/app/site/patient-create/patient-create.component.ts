@@ -26,6 +26,7 @@ export class PatientCreateComponent implements OnInit {
   isUpdated = false;
   changes: any = [];
   showDobReason = false;
+  showChangeLog = false;
   constructor(private fb: FormBuilder,
     private siteService: SiteService,
     private studyService: StudyService,
@@ -123,7 +124,9 @@ export class PatientCreateComponent implements OnInit {
         console.error(err);
       });
     } else {
+      // tslint:disable-next-line:prefer-const
       let requestBody = {};
+      // tslint:disable-next-line:prefer-const
       for (let control in frm) {
         if (this.frmRegister.get(control).dirty) {
           requestBody[control] = this.frmRegister.get(control).value;
