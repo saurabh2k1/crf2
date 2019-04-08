@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AdminService } from 'src/app/admin.service';
 import { Site } from 'src/app/models/site';
 import { ActivatedRoute } from '@angular/router';
@@ -11,10 +12,14 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class ManageSiteComponent implements OnInit {
 
+  displayedColumn: string[] = ['code', 'name', 'address', 'user', 'study', 'actions' ];
   showList = false;
   showNew = false;
   sites: Site[] = [];
   frmSite: FormGroup;
+  dataSource: MatTableDataSource<any>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   constructor(private adminService: AdminService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder) { }
@@ -48,6 +53,8 @@ export class ManageSiteComponent implements OnInit {
   listSite() {
     this.adminService.getSites().subscribe((site: Site[]) => {
       this.sites = site;
+      this.dataSource = new MatTableDataSource<any>(site);
+      this.dataSource.paginator = this.paginator;
     });
   }
 

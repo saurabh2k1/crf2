@@ -38,6 +38,10 @@ export class AdminService {
 
   }
 
+  getUserById(userId: any): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/users/${userId}`);
+  }
+
   getRoles(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/roles`);
   }
@@ -52,6 +56,10 @@ export class AdminService {
     });
     const options = {headers: headers};
     return this.http.post(`${this.apiUrl}/register/email`, newUser, options);
+  }
+
+  updateUser(user: any, userId: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users/update/${userId}`, user);
   }
 
   saveVisit(newVisit: any): Observable<any> {

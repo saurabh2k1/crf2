@@ -33,7 +33,7 @@ export class PatientListComponent implements OnInit {
       this.getPatients();
     }
 
-
+ 
   }
 
   getPatients() {

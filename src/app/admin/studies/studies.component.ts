@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Study } from 'src/app/models/study';
 import { AdminService } from 'src/app/admin.service';
 import { getSupportedInputTypes } from '@angular/cdk/platform';
@@ -17,6 +18,9 @@ export class StudiesComponent implements OnInit {
   showList = false;
   showNew = false;
   frmStudy: FormGroup;
+  displayedColumn: string[] = [ 'name', 'description', 'site', 'actions' ];
+  dataSource: MatTableDataSource<any>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private adminService: AdminService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder) { }
@@ -50,6 +54,8 @@ export class StudiesComponent implements OnInit {
   getStudy() {
     this.adminService.getStudies().subscribe((study: Study[]) => {
       this.studies = study;
+      this.dataSource = new MatTableDataSource<any>(study);
+      this.dataSource.paginator = this.paginator;
       console.log(study);
     });
   }

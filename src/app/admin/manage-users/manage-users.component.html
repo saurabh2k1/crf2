@@ -7,40 +7,38 @@
               <div class="card-icon">
                 <i class="material-icons">person</i>
               </div>
-              <h4 class="card-title ">Users</h4>
-              <span class="pull-right">
-                <a [routerLink]="['/admin/user/new']" class="btn btn-primary " mat-raised-button type="button" >
-                  <i class="material-icons">add_box</i>Add</a></span>
+              <h4 class="card-title ">Users  <span class="pull-right">
+                  <a [routerLink]="['/admin/user/new']" class="btn btn-primary " mat-raised-button type="button" >
+                    <i class="material-icons">add_box</i>Add</a></span></h4>
+             
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                  <table class="table table-hover">
-                    <thead class="text-primary">
-                      <tr><th>Full Name</th><th>Roles</th><th>Assigned Site</th><th class="text-right">Action</th></tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor='let user of users'>
-
-                       <td>{{user.first_name}} {{user.last_name}} </td>
-                        <td><span >{{user.role.name |  uppercase }},</span></td>
-                        <td>
-                          <span *ngIf='user.site'>{{user.site.name}}, <br></span>
-                          <!-- <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>
-                        <td>{{site.users}}</td> -->
-                        <td class="td-actions text-right">
-                          <button mat-raised-button type="button" class="btn btn-info btn-round ">
-                            <i class="material-icons">person</i>
-                        </button>
-                        <button mat-raised-button type="button" class="btn btn-success btn-round">
-                            <i class="material-icons">edit</i>
-                        </button>
-                        <button mat-raised-button type="button" class="btn btn-danger btn-round">
-                            <i class="material-icons">close</i>
-                        </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                    </table>
+                <table mat-table class="table table-hover" [dataSource]="dataSource">
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef class="text-rose"> Full Name </th>
+                        <td mat-cell *matCellDef="let user"> {{user.first_name}} {{user.last_name}} </td>
+                      </ng-container>
+                      <ng-container matColumnDef="role">
+                          <th mat-header-cell *matHeaderCellDef class="text-rose"> Roles </th>
+                          <td mat-cell *matCellDef="let user"> {{user.role.name |  uppercase }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="site">
+                            <th mat-header-cell *matHeaderCellDef class="text-rose"> Assigned Site </th>
+                            <td mat-cell *matCellDef="let user">  <span *ngIf='user.site'>{{user.site.name}}, <br></span> </td>
+                          </ng-container>
+                      <ng-container matColumnDef="actions">
+                          <th mat-header-cell *matHeaderCellDef class="text-right text-rose">Action</th>
+                          <td mat-cell class="td-actions text-right" *matCellDef="let user">
+                            <a routerLink="edit/{{user._id}}" mat-raised-button class="btn btn-icon btn-danger" >
+                              <i class="material-icons">edit</i>
+                            </a>
+                          </td>
+                          </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="displayedColumn" ></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumn;"></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
               </div>
 
             </div>
@@ -55,7 +53,7 @@
                     <div class="card-icon">
                       <i class="material-icons">person</i>
                     </div>
-                    <h4 class="card-title ">New Users</h4>
+                    <h4 class="card-title "><span *ngIf="!isEdit">New</span> User</h4>
                   </div>
                   <div class="card-body">
                     <br/>
@@ -87,7 +85,7 @@
                             </mat-form-field>
                       </div>
                     </div>
-                    <div class="row">
+                    <div class="row" *ngIf="!isEdit">
                       <div class="col-md-5 mr-auto">
                         <mat-form-field class="example-full-width has-label" [ngClass]="displayFieldCss(frmUser, 'password')">
                           <input type="password" matInput placeholder="Password" formControlName="password" required />

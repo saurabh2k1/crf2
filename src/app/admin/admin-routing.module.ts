@@ -25,7 +25,7 @@ const adminRoutes: Routes = [
         children: [
           { path: 'users', component: ManageUsersComponent, data: {kind: 'list'}},
           { path: 'user/new', component: ManageUsersComponent, data: {kind: 'create'}},
-
+          { path: 'users/edit/:id', component: ManageUsersComponent, data: {kind: 'edit'}},
           { path: 'sites', component: ManageSiteComponent, data: {kind: 'list'} },
           { path: 'site/new', component: ManageSiteComponent, data: {kind: 'create'}},
           { path: 'visits', component: ManageVisitComponent, data: {kind: 'list'} },
