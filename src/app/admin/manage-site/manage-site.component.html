@@ -40,8 +40,8 @@
                             </ng-container>  
                             <ng-container matColumnDef="actions">
                                 <th mat-header-cell *matHeaderCellDef class="text-right text-rose">Action</th>
-                                <td mat-cell class="td-actions text-right" *matCellDef="let visit">
-                                  <a routerLink="/admin/visit/edit/{{visit._id}}" mat-raised-button class="btn btn-icon btn-danger" >
+                                <td mat-cell class="td-actions text-right" *matCellDef="let site">
+                                  <a routerLink="edit/{{site._id}}" mat-raised-button class="btn btn-icon btn-danger" >
                                     <i class="material-icons">edit</i>
                                   </a>
                                 </td>
@@ -66,7 +66,7 @@
               <div class="card-icon">
                 <i class="material-icons">place</i>
               </div>
-              <h4 class="card-title">New Site</h4>
+              <h4 class="card-title"> <span *ngIf="!isEdit">New </span>Site</h4>
             </div>
             <div class="card-body">
               <br>

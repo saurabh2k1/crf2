@@ -1,5 +1,6 @@
 <div class="main-content">
     <div class="container-fluid">
+      <app-alert></app-alert>
       <div class="row" *ngIf='showList'>
         <div class="col-md-10 offset-md-1">
           <div class="card">
@@ -14,25 +15,28 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table mat-table class="table table-hover" [dataSource]="dataSource">
+                <table mat-table class="table table-hover" [dataSource]="dataSource" matSort>
                     <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef class="text-rose"> Full Name </th>
+                        <th mat-header-cell *matHeaderCellDef class="text-rose" mat-sort-header> Full Name </th>
                         <td mat-cell *matCellDef="let user"> {{user.first_name}} {{user.last_name}} </td>
                       </ng-container>
                       <ng-container matColumnDef="role">
-                          <th mat-header-cell *matHeaderCellDef class="text-rose"> Roles </th>
+                          <th mat-header-cell *matHeaderCellDef class="text-rose" mat-sort-header> Roles </th>
                           <td mat-cell *matCellDef="let user"> {{user.role.name |  uppercase }} </td>
                         </ng-container>
                         <ng-container matColumnDef="site">
-                            <th mat-header-cell *matHeaderCellDef class="text-rose"> Assigned Site </th>
+                            <th mat-header-cell *matHeaderCellDef class="text-rose" mat-sort-header> Assigned Site </th>
                             <td mat-cell *matCellDef="let user">  <span *ngIf='user.site'>{{user.site.name}}, <br></span> </td>
                           </ng-container>
                       <ng-container matColumnDef="actions">
                           <th mat-header-cell *matHeaderCellDef class="text-right text-rose">Action</th>
                           <td mat-cell class="td-actions text-right" *matCellDef="let user">
-                            <a routerLink="edit/{{user._id}}" mat-raised-button class="btn btn-icon btn-danger" >
+                            <a routerLink="edit/{{user._id}}" mat-icon-button mat-raised-button color="warn" matTooltip="Edit User"  >
                               <i class="material-icons">edit</i>
-                            </a>
+                            </a> 
+                            <button mat-icon-button matTooltip="Reset Password" mat-raised-button color="primary"  (click)="openDialog(user)" >
+                              <mat-icon>vpn_key</mat-icon>
+                            </button>
                           </td>
                           </ng-container>
                       <tr mat-header-row *matHeaderRowDef="displayedColumn" ></tr>

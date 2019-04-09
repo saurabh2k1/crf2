@@ -1,3 +1,5 @@
+import { ChangePasswordModalComponent } from './../change-password-modal/change-password-modal.component';
+import { AlertService } from './../../alert.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AdminService } from 'src/app/admin.service';
 import { User } from 'src/app/models/user';
@@ -5,7 +7,10 @@ import { ActivatedRoute,  Router } from '@angular/router';
 import {
   MatListSubheaderCssMatStyler,
   MatTableDataSource,
-  MatPaginator
+  MatPaginator,
+  MatDialog,
+  MatDialogConfig,
+  MatSort,
 } from '@angular/material';
 import {
   FormGroup,
@@ -26,12 +31,14 @@ export class ManageUsersComponent implements OnInit {
   sites: Site[] = [];
   roles: any[] = [];
   id: any;
+  loading = false;
   showList = false;
   showNew = false;
   isEdit = false;
   frmUser: FormGroup;
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   displayedColumn: string[] = ['name', 'role', 'site', 'actions'];
 
   emailFormControl = new FormControl('', [
@@ -44,6 +51,8 @@ export class ManageUsersComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private route: Router,
+    private alertService: AlertService,
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -91,16 +100,40 @@ export class ManageUsersComponent implements OnInit {
     };
   }
 
+  openDialog(user: any): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data =  {name: user.first_name + ' ' + user.last_name, password: user.password, userId: user._id};
+    dialogConfig.width = '350px';
+    const dialogRef = this.dialog.open(ChangePasswordModalComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog Closed');
+      console.log(result);
+      this.resetPassword(result);
+    });
+  }
+
+  resetPassword(data: any): void {
+    this.adminService.resetPassword(data).subscribe((reply: any) => {
+      alert(reply.msg);
+    }, err => {
+      alert(err.error);
+    });
+  }
+
   listUser() {
     this.adminService.getUsers().subscribe((user: User[]) => {
       this.users = user;
       this.dataSource = new MatTableDataSource<any>(user);
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
   }
 
   showEdit(id: any) {
-    this.adminService.getUserById(id).subscribe((user: User) => {
+    this.adminService.getUserById(id).subscribe((user: any) => {
       this.frmUser.patchValue(user);
       this.frmUser.get('site_id').patchValue(user.site._id);
       this.frmUser.get('role_id').patchValue(user.role.id);
@@ -109,8 +142,10 @@ export class ManageUsersComponent implements OnInit {
   }
 
   getSites() {
+    this.loading = true;
     this.adminService.getSites().subscribe((site: any) => {
       this.sites = site;
+      this.loading = false;
     });
   }
 
@@ -121,15 +156,17 @@ export class ManageUsersComponent implements OnInit {
   }
 
   onSave() {
+    this.loading = true;
     if (this.isEdit) {
       console.log(this.frmUser.value);
       this.adminService.updateUser(this.frmUser.value, this.id).subscribe(data => {
-        console.log(data);
-        this.listUser();
-          this.showNew = false;
-          this.showList = true;
+        this.alertService.success('Updated successfully');
+        this.loading = false;
+        this.route.navigate(['/admin/users']);
       }, err => {
-        console.log(err);
+        console.log(err.error);
+        this.alertService.error(err.error);
+        this.loading = false;
       });
     } else {
       this.adminService.saveUser(this.frmUser.value).subscribe(
@@ -138,8 +175,10 @@ export class ManageUsersComponent implements OnInit {
           this.listUser();
           this.showNew = false;
           this.showList = true;
+          this.loading = false;
         },
         err => {
+          this.loading = false;
           console.log(err.error);
         }
       );

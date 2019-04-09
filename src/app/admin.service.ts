@@ -25,6 +25,10 @@ export class AdminService {
     return this.http.get<any>(`${this.apiUrl}/sites`);
   }
 
+  getSite(id: any): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/sites/get/${id}`);
+  }
+
   getUsers(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/users`);
   }
@@ -60,6 +64,10 @@ export class AdminService {
 
   updateUser(user: any, userId: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/users/update/${userId}`, user);
+  }
+
+  resetPassword(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users/resetpassword`, data);
   }
 
   saveVisit(newVisit: any): Observable<any> {

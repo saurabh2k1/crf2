@@ -15,7 +15,9 @@ export class ManageSiteComponent implements OnInit {
   displayedColumn: string[] = ['code', 'name', 'address', 'user', 'study', 'actions' ];
   showList = false;
   showNew = false;
+  isEdit = false;
   sites: Site[] = [];
+  id: any;
   frmSite: FormGroup;
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -37,13 +39,24 @@ export class ManageSiteComponent implements OnInit {
         case 'list':
           this.listSite();
           this.showList = true;
+          this.showNew = false;
+          this.isEdit = false;
         break;
         case 'create':
           this.showList = false;
           this.showNew = true;
+          this.isEdit = false;
+        break;
+        case 'edit':
+        this.showList = false;
+        this.isEdit = true;
+        this.id = this.activatedRoute.snapshot.paramMap.get('id');
+        this.showEdit(this.id);
+        this.showNew = true;
         break;
         default:
           this.showList = false;
+          this.isEdit = false;
           break;
       }
     });
@@ -55,6 +68,12 @@ export class ManageSiteComponent implements OnInit {
       this.sites = site;
       this.dataSource = new MatTableDataSource<any>(site);
       this.dataSource.paginator = this.paginator;
+    });
+  }
+
+  showEdit(id: any): void {
+    this.adminService.getSite(id).subscribe((data: any) => {
+      this.frmSite.patchValue(data);
     });
   }
 

@@ -17,6 +17,7 @@ import { CrfsComponent } from './crfs/crfs.component';
 import { CrfDetailComponent } from './crf-detail/crf-detail.component';
 import { CrfAddComponent } from './crf-add/crf-add.component';
 import { CrfEditComponent } from './crf-edit/crf-edit.component';
+import { ChangePasswordModalComponent } from './change-password-modal/change-password-modal.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { CrfEditComponent } from './crf-edit/crf-edit.component';
     CrfsComponent,
     CrfDetailComponent,
     CrfAddComponent,
-    CrfEditComponent
+    CrfEditComponent,
+    ChangePasswordModalComponent
   ],
   imports: [
     CommonModule,
@@ -41,6 +43,7 @@ import { CrfEditComponent } from './crf-edit/crf-edit.component';
     SharedModule,
     MaterialModule,
     AdminRoutingModule
-  ]
+  ],
+  entryComponents: [ChangePasswordModalComponent]
 })
 export class AdminModule { }

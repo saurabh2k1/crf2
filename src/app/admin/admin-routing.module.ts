@@ -28,6 +28,7 @@ const adminRoutes: Routes = [
           { path: 'users/edit/:id', component: ManageUsersComponent, data: {kind: 'edit'}},
           { path: 'sites', component: ManageSiteComponent, data: {kind: 'list'} },
           { path: 'site/new', component: ManageSiteComponent, data: {kind: 'create'}},
+          { path: 'sites/edit/:id', component: ManageSiteComponent, data: {kind: 'edit'}},
           { path: 'visits', component: ManageVisitComponent, data: {kind: 'list'} },
           { path: 'visit/new', component: ManageVisitComponent, data: {kind: 'create'}},
           { path: 'visit/edit/:id', component: ManageVisitComponent, data: {kind: 'edit'}},
