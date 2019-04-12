@@ -112,9 +112,21 @@ export class AdminService {
     return this.http.get(`${this.apiUrl}/visit/${visitID}`);
   }
 
+  getStudy(studyId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/studies/get/${studyId}`);
+  }
+
+  updateStudy(study: any, studyId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/studies/update/${studyId}`, study);
+  }
   saveStudy(newStudy: Study): Observable<any> {
     return this.http.post(`${this.apiUrl}/studies/new`, newStudy);
   }
+
+  updateSite(site: any, siteID: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/sites/update/${siteID}`, site);
+  }
+
 
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

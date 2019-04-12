@@ -17,6 +17,8 @@ export class StudiesComponent implements OnInit {
   sites: Site[] = [];
   showList = false;
   showNew = false;
+  isEdit = false;
+  id: any;
   frmStudy: FormGroup;
   displayedColumn: string[] = [ 'name', 'description', 'site', 'actions' ];
   dataSource: MatTableDataSource<any>;
@@ -44,11 +46,33 @@ export class StudiesComponent implements OnInit {
           this.getSites();
           this.showNew = true;
           break;
+        case 'edit':
+          this.id = this.activatedRoute.snapshot.paramMap.get('id');
+          this.isEdit = true;
+
+          this.showEdit(this.id);
+          this.showList = false;
+          break;
         default:
           break;
       }
     });
 
+  }
+
+
+  showEdit(id: any): void {
+    this.adminService.getStudy(id).subscribe(data => {
+      console.log(data);
+      this.frmStudy.get('name').patchValue(data.study.name);
+      this.frmStudy.get('description').patchValue(data.study.description);
+      this.getSites();
+      this.frmStudy.controls['sites'].setValue(data.study.sites);
+      this.showNew = true;
+    }, err => {
+      alert(err.error);
+      this.showNew = false;
+    });
   }
 
   getStudy() {
@@ -67,13 +91,28 @@ export class StudiesComponent implements OnInit {
   }
 
   onSave() {
-    this.adminService.saveStudy(this.frmStudy.value).subscribe(data => {
-      console.log(data);
-      this.showNew = false;
-      this.getStudy();
-      this.showList = true;
-    }, err => {
-      console.log(err.error);
-    });
+    if (this.isEdit) {
+      this.adminService.updateStudy(this.frmStudy.value, this.id)
+      .subscribe(data => {
+        console.log(data);
+        alert(data.msg);
+        this.showNew = false;
+        this.getStudy();
+        this.showList = true;
+      }, err => {
+        alert(err.error);
+      });
+
+    } else {
+      this.adminService.saveStudy(this.frmStudy.value).subscribe(data => {
+        console.log(data);
+        this.showNew = false;
+        this.getStudy();
+        this.showList = true;
+      }, err => {
+        console.log(err.error);
+      });
+    }
+
   }
 }

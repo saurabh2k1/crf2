@@ -30,8 +30,8 @@
                           </ng-container> 
                           <ng-container matColumnDef="actions">
                               <th mat-header-cell *matHeaderCellDef class="text-right text-rose">Action</th>
-                              <td mat-cell class="td-actions text-right" *matCellDef="let visit">
-                                <a routerLink="/admin/visit/edit/{{visit._id}}" mat-raised-button class="btn btn-icon btn-danger" >
+                              <td mat-cell class="td-actions text-right" *matCellDef="let study">
+                                <a routerLink="edit/{{study._id}}" mat-raised-button class="btn btn-icon btn-danger" >
                                   <i class="material-icons">edit</i>
                                 </a>
                               </td>
@@ -79,7 +79,7 @@
                   <div class="row">
                     <div class="col-md-11 mr-auto">
                       <mat-form-field class="example-full-width">
-                        <mat-select multiple placeholder="Sites (select multiple)" formControlName="sites" >
+                        <mat-select multiple placeholder="Sites (select multiple)" formControlName="sites"  >
                           <mat-option *ngFor="let site of sites" [value]="site">
                             {{site.name | titlecase}}
                           </mat-option>

@@ -78,7 +78,21 @@ export class ManageSiteComponent implements OnInit {
   }
 
   onSubmit() {
-    this.adminService.saveSite(this.frmSite.value)
+    if (this.isEdit) {
+      this.adminService.updateSite(this.frmSite.value, this.id)
+      .subscribe(data => {
+        console.log(data);
+        alert(data.msg);
+        this.showNew = false;
+        this.isEdit = false;
+        this.listSite();
+        this.showList = true;
+      }, err => {
+        alert(err.error);
+      });
+
+    } else {
+      this.adminService.saveSite(this.frmSite.value)
       .subscribe(data => {
         console.log(data);
         this.showNew = false;
@@ -87,6 +101,7 @@ export class ManageSiteComponent implements OnInit {
       }, err => {
         console.log(err.error);
       });
+    }
   }
 
 }

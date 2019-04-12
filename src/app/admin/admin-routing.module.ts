@@ -34,6 +34,7 @@ const adminRoutes: Routes = [
           { path: 'visit/edit/:id', component: ManageVisitComponent, data: {kind: 'edit'}},
           { path: 'studies', component: StudiesComponent, data: {kind: 'list'} },
           { path: 'study/new', component: StudiesComponent, data: {kind: 'create'}},
+          { path: 'studies/edit/:id', component: StudiesComponent, data: {kind: 'edit'}},
           { path: '', component: AdminDashboardComponent },
           { path: 'dashboard', component: AdminDashboardComponent},
           { path: 'crfs', component: CrfsComponent, data: { title: 'List of CRFs'}},
