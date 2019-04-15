@@ -1,3 +1,60 @@
-<p>
-  crf-edit works!
-</p>
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="loading-shade" *ngIf="isLoading">
+      <mat-spinner *ngIf="isLoading"></mat-spinner>
+    </div>
+    <div class="row">
+      <div class="col-md-10">
+        <div class="card">
+
+          <form [formGroup]="newForm">
+            <div class="card-header card-header-icon card-header-rose">
+              <div class="card-icon">
+                <i class="material-icons">assignment</i>
+              </div>
+              <h4 class="card-title ">Edit CRF Form</h4>
+            </div>
+            <div class="card-body">
+              <br/>
+              <div class="row">
+                <div class="col-md-3 mr-auto">
+                  <mat-form-field>
+                    <mat-select placeholder="Select Study" formControlName="study" (selectionChange)="studyChange($event.value)">
+                      <mat-option *ngFor="let study of studies" [value]="study._id">{{study.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-7 mr-auto" >
+                    <mat-form-field>
+                      <mat-select placeholder="Select Visits for this CRF (multiple select)s" formControlName="visits" multiple>
+                        <mat-option *ngFor="let visit of visits" [value]="visit._id">{{visit.description}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3 mr-auto">
+                  <mat-form-field>
+                    <input type="text" matInput formControlName="code" placeholder="CRF Code" required />
+                    <app-field-error-display></app-field-error-display>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-7 mr-auto">
+                  <mat-form-field>
+                    <input type="text" matInput formControlName="name" placeholder="CRF Description" required />
+                    <app-field-error-display></app-field-error-display>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a [routerLink]="['/admin/crfs']" matRaisedButton class="btn btn-default">Back</a>
+              <mat-spinner *ngIf="isLoading"></mat-spinner>
+            <button type="submit" matRaisedButton class="mat-raised-button btn btn-rose" (click)="onSave()">Save</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
