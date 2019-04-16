@@ -17,12 +17,10 @@
             <div class="card-body">
               <br/>
               <div class="row">
-                <div class="col-md-3 mr-auto">
-                  <mat-form-field>
-                    <mat-select placeholder="Select Study" formControlName="study" (selectionChange)="studyChange($event.value)">
-                      <mat-option *ngFor="let study of studies" [value]="study._id">{{study.name}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                <div class="col-md-3 mr-auto" *ngIf="studies">
+                 
+                   Study: {{studies.name}}
+                   
                 </div>
                 <div class="col-md-7 mr-auto" >
                     <mat-form-field>

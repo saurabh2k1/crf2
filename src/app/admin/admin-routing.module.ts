@@ -1,3 +1,4 @@
+import { CrfDisplayComponent } from './crf-display/crf-display.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminComponent } from './admin/admin.component';
@@ -41,6 +42,7 @@ const adminRoutes: Routes = [
           { path: 'crf-details/:id', component: CrfDetailComponent, data: { title: 'CRF Details'}},
           { path: 'crf-add', component: CrfAddComponent, data: { title: 'Add CRF'}},
           { path: 'crf-edit/:id', component: CrfEditComponent, data: { title: 'Edit CRF'}},
+          { path: 'crf/display/:id', component: CrfDisplayComponent},
         ]
       }
     ]

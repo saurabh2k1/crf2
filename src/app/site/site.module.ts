@@ -34,15 +34,6 @@ import { ProfileComponent } from './profile/profile.component';
     SiteComponent,
     SelectStudyComponent,
     VisitsComponent,
-    DynamicFormComponent,
-    DynamicFieldDirective,
-    ButtonComponent,
-    CheckboxComponent,
-    DateComponent,
-    UnitComponent,
-    SelectComponent,
-    RadiobuttonComponent,
-    InputComponent,
     ProfileComponent,
   ],
   imports: [
@@ -54,15 +45,5 @@ import { ProfileComponent } from './profile/profile.component';
     MaterialModule,
     SiteRoutingModule
   ],
-  entryComponents: [
-    InputComponent,
-    ButtonComponent,
-    SelectComponent,
-    DateComponent,
-    RadiobuttonComponent,
-    CheckboxComponent,
-    UnitComponent
-  ]
 })
 export class SiteModule { }
- 

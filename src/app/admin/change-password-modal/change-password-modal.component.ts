@@ -23,7 +23,6 @@ export class ChangePasswordModalComponent implements OnInit {
     this.password = data.password;
    }
 
-
   ngOnInit() {
     this.form = this.fb.group({
       userId: [this.userId, []],

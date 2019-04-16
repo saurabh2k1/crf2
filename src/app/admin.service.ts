@@ -84,8 +84,12 @@ export class AdminService {
       catchError(this.handleError<any>('Add Form')));
   }
 
+  updateForm(form: any, formId: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/form/${formId}`, form);
+  }
+
   addFields(fields: any, form_id: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/form/${form_id}/field`, fields);
+    return this.http.post(`${this.apiUrl}/form/field/${form_id}`, fields);
   }
 
   getForm(id: string): Observable<any> {

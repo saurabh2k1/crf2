@@ -39,10 +39,10 @@
               <i class="material-icons">how_to_vote</i>
             </div>
             <h4 class="card-title ">{{ isFieldEdit? 'Edit': 'Add'}} Field</h4>
-            <mat-card-subtitle>CRF: {{dForm.name}} </mat-card-subtitle>
+            <mat-card-subtitle *ngIf="dForm.name">CRF: {{dForm.name}} </mat-card-subtitle>
           </div>
           <div class="card-body">
-            <!-- <mat-horizontal-stepper labelPosition="bottom" linear="isLinear" #stepper> -->
+            <!--  <mat-horizontal-stepper labelPosition="bottom" linear="isLinear" #stepper> -->
               <!-- <mat-step [stepControl]="firstFormGroup"> -->
                 <form [formGroup]="firstFormGroup">
                   <!-- <ng-template matStepLabel>Field Type</ng-template> -->
@@ -162,7 +162,7 @@
                       </div>
                     </div>
                     <div class="col-md-4">
-
+                        
                     </div>
                   </div>
                   <!-- {{secondFormGroup.value | json}} -->
@@ -213,6 +213,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="row">
+      <a href="{{baseURL}}/admin/crf/display/{{dForm._id}}" target="_blank" mat-raised-button color="primary" >View Form</a>
     </div>
   </div>
 </div>

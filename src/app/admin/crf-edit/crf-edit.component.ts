@@ -2,6 +2,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from 'src/app/admin.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { Study } from 'src/app/models/study';
 
 @Component({
   selector: 'app-crf-edit',
@@ -12,8 +13,9 @@ export class CrfEditComponent implements OnInit {
 
   newForm: FormGroup;
   isLoading = false;
-  studies: any;
+  studies: Study;
   visits: any;
+  id: string;
 
   constructor(
     private fb: FormBuilder,
@@ -24,24 +26,26 @@ export class CrfEditComponent implements OnInit {
 
   ngOnInit() {
     this.newForm = this.fb.group({
-      study: [null, []],
-      code: [null],
-      name: [null],
+      code: [''],
+      name: [''],
       visits: [[null]],
     });
-    const id = this.activatedRoutes.snapshot.paramMap.get('id');
+    this.id = this.activatedRoutes.snapshot.paramMap.get('id');
     this.isLoading = true;
-    this.adminService.getStudies().subscribe((data: any) => {
-      this.studies = data;
-    });
-    this.adminService.getForm(id).subscribe((data: any) => {
+    this.adminService.getForm(this.id).subscribe((data: any) => {
       this.newForm.patchValue(data);
+      this.studies = data.study;
+      this.studyChange();
       this.isLoading = false;
     });
   }
 
-  studyChange(event) {
-    const study_id = event;
+  get f() {
+    return this.newForm.controls;
+  }
+
+  studyChange() {
+    const study_id = this.studies._id;
     this.adminService.getVisit(study_id).subscribe((data: any) => {
       this.visits = data;
     });
@@ -50,10 +54,11 @@ export class CrfEditComponent implements OnInit {
   onSave() {
     this.isLoading = true;
     console.log(`Form Value: ${this.newForm.value}`);
-    this.adminService.addForm(this.newForm.value).subscribe(res => {
-      const id = res['id'];
+    this.adminService.updateForm(this.newForm.value, this.id).subscribe(res => {
+      console.log(res);
+      alert(res.msg);
       this.isLoading = false;
-      this.router.navigate(['admin/crf-details', id]);
+      this.router.navigate(['admin/crfs']);
     }, err => {
       console.log(err);
       this.isLoading = false;

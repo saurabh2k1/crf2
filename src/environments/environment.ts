@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://lumen-api.test'
+  apiUrl: 'http://lumen-api.test',
+  baseUrl: 'http://localhost:4200',
   // apiUrl: 'http://api.qascentresearch.com'
 };
 
