@@ -168,6 +168,7 @@ export class VisitsComponent implements OnInit {
   }
 
   saveCrForm(value) {
+    console.log(value);
     const crfForm = {
       'form_id': this.theForm._id,
       'site_id': this.site_id,

@@ -160,8 +160,10 @@
                                 </tfoot>
                               </table>
                             </div>
-                            <div *ngIf="!crfFormDone"><dynamic-form [fields]="fields" (submit)="saveCrForm($event)" ></dynamic-form></div>
-
+                            <div *ngIf="!crfFormDone">
+                              <dynamic-form [fields]="fields" (submit)="saveCrForm($event)" >
+                              </dynamic-form>
+                            </div>
                         </div>
                       </form>
                     </div>

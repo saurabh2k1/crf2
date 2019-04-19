@@ -22,7 +22,7 @@ export class SiteService {
    }
 
    getSite(): Observable<any> {
-    return this.http.get(`http://lumen-api.test/api/site`);
+    return this.http.get(`${this.apiUrl}/api/site`);
    }
 
    getPatients(site_id, study_id): Observable<any> {
