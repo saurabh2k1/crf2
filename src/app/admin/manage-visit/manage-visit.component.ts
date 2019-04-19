@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AdminService } from 'src/app/admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-manage-visit',
@@ -16,6 +17,10 @@ export class ManageVisitComponent implements OnInit {
   visits: any;
   id: any;
   frmVisit: FormGroup;
+  displayedColumn: string[] = ['code', 'description', 'study', 'actions' ];
+  dataSource: MatTableDataSource<any>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   constructor(private adminService: AdminService,
     private activatedRoute: ActivatedRoute,
     private route: Router,
@@ -64,6 +69,8 @@ export class ManageVisitComponent implements OnInit {
   getVisits() {
     this.adminService.getVisit().subscribe((visits: any) => {
       this.visits = visits;
+      this.dataSource = new MatTableDataSource<any>(visits);
+      this.dataSource.paginator = this.paginator;
       console.log(visits);
     }, err => {
       console.log(err);

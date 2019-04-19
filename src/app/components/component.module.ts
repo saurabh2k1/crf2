@@ -14,22 +14,22 @@ import { DynamicFieldDirective } from './dynamic-field/dynamic-field.directive';
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 @NgModule({
   declarations: [
-    // InputComponent,
-    // UnitComponent,
-    // ButtonComponent,
-    // SelectComponent,
-    // DateComponent,
-    // RadiobuttonComponent,
-    // CheckboxComponent,
-    // DynamicFieldDirective,
-    // DynamicFormComponent,
+    InputComponent,
+    UnitComponent,
+    ButtonComponent,
+    SelectComponent,
+    DateComponent,
+    RadiobuttonComponent,
+    CheckboxComponent,
+    DynamicFieldDirective,
+    DynamicFormComponent,
   ],
   imports: [
     CommonModule,
     BrowserAnimationsModule,
+    MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule
   ],
   entryComponents: [
     InputComponent,

@@ -7,39 +7,49 @@
             <div class="card-icon">
               <i class="material-icons">place</i>
             </div>
-            <h4 class="card-title ">Sites</h4>
-            <span class="pull-right">
-              <a [routerLink]="['/admin/site/new']" class="btn btn-primary " mat-raised-button type="button">
-                <i class="material-icons">add_box</i>Add</a></span>
+            <h4 class="card-title ">Sites <span class="pull-right">
+                <a [routerLink]="['/admin/site/new']" class="btn btn-primary " mat-raised-button type="button">
+                  <i class="material-icons">add_box</i>Add</a></span></h4>
+            
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-hover">
-                <thead class="text-primary">
-                  <tr>
-                    <th>Site Code</th>
-                    <th>Site Name</th>
-                    <th>Address</th>
-                    <th>Users</th>
-                    <th>Studies</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor='let site of sites'>
-                    <td>{{site.code}}</td>
-                    <td>{{site.name}}</td>
-                    <td>
-                      <span *ngIf='site.contact_person'>{{site.contact_person}}, <br></span>
-                      <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>
-                    <td><span *ngFor='let user of site.users'>{{user.first_name}} {{user.last_name}}</span></td>
-                    <td><span *ngFor='let study of site.studies'>
-                        {{study.name}},
-                      </span></td>
-                    <td></td>
-                  </tr>
-                </tbody>
+              <table mat-table class="table table-hover" [dataSource]="dataSource">
+                  <ng-container matColumnDef="code">
+                      <th mat-header-cell *matHeaderCellDef class="text-rose">Site Code</th>
+                      <td mat-cell *matCellDef="let site">{{site.code}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef class="text-rose">Site Name</th>
+                        <td mat-cell *matCellDef="let site">{{site.name}} </td>
+                      </ng-container>
+                      <ng-container matColumnDef="address">
+                          <th mat-header-cell *matHeaderCellDef class="text-rose">Address</th>
+                          <td mat-cell *matCellDef="let site"> <span *ngIf='site.contact_person'>{{site.contact_person}}, <br></span>
+                            <span *ngIf='site.department'>{{site.department}}, <br></span>{{site.address}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="user">
+                            <th mat-header-cell *matHeaderCellDef class="text-rose">Users</th>
+                            <td mat-cell *matCellDef="let site"> <span *ngFor='let user of site.users'>{{user.first_name}} {{user.last_name}},<br/></span></td>
+                          </ng-container> 
+                          <ng-container matColumnDef="study">
+                              <th mat-header-cell *matHeaderCellDef class="text-rose">Studies</th>
+                              <td mat-cell *matCellDef="let site"> <span *ngFor='let study of site.studies'>
+                                  {{study.name}},
+                                </span></td>
+                            </ng-container>  
+                            <ng-container matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef class="text-right text-rose">Action</th>
+                                <td mat-cell class="td-actions text-right" *matCellDef="let site">
+                                  <a routerLink="edit/{{site._id}}" mat-raised-button class="btn btn-icon btn-danger" >
+                                    <i class="material-icons">edit</i>
+                                  </a>
+                                </td>
+                                </ng-container>  
+                <tr mat-header-row *matHeaderRowDef="displayedColumn" ></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumn;"></tr>
               </table>
+              <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
             </div>
 
           </div>
@@ -56,7 +66,7 @@
               <div class="card-icon">
                 <i class="material-icons">place</i>
               </div>
-              <h4 class="card-title">New Site</h4>
+              <h4 class="card-title"> <span *ngIf="!isEdit">New </span>Site</h4>
             </div>
             <div class="card-body">
               <br>
