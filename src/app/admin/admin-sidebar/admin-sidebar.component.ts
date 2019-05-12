@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import PerfectScrollbar from 'perfect-scrollbar';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Router } from '@angular/router';
 
 declare const $: any;
 // Metadata
@@ -43,7 +44,7 @@ export const ROUTES: RouteInfo[] = [
 export class AdminSidebarComponent implements OnInit {
   public menuItems: any[];
   user: any;
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.user = this.authService.currentUserValue;
@@ -71,5 +72,10 @@ export class AdminSidebarComponent implements OnInit {
     }
     return bool;
   }
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+
 
 }

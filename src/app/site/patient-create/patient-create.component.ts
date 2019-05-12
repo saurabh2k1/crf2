@@ -27,6 +27,8 @@ export class PatientCreateComponent implements OnInit {
   changes: any = [];
   showDobReason = false;
   showChangeLog = false;
+  minAge = 0;
+  MaxAge = 999;
   constructor(private fb: FormBuilder,
     private siteService: SiteService,
     private studyService: StudyService,
@@ -34,6 +36,9 @@ export class PatientCreateComponent implements OnInit {
     private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
+     // TODO: get the max, min age for study from study details
+    this.MaxAge = 75;
+    this.minAge = 55;
     this.frmRegister = this.fb.group({
       initials: ['', [Validators.required, Validators.pattern('^[a-zA-Z][a-zA-Z/-]{2}$')]],
       dob: ['', [Validators.required]],
@@ -41,7 +46,7 @@ export class PatientCreateComponent implements OnInit {
       race: ['', Validators.required],
       icf: ['', Validators.required],
       icf_date: [null, Validators.required],
-      reason: [null],
+      reason: [null, Validators.required],
     });
     const study = JSON.parse(localStorage.getItem('study'));
     const site = JSON.parse(localStorage.getItem('site'));
@@ -90,8 +95,9 @@ export class PatientCreateComponent implements OnInit {
     const dob = new Date(val);
     const timeDiff = Math.abs(Date.now() - dob.getTime());
     this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365);
-    // TODO: get the max, min age for study from study details
-    if (this.age < 55 || this.age > 75) {
+
+
+    if (this.age < this.minAge || this.age > this.MaxAge) {
       this.showDobReason = true;
     } else {
       this.showDobReason = false;
@@ -146,6 +152,14 @@ export class PatientCreateComponent implements OnInit {
 
   showEdit(id) {
     this.siteService.getPatientByID(id).subscribe((data: any) => {
+      const dob = new Date(data.dob);
+      const timeDiff = Math.abs(Date.now() - dob.getTime());
+      this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365);
+      if (this.age < this.minAge || this.age > this.MaxAge) {
+        this.showDobReason = true;
+      } else {
+        this.showDobReason = false;
+      }
       this.frmRegister.patchValue(data);
       this.frmRegister.get('dob').patchValue(new Date(data.dob));
       this.frmRegister.get('icf_date').patchValue(new Date(data.icf_date));

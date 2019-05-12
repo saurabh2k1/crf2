@@ -18,6 +18,9 @@ import { FieldErrorDisplayComponent } from './field-error-display/field-error-di
 import { ContainsPipe } from '../contains.pipe';
 import { SelectComponent } from '../components/select/select.component';
 import { UnitComponent } from '../components/unit/unit.component';
+import { ComponentModule } from './../components/component.module';
+import { Navbar1Component } from './navbar1/navbar1.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 
 
 @NgModule({
@@ -37,6 +40,8 @@ import { UnitComponent } from '../components/unit/unit.component';
     SelectComponent,
     RadiobuttonComponent,
     InputComponent,
+    Navbar1Component,
+    BreadcrumbComponent,
   ],
   imports: [
     CommonModule,
@@ -44,6 +49,7 @@ import { UnitComponent } from '../components/unit/unit.component';
     ReactiveFormsModule,
     FormsModule,
     MaterialModule,
+    // ComponentModule
   ],
   exports: [
     FooterComponent,
@@ -61,6 +67,8 @@ import { UnitComponent } from '../components/unit/unit.component';
     SelectComponent,
     RadiobuttonComponent,
     InputComponent,
+    Navbar1Component,
+    BreadcrumbComponent
   ],
   entryComponents: [
     InputComponent,

@@ -1,4 +1,4 @@
-<div class="wrapper">
+<!-- <div class="wrapper">
   <div class="sidebar" data-color="white" data-background-color="red" data-image="./assets/img/sidebar-1.jpg">
     <app-sidebar></app-sidebar>
     <div class="sidebar-background" style="background-image: url(assets/img/sidebar-1.jpg)"></div>
@@ -9,4 +9,66 @@
     <router-outlet ></router-outlet>
     <app-footer></app-footer>
   </div>
-</div>
+</div> -->
+<mat-sidenav-container >
+    <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
+    [attr.role]="(isHandset$ | async) ? 'dialog': 'navigation'"
+    [mode] = "(isHandset$ | async) ? 'over' : 'side'"
+    [ngClass]="{'hidden': !(isHandset$ | async)}"
+
+    [opened]="!(isHandset$ | async)" >
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+        <mat-nav-list>
+            <mat-list-item routerLinkActive="active" *ngFor="let menuitem of menuItems" >
+              <!--If is a single link-->
+              <a [routerLink]="[menuitem.path]" *ngIf="menuitem.type === 'link'" mat-list-item class="nav-link">
+                <mat-icon matListIcon>{{menuitem.icontype}}</mat-icon>
+                {{menuitem.title}}
+              </a>
+              <!--If it have a submenu-->
+              <a data-toggle="collapse" href="#{{menuitem.collapse}}" *ngIf="menuitem.type === 'sub'" (click)="updatePS()"
+                class="nav-link">
+                <i class="material-icons">{{menuitem.icontype}}</i>
+                <p>{{menuitem.title}}<b class="caret"></b></p>
+              </a>
+
+              <!-- Display the submenu items-->
+              <div id="{{menuitem.collapse}}" class="collapse" *ngIf="menuitem.type === 'sub'">
+                <ul class="nav">
+                  <li routerLinkActive="active" *ngFor="let childitem of menuitem.children" class="nav-item">
+                    <a [routerLink]="[menuitem.path, childitem.path]" class="nav-link">
+                      <span class="sidebar-mini">{{childitem.ab}}</span>
+                      <span class="sidebar-normal">{{childitem.title}}</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </mat-list-item>
+            <li class="nav-item d-lg-none">
+              <a class="nav-link" href="#" (click)="logout()">
+                <i class="material-icons">power_settings_new</i>
+                <p>
+                  <span class="d-lg-none d-md-block">Logout</span>
+                </p>
+              </a>
+            </li>
+        </mat-nav-list>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+      <mat-toolbar color="primary">
+          <button type="button" mat-icon-button *ngIf="isHandset$ | async" (click)="drawer.toggle()">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <a class="navbar-brand" href="#">
+            <img src="/assets/img/QdataEDC.png" style="width:190px; " >
+            </a>
+        </mat-toolbar>
+        <app-breadcrumb></app-breadcrumb>
+    <router-outlet></router-outlet>
+    <app-footer></app-footer>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+

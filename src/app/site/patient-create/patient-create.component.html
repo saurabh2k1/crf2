@@ -29,7 +29,7 @@
                     <app-field-error-display [displayError]="isFieldValid(frmRegister, 'dob')" errorMsg="Date of Birth is required"></app-field-error-display>
                   </mat-form-field>
                 </div>
-                <div class="col-md-5 mr-auto text-danger" *ngIf="showDobReason">Age of the patient ({{age}} years) is not in the approved limit.</div>
+                <div class="col-md-5 mr-auto text-danger" *ngIf="showDobReason">Age of the patient ({{age}} years) is not in the approved limit ({{minAge}} - {{MaxAge}} years).</div>
                 <div class="col-md-5 mr-auto" *ngIf="showDobReason">
                 <mat-form-field class="example-full-width" >
                   <input matInput formControlName="reason" placeholder="Enter reason for exception in age of patient" />
@@ -94,7 +94,7 @@
                     <td>Changes in Field: {{a.field | uppercase}}</td>
                     <td>Old Value: {{a.old_value}} => New Value: {{a.new_value}}</td>
                   </tr>
-                </table>  
+                </table>
                 </div>
             </div>
             <div class="card-footer text-right">
