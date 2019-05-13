@@ -44,9 +44,9 @@ export class PatientCreateComponent implements OnInit {
       dob: ['', [Validators.required]],
       gender: ['', Validators.required],
       race: ['', Validators.required],
-      icf: ['', Validators.required],
-      icf_date: [null, Validators.required],
-      reason: [null, Validators.required],
+      icf: ['', Validators.requiredTrue],
+      icf_date: ['', Validators.required],
+      reason: [null],
     });
     const study = JSON.parse(localStorage.getItem('study'));
     const site = JSON.parse(localStorage.getItem('site'));
@@ -91,6 +91,10 @@ export class PatientCreateComponent implements OnInit {
     };
   }
 
+  get icf() {
+    return this.frmRegister.get('icf');
+  }
+
   dobChange(val: Date) {
     const dob = new Date(val);
     const timeDiff = Math.abs(Date.now() - dob.getTime());
@@ -106,9 +110,10 @@ export class PatientCreateComponent implements OnInit {
 
 
   onRegister() {
-    // console.log(this.frmRegister.value);
-
-    const frm = this.frmRegister.controls;
+    console.log(this.frmRegister.valid);
+    console.log(this.frmRegister.status);
+    return;
+      const frm = this.frmRegister.controls;
 
     const pat = {
       initials: frm['initials'].value,
@@ -121,6 +126,7 @@ export class PatientCreateComponent implements OnInit {
       study_id: this.studyID,
     };
     if (this.showNew) {
+      if (this.frmRegister.valid) {
       this.siteService.createPatient(pat).subscribe(data => {
         console.log(data);
         if (data.id) {
@@ -129,6 +135,7 @@ export class PatientCreateComponent implements OnInit {
       }, err => {
         console.error(err);
       });
+    }
     } else {
       // tslint:disable-next-line:prefer-const
       let requestBody = {};
@@ -148,6 +155,8 @@ export class PatientCreateComponent implements OnInit {
     }
 
     console.log(pat);
+
+
   }
 
   showEdit(id) {
