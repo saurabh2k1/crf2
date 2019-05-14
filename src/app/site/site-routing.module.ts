@@ -15,20 +15,20 @@ const siteRoutes: Routes = [
     path: 'site',
     component: SiteComponent,
     canActivate: [AuthGuard],
-    data: {roles: [Role.User]},
+    data: {roles: [Role.User], breadcrumb: 'Home'},
     children: [
       {
         path: '',
         children: [
           {
-            path: 'patients', component: PatientListComponent
+            path: 'patients', component: PatientListComponent, data: {breadcrumb: 'Subject'},
           },
-          { path: 'patient/new', component: PatientCreateComponent, data: {kind: 'new'}},
-          { path: 'patient/:id', component: PatientCreateComponent, data: {kind: 'edit'}},
+          { path: 'patient/new', component: PatientCreateComponent, data: {kind: 'new', breadcrumb: 'New'}},
+          { path: 'patient/:id', component: PatientCreateComponent, data: {kind: 'edit', breadcrumb: 'Edit'}},
           { path: 'visits', component: VisitsComponent},
           { path: 'profile', component: ProfileComponent},
-          {path: 'dashboard', component: SiteDashboardComponent},
-          { path: '', component: SelectStudyComponent},
+          {path: 'dashboard', component: SiteDashboardComponent, data: {breadcrumb: 'Dashboard'}},
+          { path: '', component: SelectStudyComponent, data: {breadcrumb: 'Study'}},
         ]
       }
     ]
