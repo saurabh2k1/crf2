@@ -21,6 +21,7 @@ import { UnitComponent } from '../components/unit/unit.component';
 import { ComponentModule } from './../components/component.module';
 import { Navbar1Component } from './navbar1/navbar1.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { LabelComponent } from '../components/label/label.component';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     SelectComponent,
     RadiobuttonComponent,
     InputComponent,
+    LabelComponent,
     Navbar1Component,
     BreadcrumbComponent,
   ],
@@ -67,6 +69,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     SelectComponent,
     RadiobuttonComponent,
     InputComponent,
+    LabelComponent,
     Navbar1Component,
     BreadcrumbComponent
   ],
@@ -78,6 +81,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     RadiobuttonComponent,
     CheckboxComponent,
     UnitComponent,
+    LabelComponent,
   ]
 })
 export class SharedModule { }

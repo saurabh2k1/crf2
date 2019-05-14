@@ -34,8 +34,6 @@ export class SiteDashboardComponent implements OnInit {
 
   }
 
-
-
   getDashboard() {
     this.siteService.getSiteStatics(this.siteId, this.studyId).subscribe((data: any) => {
       console.log(data);

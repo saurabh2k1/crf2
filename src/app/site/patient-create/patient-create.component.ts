@@ -29,6 +29,7 @@ export class PatientCreateComponent implements OnInit {
   showChangeLog = false;
   minAge = 0;
   MaxAge = 999;
+  studyStartDate;
   constructor(private fb: FormBuilder,
     private siteService: SiteService,
     private studyService: StudyService,
@@ -39,6 +40,7 @@ export class PatientCreateComponent implements OnInit {
      // TODO: get the max, min age for study from study details
     this.MaxAge = 75;
     this.minAge = 55;
+    this.studyStartDate = new Date('2019-05-01');
     this.frmRegister = this.fb.group({
       initials: ['', [Validators.required, Validators.pattern('^[a-zA-Z][a-zA-Z/-]{2}$')]],
       dob: ['', [Validators.required]],
@@ -82,7 +84,7 @@ export class PatientCreateComponent implements OnInit {
     });
   }
   isFieldValid(form: FormGroup, field: string) {
-    return !form.get(field).valid && form.get(field).touched;
+    return !form.get(field).valid ;    // && form.get(field).touched
   }
   displayFieldCss(form: FormGroup, field: string) {
     return {
@@ -111,8 +113,10 @@ export class PatientCreateComponent implements OnInit {
 
   onRegister() {
     console.log(this.frmRegister.valid);
-    console.log(this.frmRegister.status);
-    return;
+    console.log(this.frmRegister);
+    if (this.frmRegister.invalid) {
+      return;
+    }
       const frm = this.frmRegister.controls;
 
     const pat = {
@@ -126,7 +130,6 @@ export class PatientCreateComponent implements OnInit {
       study_id: this.studyID,
     };
     if (this.showNew) {
-      if (this.frmRegister.valid) {
       this.siteService.createPatient(pat).subscribe(data => {
         console.log(data);
         if (data.id) {
@@ -135,7 +138,6 @@ export class PatientCreateComponent implements OnInit {
       }, err => {
         console.error(err);
       });
-    }
     } else {
       // tslint:disable-next-line:prefer-const
       let requestBody = {};
@@ -174,7 +176,7 @@ export class PatientCreateComponent implements OnInit {
       this.frmRegister.get('icf_date').patchValue(new Date(data.icf_date));
       this.isUpdated = data.isUpdated;
       this.changes = data.audits;
-      // this.frmRegister.get('icf').patchValue(true);
+      this.frmRegister.get('icf').patchValue(true);
       // this.frmRegister.controls['gender'].setValue(data.gender);
 
     });

@@ -54,33 +54,34 @@
                       <mat-option value="Mixed">Mixed</mat-option>
                       <mat-option value="Undisclosed">Undisclosed</mat-option>
                     </mat-select>
-                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'race')" errorMsg="Input is required"></app-field-error-display>
+                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'race')" errorMsg="Race is required"></app-field-error-display>
                   </mat-form-field>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-5 mr-auto">
 
-                  <!-- <mat-checkbox formControlName="ICF" required>ICF Signed?</mat-checkbox> -->
+                  <!-- <mat-checkbox formControlName="icf" labelPosition="before" required>ICF Signed?</mat-checkbox> -->
 
                   <div class="form-check mr-auto">
                     <label class="form-check-label">
-                      <input class="form-check-input" formControlName="icf" type="checkbox" value="1" required> ICF
+                      <input class="form-check-input" formControlName="icf" type="checkbox" value="" required> ICF
                       Signed? *
                       <span class="form-check-sign">
                         <span class="check"></span>
                       </span>
                     </label>
-                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'icf')" errorMsg="Input is required"></app-field-error-display>
+                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'icf')" errorMsg="ICF is required"></app-field-error-display>
                   </div>
                 </div>
                 <div class="col-md-5 mr-auto" >
                   <mat-form-field class="example-full-width">
                     <input matInput [matDatepicker]="ICFpicker" formControlName="icf_date" placeholder="ICF Date" [max]="getToday()"
+                      [min]="studyStartDate"
                       (click)="ICFpicker.open()" required>
                     <mat-datepicker-toggle matSuffix [for]="ICFpicker"></mat-datepicker-toggle>
                     <mat-datepicker #ICFpicker></mat-datepicker>
-                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'icf_date')" errorMsg="Input is required"></app-field-error-display>
+                    <app-field-error-display [displayError]="isFieldValid(frmRegister, 'icf_date')" errorMsg="ICF Date is required"></app-field-error-display>
                   </mat-form-field>
                 </div>
               </div>
@@ -89,10 +90,13 @@
               <div class="row" *ngIf="isUpdated" class="" >
                 <button class="btn btn-primary" (click)="showChangeLog = !showChangeLog" >Show/Hide Change Log</button>
                 <table class="table table-striped changelog" *ngIf="showChangeLog" >
+                  <tr><th>Changed Field</th><th>Old value to New value</th><th>Updated By</th><th>Timestamp</th></tr>
                   <tr *ngFor="let a of changes" >
+                    
+                    <td>{{a.field | uppercase}}</td>
+                    <td>{{a.old_value}} => {{a.new_value}}</td>
+                    <td>{{a.changedBy}}</td>
                     <td>{{a.created_at | date: "medium" : '+0530' }}</td>
-                    <td>Changes in Field: {{a.field | uppercase}}</td>
-                    <td>Old Value: {{a.old_value}} => New Value: {{a.new_value}}</td>
                   </tr>
                 </table>
                 </div>
@@ -100,7 +104,7 @@
             </div>
             <div class="card-footer text-right">
               <div class="mr-auto"><a routerLink="/site/patients" class="btn btn-default">Cancel</a></div>
-              <button mat-raised-button type="submit"  *ngIf="frmRegister.dirty" class="btn btn-rose" (click)="onRegister()">{{btnText}}</button>
+              <button mat-raised-button type="submit"  *ngIf="frmRegister.dirty && !frmRegister.invalid" class="btn btn-rose" (click)="onRegister()">{{btnText}}</button>
             </div>
           </form>
         </div>

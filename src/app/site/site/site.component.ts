@@ -10,6 +10,7 @@ import { Study } from 'src/app/models/study';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AuthService } from 'src/app/auth/auth.service';
 
 
 export interface RouteInfo {
@@ -63,7 +64,10 @@ export class SiteComponent implements OnInit, AfterViewInit {
   @ViewChild('sidebar') sidebar: any;
   @ViewChild(NavbarComponent) navbar: NavbarComponent;
 
-  constructor(private router: Router, location: Location, private siteService: SiteService,private breakpointObserver: BreakpointObserver) {
+  constructor(private router: Router, location: Location,
+    private siteService: SiteService,
+    private authService: AuthService,
+    private breakpointObserver: BreakpointObserver) {
     this.location = location;
    }
 
@@ -146,6 +150,11 @@ export class SiteComponent implements OnInit, AfterViewInit {
         bool = true;
     }
     return bool;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 }
