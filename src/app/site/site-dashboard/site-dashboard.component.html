@@ -13,7 +13,46 @@
               <h3 class="card-title">{{patientCount}}</h3>
             </div>
             <div class="card-body">
-              
+              <div class="row">
+                <div class="col">
+                  <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                    <a
+                    [routerLink]="['/site/patient/new']"
+                    class="btn btn-primary "
+                    mat-raised-button
+                    type="button"
+                  >
+                    <i class="material-icons">add_box</i>Add</a>
+                </div>
+              </div>
+                
+              <div class="table-responsive">
+                <table mat-table [dataSource]="dataSource" class="table ">
+                  <ng-container matColumnDef="patid">
+                    <th mat-header-cell *matHeaderCellDef>Patient ID</th>
+                    <td mat-cell *matCellDef="let patient"> <mat-icon>person</mat-icon>
+                      {{ getRefNumber(patient.pat_id, patient.prefix) }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="initials">
+                    <th mat-header-cell *matHeaderCellDef>Initials</th>
+                    <td mat-cell *matCellDef="let patient">
+                      {{ patient.initials }}
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumn"></tr>
+                </table>
+  
+                <mat-paginator
+                  [pageSizeOptions]="[5, 10, 20]"
+                  showFirstLastButtons
+                ></mat-paginator>
+              </div>
             </div>
             <div class="card-footer">
               <div class="stats">
@@ -30,8 +69,9 @@
                 <i class="material-icons">lock</i>
               </div>
               <p class="card-category">eCRF Locked</p>
-              <h3 class="card-title">75.521</h3>
+              <h3 class="card-title">0</h3>
             </div>
+            
             <div class="card-footer">
               <div class="stats">
                 <i class="material-icons">local_offer</i> Tracked from Google Analytics
@@ -46,7 +86,15 @@
                 <i class="material-icons">notification_important</i>
               </div>
               <p class="card-category">Open Queries</p>
-              <h3 class="card-title">34,245</h3>
+              <h3 class="card-title">0</h3>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <tr><td class="text-left">Non-conformant Data</td><td>{{nonConformant}}</td></tr>
+                <tr><td class="text-left">Open Queries</td><td>{{openQuery}}</td></tr>
+                <tr><td class="text-left">Sticky Notes</td><td>{{stickyNotes}}</td></tr>
+                <tr><td class="text-left">Overdue Data</td><td>{{overDue}}</td></tr>
+              </table>
             </div>
             <div class="card-footer">
               <div class="stats">
