@@ -1,5 +1,15 @@
 <div class="main-content">
   <div class="container-fluid">
+    <br/>
+    <div class="row">
+      <div>
+        <mat-chip-list>
+          <mat-chip color="primary" [routerLink]="['/site/dashboard']"><mat-icon>home</mat-icon> Home</mat-chip>
+          <mat-chip color="primary" [routerLink]="['/site/patients']"><mat-icon>assignment_ind</mat-icon> Patients</mat-chip>
+          <mat-chip color="primary" selected><mat-icon>edit</mat-icon> {{btnText}}</mat-chip>
+        </mat-chip-list>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-10 offset-md-1">
         <div class="card">

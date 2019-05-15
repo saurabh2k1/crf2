@@ -35,7 +35,10 @@
                   <ng-container matColumnDef="patid">
                     <th mat-header-cell *matHeaderCellDef>Patient ID</th>
                     <td mat-cell *matCellDef="let patient"> <mat-icon>person</mat-icon>
-                      {{ getRefNumber(patient.pat_id, patient.prefix) }}
+                      <span routerLink="/site/patient/{{ patient._id }}">
+                          {{ getRefNumber(patient.pat_id, patient.prefix) }}
+                      </span>
+                      
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="initials">
