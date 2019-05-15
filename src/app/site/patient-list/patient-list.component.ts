@@ -32,8 +32,6 @@ export class PatientListComponent implements OnInit {
       this.site_id = site.id;
       this.getPatients();
     }
-
- 
   }
 
   getPatients() {

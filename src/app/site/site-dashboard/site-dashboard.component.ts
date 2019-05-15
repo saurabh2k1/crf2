@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { StudyService } from 'src/app/study.service';
 import { Study } from 'src/app/models/study';
 import { AdminService } from 'src/app/admin.service';
 import { SiteService } from '../site.service';
 import { Router } from '@angular/router';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { Patient } from 'src/app/models/patient';
 
 @Component({
   selector: 'app-site-dashboard',
@@ -16,8 +18,15 @@ export class SiteDashboardComponent implements OnInit {
   studyName = '';
   studyId = '';
   studies: Study[] = [];
+  patients: any;
   patientCount = '';
-
+  displayedColumn: string[] = ['patid', 'initials'];
+  dataSource: MatTableDataSource<Patient>;
+  nonConformant = 0;
+  openQuery = 0;
+  stickyNotes = 0;
+  overDue = 0;
+  @ViewChild(MatPaginator) Paginator: MatPaginator;
   constructor(private studyService: StudyService,
     private siteService: SiteService,
     private router: Router) { }
@@ -30,8 +39,18 @@ export class SiteDashboardComponent implements OnInit {
       this.studyId = study.id;
       this.siteId = site.id;
       this.getDashboard();
+      this.getPatients();
     }
 
+  }
+
+  getPatients() {
+    this.siteService.getPatients(this.siteId, this.studyId).subscribe(data => {
+      console.log(data);
+      this.patients = data;
+      this.dataSource = new MatTableDataSource<Patient>(data);
+      this.dataSource.paginator = this.Paginator;
+    });
   }
 
   getDashboard() {
@@ -45,4 +64,11 @@ export class SiteDashboardComponent implements OnInit {
     this.studyService.setStudy(study.id, study.name);
   }
 
+  getRefNumber(patID, prefix) {
+    return `${prefix}/` + String('000' + patID).slice(-4);
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }
