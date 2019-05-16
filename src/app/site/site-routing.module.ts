@@ -1,3 +1,4 @@
+import { Visit1Component } from './visit1/visit1.component';
 import { ProfileComponent } from './profile/profile.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -26,6 +27,7 @@ const siteRoutes: Routes = [
           { path: 'patient/new', component: PatientCreateComponent, data: {kind: 'new', breadcrumb: 'New'}},
           { path: 'patient/:id', component: PatientCreateComponent, data: {kind: 'edit', breadcrumb: 'Edit'}},
           { path: 'visits', component: VisitsComponent},
+          { path: 'visits/:id', component: Visit1Component, },
           { path: 'profile', component: ProfileComponent},
           {path: 'dashboard', component: SiteDashboardComponent, data: {breadcrumb: 'Dashboard'}},
           { path: '', component: SelectStudyComponent, data: {breadcrumb: 'Study'}},

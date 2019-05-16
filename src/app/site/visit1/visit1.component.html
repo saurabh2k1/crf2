@@ -1,0 +1,53 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <br/>
+    <div class="row">
+      <div>
+        <mat-chip-list>
+          <mat-chip color="primary" [routerLink]="['/site/dashboard']"><mat-icon>dashboard</mat-icon> Dashboard</mat-chip>
+          <mat-chip color="primary" [routerLink]="['/site/patients']"><mat-icon>group</mat-icon> Patients</mat-chip>
+          <mat-chip color="primary" routerLink="/site/patient/{{patID}}" ><mat-icon>assignment_ind</mat-icon> {{ getRefNumber(patient.pat_id, patient.prefix) }} </mat-chip>
+          <mat-chip color="primary" selected><mat-icon>pets</mat-icon>  {{pageTitle}} </mat-chip>
+        </mat-chip-list>
+      </div>
+    </div>
+    <br/>
+    <div class="row">
+      <div class="col-md-2" style="border: 1px solid gray;">
+        <mat-list dense>
+          <p>Visits</p>
+          <mat-list-item *ngFor="let visit of visits">
+            <mat-icon mat-list-icon>folder</mat-icon>
+            <h4 mat-line>{{visit.description}}</h4>
+            <p mat-line><span *ngIf="visit.dov">({{visit.dov | date}})</span></p>
+          </mat-list-item>
+          <mat-list-item (click)="showAE()">
+            <mat-icon mat-list-icon>folder</mat-icon>
+            <h4 mat-line>Adverse Events</h4>
+          </mat-list-item>
+          <mat-list-item >
+              <mat-icon mat-list-icon>folder</mat-icon>
+              <h4 mat-line>Concomitant Medication</h4>
+            </mat-list-item>
+        </mat-list>
+        <hr>
+        Dynamic contents (like forms of a visit)
+      </div>
+      <div class="col-md-10" style="border: 1px solid gray;">
+        
+            Patient: {{ getRefNumber(patient.pat_id, patient.prefix) }} <br/>
+            Page: {{pageTitle}}<br/>
+          <div id="aeTable" *ngIf="showAETable">
+            <table class="table">
+              <thead class="text-primary">
+                <tr><th>#</th><th>Adverse Event</th><th>Start Date</th><th>End Date</th><th>Severity</th><th>Action Taken</th><th>Outcome</th></tr>
+              </thead>
+              <tbody></tbody>
+              <tfoot><tr><td colspan="7"><button (click)="addAE()" mat-button color="primary">Add a new Log line</button></td></tr></tfoot>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
