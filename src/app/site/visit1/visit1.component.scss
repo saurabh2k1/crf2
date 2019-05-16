@@ -6,3 +6,7 @@
 .mat-list-item-content {
     padding:0px !important;
 }
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}

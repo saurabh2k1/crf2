@@ -6,7 +6,7 @@
         <mat-chip-list>
           <mat-chip color="primary" [routerLink]="['/site/dashboard']"><mat-icon>dashboard</mat-icon> Dashboard</mat-chip>
           <mat-chip color="primary" [routerLink]="['/site/patients']"><mat-icon>group</mat-icon> Patients</mat-chip>
-          <mat-chip color="primary" routerLink="/site/patient/{{patID}}" ><mat-icon>assignment_ind</mat-icon> {{ getRefNumber(patient.pat_id, patient.prefix) }} </mat-chip>
+          <mat-chip color="primary" routerLink="/site/patient/{{patID}}" ><mat-icon>assignment_ind</mat-icon> {{ getRefNumber(patient?.pat_id, patient?.prefix) }} </mat-chip>
           <mat-chip color="primary" selected><mat-icon>pets</mat-icon>  {{pageTitle}} </mat-chip>
         </mat-chip-list>
       </div>
@@ -34,17 +34,231 @@
         Dynamic contents (like forms of a visit)
       </div>
       <div class="col-md-10" style="border: 1px solid gray;">
-        
-            Patient: {{ getRefNumber(patient.pat_id, patient.prefix) }} <br/>
+
+            Patient: {{ getRefNumber(patient?.pat_id, patient?.prefix) }} <br/>
             Page: {{pageTitle}}<br/>
-          <div id="aeTable" *ngIf="showAETable">
-            <table class="table">
-              <thead class="text-primary">
-                <tr><th>#</th><th>Adverse Event</th><th>Start Date</th><th>End Date</th><th>Severity</th><th>Action Taken</th><th>Outcome</th></tr>
-              </thead>
-              <tbody></tbody>
-              <tfoot><tr><td colspan="7"><button (click)="addAE()" mat-button color="primary">Add a new Log line</button></td></tr></tfoot>
-            </table>
+        <div id="aeTable" *ngIf="showAETable">
+          <table class="table">
+            <thead class="text-primary">
+              <tr><th>#</th><th>Adverse Event</th><th>Start Date</th><th>End Date</th><th>Severity</th><th>Action Taken</th><th>Outcome</th></tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot><tr><td colspan="7"><button (click)="addAE()" mat-button color="primary">Add a new Log line</button></td></tr></tfoot>
+          </table>
+        </div>
+        <div id="aeForm" *ngIf="showAEForm">
+          <form [formGroup]="frmAEForm">
+            <div class="row">
+              <div class="col">
+                  <label id="isEventOccur-label">Did an adverse event occur? </label> <br/>
+                  <mat-radio-group aria-labelledby="isEventOccur-label" formControlName="isEventOccur" required>
+                    <mat-radio-button value="1">Yes</mat-radio-button>
+                    <mat-radio-button value="0">No</mat-radio-button>
+                  </mat-radio-group>
+              </div>
+              <div class="col">
+                  <label id="isEyeAffected-label">Did the event affect the eye? </label> <br/>
+                  <mat-radio-group aria-labelledby="isEyeAffected-label" formControlName="isEyeAffected" required>
+                    <mat-radio-button value="1">Yes</mat-radio-button>
+                    <mat-radio-button value="0">No</mat-radio-button>
+                  </mat-radio-group>
+              </div>
+              <div class="col">
+                <mat-form-field class="example-full-width">
+                    <input matInput #dob [matDatepicker]="picker" formControlName="examDate" placeholder="Examination Date" [max]="getToday()"
+                      (click)="picker.open()"  required>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <app-field-error-display [displayError]="isFieldValid(frmAEForm, 'examDate')" errorMsg="Examination date is required"></app-field-error-display>
+                  </mat-form-field>
+              </div>
+              <div class="col">
+                  <mat-form-field class="example-full-width">
+                      <input matInput #dob [matDatepicker]="picker1" formControlName="firstObservedDate" placeholder="Date AE was first observed" [max]="getToday()"
+                        (click)="picker1.open()"  required>
+                      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                      <mat-datepicker #picker1></mat-datepicker>
+                      <app-field-error-display [displayError]="isFieldValid(frmAEForm, 'firstObservedDate')" errorMsg="Examination date is required"></app-field-error-display>
+                    </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <mat-form-field>
+                  <mat-label>Which event did occur?</mat-label>
+                  <mat-select formControlName="eventName">
+                    <mat-option>--</mat-option>
+                    <mat-option value="Persistent corneal edema after 60 days postoperative">Persistent corneal edema after 60 days postoperative</mat-option>
+                    <mat-option value="Endophthalmitis">Endophthalmitis</mat-option>
+                    <mat-option value="Retinal detachment">Retinal detachment</mat-option>
+                    <mat-option value="Elevated IOP with medication treatment">Elevated IOP with medication treatment</mat-option>
+                    <mat-option value="Secondary surgical intervention">Secondary surgical intervention</mat-option>
+                    <mat-option value="Hyphema">Hyphema</mat-option>
+                    <mat-option value="Persistent Uvitis after 60 days postoperative">Persistent Uvitis after 60 days postoperative</mat-option>
+                    <mat-option value="Hypopyon">Hypopyon</mat-option>
+                    <mat-option value="Persistent macular edema after 60 days postoperative">Persistent macular edema after 60 days postoperative</mat-option>
+                    <mat-option value="Pupillary block">Pupillary block</mat-option>
+                    <mat-option value="Zonular rupture">Zonular rupture</mat-option>
+                    <mat-option value="Poasterior capsular tear/rupture">Poasterior capsular tear/rupture</mat-option>
+                    <mat-option value="Other">Other</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col">
+                <mat-form-field>
+                  <mat-label>When did the event occur?</mat-label>
+                  <mat-select formControlName="control">
+                    <mat-option>--</mat-option>
+                    <mat-option value="Before IOL implantation">Before IOL implantation</mat-option>
+                    <mat-option value="During IOL implantation">During IOL implantation</mat-option>
+                    <mat-option value="After IOL implantation">After IOL implantation</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col">
+                  <mat-form-field>
+                    <mat-label>Severity level of the event</mat-label>
+                    <mat-select formControlName="control">
+                      <mat-option>--</mat-option>
+                      <mat-option value="Mild">Mild</mat-option>
+                      <mat-option value="Moderate">Moderate</mat-option>
+                      <mat-option value="Severe">Severe</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field class="example-full-width">
+                        <input matInput #dob [matDatepicker]="pickerOnset" formControlName="onsetDate" placeholder="Estimated onset date" [max]="getToday()"
+                          (click)="pickerOnset.open()"  required>
+                        <mat-datepicker-toggle matSuffix [for]="pickerOnset"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerOnset></mat-datepicker>
+                        <app-field-error-display [displayError]="isFieldValid(frmAEForm, 'onsetDate')" errorMsg="Onset date is required"></app-field-error-display>
+                      </mat-form-field>
+                </div>
+                </div>
+                <div class="row">
+              <div class="col">
+                <mat-form-field>
+                  <textarea matInput placeholder="Brief description of the event" #brief maxlength="2000" mat-autosize="true" cdkAutosizeMinRows="4"></textarea>
+                  <mat-hint align="end">{{brief.value.length}} / 2000</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="col">
+                  <mat-form-field>
+                    <mat-label>Does the event fulfill any of the following criteria?</mat-label>
+                    <mat-select formControlName="eventCriteria">
+                      <mat-option>--</mat-option>
+                      <mat-option value="Led to a death">Led to a death</mat-option>
+                      <mat-optgroup label="led to a serious deterioration in health that either:">
+                        <mat-option value="Resulted in a life-threatening illness or injury">Resulted in a life-threatening illness or injury</mat-option>
+                        <mat-option value="Resulted in a permanent impairment of a body structure or a body function">Resulted in a permanent impairment of a body structure or a body function</mat-option>
+                        <mat-option value="Required in-patient hospitalization or prolongation of existing hospitalization">Required in-patient hospitalization or prolongation of existing hospitalization</mat-option>
+                      </mat-optgroup>
+                      <mat-option value="Resulted in medical or surgical intervention to prevent life threatening illness or injury or permanent impairment to a body structure or a body function">Resulted in medical or surgical intervention to prevent life threatening illness or injury or permanent impairment to a body structure or a body function</mat-option>
+                      <mat-option value="Led to fetal distress, fetal death or a congenital abnormality or birth defect">Led to fetal distress, fetal death or a congenital abnormality or birth defect</mat-option>
+
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+
+              <div class="col">
+                  <label id="isongoing-label">is Ongoing? </label> <br>
+                  <mat-radio-group aria-labelledby="isongoing-label" formControlName="isongoing" required>
+                    <mat-radio-button value="1">Yes</mat-radio-button>
+                    <mat-radio-button value="0">No</mat-radio-button>
+                  </mat-radio-group>
+              </div>
+              <div class="col">
+                  <mat-form-field class="example-full-width">
+                      <input matInput #dob [matDatepicker]="pickerEnd" formControlName="endDate" placeholder="End date" [max]="getToday()"
+                        (click)="pickerEnd.open()"  >
+                      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerEnd></mat-datepicker>
+                      <app-field-error-display [displayError]="isFieldValid(frmAEForm, 'endDate')" errorMsg="Onset date is required"></app-field-error-display>
+                    </mat-form-field>
+              </div>
+              <div class="col">
+                <mat-form-field>
+                    <mat-label id="actionTaken-label">Action Taken </mat-label>
+                    <mat-select aria-labelledby="actionTaken-label" formControlName="actionTaken" required>
+                      <mat-option>--</mat-option>
+                      <mat-option value="IOL explanted">IOL explanted</mat-option>
+                      <mat-option value="Secondary surgical intervention">Secondary surgical intervention</mat-option>
+                      <mat-option value="Medication given">Medication given</mat-option>
+                      <mat-option value="None">None</mat-option>
+                    </mat-select>
+                </mat-form-field>
+               </div>
+               <div class="col">
+                  <mat-form-field>
+                      <mat-label id="resolution-label">Resolution </mat-label>
+                      <mat-select aria-labelledby="resolution-label" formControlName="resolution" required>
+                        <mat-option>--</mat-option>
+                        <mat-option value="Resolved without sequelae">Resolved without sequelae</mat-option>
+                        <mat-option value="Resolved with sequelae">Resolved without sequelae</mat-option>
+                        <mat-option value="Ongoing">Ongoing</mat-option>
+                        <mat-option value="Fatal">Fatal</mat-option>
+                      </mat-select>
+                  </mat-form-field>
+               </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                  <mat-form-field>
+                      <mat-label id="relationshipIOL-label">Do you see a casual relationship of the event to the IOL? </mat-label>
+                      <mat-select aria-labelledby="relationshipIOL-label" formControlName="relationshipIOL" required>
+                        <mat-option>--</mat-option>
+                        <mat-option value="Definitely">Definitely</mat-option>
+                        <mat-option value="Likely">Likely</mat-option>
+                        <mat-option value="Unlikely">Unlikely</mat-option>
+                        <mat-option value="Not related">Not related</mat-option>
+                      </mat-select>
+                  </mat-form-field>
+              </div>
+              <div class="col">
+                  <mat-form-field>
+                      <mat-label id="relationshipSurgical-label">Do you see a casual relationship of the event to the surgical procedure? </mat-label>
+                      <mat-select aria-labelledby="relationshipSurgical-label" formControlName="relationshipSurgical" required>
+                        <mat-option>--</mat-option>
+                        <mat-option value="Definitely">Definitely</mat-option>
+                        <mat-option value="Likely">Likely</mat-option>
+                        <mat-option value="Unlikely">Unlikely</mat-option>
+                        <mat-option value="Not related">Not related</mat-option>
+                      </mat-select>
+                  </mat-form-field>
+              </div>
+              <div class="col">
+                  <label id="isDeviceRelated-label">is related to a malfunction of the device? </label> <br>
+                  <mat-radio-group aria-labelledby="isDeviceRelated-label" formControlName="isDeviceRelated" required>
+                    <mat-radio-button value="1">Yes</mat-radio-button>
+                    <mat-radio-button value="0">No</mat-radio-button>
+                  </mat-radio-group>
+              </div>
+              <div class="col">
+                  <mat-form-field>
+                      <mat-label id="relationshipDevice-label">which? </mat-label>
+                      <mat-select aria-labelledby="relationshipDevice-label" formControlName="relationshipDevice" required>
+                        <mat-option>--</mat-option>
+                        <mat-option value="Optic damage">Optic damage</mat-option>
+                        <mat-option value="Haptic damage">Haptic damage</mat-option>
+                        <mat-option value="Haptic sticking">Haptic sticking</mat-option>
+                        <mat-option value="Injector malfunction">Injector malfunction</mat-option>
+                        <mat-option value="Lens surface reflection">Lens surface reflection</mat-option>
+                        <mat-option value="Lens discoloration">Lens discoloration / pseudo-coloration</mat-option>
+                        <mat-option value="Lens luxation">Lens luxation</mat-option>
+                        <mat-option value="Lens decentration">Lens decentration</mat-option>
+                        <mat-option value="Lens dislocation">Lens dislocation</mat-option>
+                        <mat-option value="Lens opacification">Lens opacification (incl. glistening)</mat-option>
+                        <mat-option value="Lens rotation">Lens rotation</mat-option>
+                        <mat-option value="Other">Other</mat-option>
+                      </mat-select>
+                  </mat-form-field>
+              </div>
+            </div>
+
+          </form>
         </div>
       </div>
     </div>
