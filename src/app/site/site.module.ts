@@ -23,6 +23,7 @@ import { MaterialModule } from '../material.module';
 import { SelectStudyComponent } from './select-study/select-study.component';
 import { VisitsComponent } from './visits/visits.component';
 import { ProfileComponent } from './profile/profile.component';
+import { Visit1Component } from './visit1/visit1.component';
 
 
 
@@ -35,6 +36,7 @@ import { ProfileComponent } from './profile/profile.component';
     SelectStudyComponent,
     VisitsComponent,
     ProfileComponent,
+    Visit1Component,
   ],
   imports: [
     CommonModule,
