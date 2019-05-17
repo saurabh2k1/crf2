@@ -41,10 +41,13 @@ export class Visit1Component implements OnInit {
       onsetDate: [],
       endDate: [],
       isongoing: [false],
+      eventOccurOn: [],
+      severity: [],
       actionTaken: [],
       resolution: [''],
       relationshipIOL: [''],
       relationshipSurgical: [''],
+      relationshipDevice: [''],
       isDeviceRelated: [false],
     });
   }
@@ -75,6 +78,10 @@ export class Visit1Component implements OnInit {
     this.closeAllPage();
     this.pageTitle = 'Adverse Event';
     this.showAEForm = true;
+  }
+
+  saveAE(): void {
+    
   }
 
   getRefNumber(patID, prefix) {

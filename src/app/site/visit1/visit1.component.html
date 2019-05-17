@@ -107,7 +107,7 @@
               <div class="col">
                 <mat-form-field>
                   <mat-label>When did the event occur?</mat-label>
-                  <mat-select formControlName="control">
+                  <mat-select formControlName="eventOccurOn">
                     <mat-option>--</mat-option>
                     <mat-option value="Before IOL implantation">Before IOL implantation</mat-option>
                     <mat-option value="During IOL implantation">During IOL implantation</mat-option>
@@ -118,7 +118,7 @@
               <div class="col">
                   <mat-form-field>
                     <mat-label>Severity level of the event</mat-label>
-                    <mat-select formControlName="control">
+                    <mat-select formControlName="severity">
                       <mat-option>--</mat-option>
                       <mat-option value="Mild">Mild</mat-option>
                       <mat-option value="Moderate">Moderate</mat-option>
@@ -255,6 +255,14 @@
                         <mat-option value="Other">Other</mat-option>
                       </mat-select>
                   </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button>Cancel</button>
+              </div>
+              <div class="col text-right">
+                <button [disabled]="frmAEForm.invalid" (click)="saveAE()">Save</button>
               </div>
             </div>
 
