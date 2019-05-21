@@ -24,6 +24,7 @@ import { SelectStudyComponent } from './select-study/select-study.component';
 import { VisitsComponent } from './visits/visits.component';
 import { ProfileComponent } from './profile/profile.component';
 import { Visit1Component } from './visit1/visit1.component';
+import { SaeComponent } from './sae/sae.component';
 
 
 
@@ -37,6 +38,7 @@ import { Visit1Component } from './visit1/visit1.component';
     VisitsComponent,
     ProfileComponent,
     Visit1Component,
+    SaeComponent,
   ],
   imports: [
     CommonModule,

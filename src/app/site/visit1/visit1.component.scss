@@ -10,3 +10,12 @@
 .mat-radio-button ~ .mat-radio-button {
   margin-left: 16px;
 }
+
+.mat-tooltip {
+  white-space: pre-line;
+  height: auto;
+}
+
+.mat-tooltip-panel {
+  white-space: pre-line;
+}

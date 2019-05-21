@@ -74,4 +74,8 @@ export class SiteService {
      return this.http.post(`${this.apiUrl}/form/crf`, newForm);
    }
 
+   createAE(newAE): Observable<any> {
+     return this.http.post(`${this.apiUrl}/site/aeforms/new`, newAE);
+   }
+
 }
