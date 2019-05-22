@@ -28,6 +28,7 @@ import { LoaderComponent } from './shared/loader/loader.component';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,13 +38,14 @@ import { LoaderComponent } from './shared/loader/loader.component';
     ChangePasswordComponent,
     LoaderComponent,
 
+
   ],
   imports: [
     CommonModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
+    // HttpModule,
     HttpClientModule,
     MaterialModule,
     SharedModule,

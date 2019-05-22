@@ -14,8 +14,12 @@
     <br/>
     <div class="row">
       <div class="col-md-2" style="border: 1px solid gray;">
+        <mat-action-list>
+          <a mat-list-item  routerLink="/site/visits/medicalhistory/{{patID}}">Medical History</a>
+        </mat-action-list>
         <mat-list dense>
           <p>Visits</p>
+
           <mat-list-item *ngFor="let visit of visits">
             <mat-icon mat-list-icon>folder</mat-icon>
             <h4 mat-line>{{visit.description}}</h4>
@@ -144,6 +148,17 @@
                       <mat-option value="Pupillary block">Pupillary block</mat-option>
                       <mat-option value="Zonular rupture">Zonular rupture</mat-option>
                       <mat-option value="Poasterior capsular tear/rupture">Poasterior capsular tear/rupture</mat-option>
+                      <mat-option value="Optic damage">Optic damage</mat-option>
+                      <mat-option value="Haptic damage">Haptic damage</mat-option>
+                      <mat-option value="Haptic sticking">Haptic sticking</mat-option>
+                      <mat-option value="Injector malfunction">Injector malfunction</mat-option>
+                      <mat-option value="Lens surface reflection">Lens surface reflection</mat-option>
+                      <mat-option value="Lens discoloration">Lens discoloration / pseudo-coloration</mat-option>
+                      <mat-option value="Lens luxation">Lens luxation</mat-option>
+                      <mat-option value="Lens decentration">Lens decentration</mat-option>
+                      <mat-option value="Lens dislocation">Lens dislocation</mat-option>
+                      <mat-option value="Lens opacification">Lens opacification (incl. glistening)</mat-option>
+                      <mat-option value="Lens rotation">Lens rotation</mat-option>
                       <mat-option value="Other">Other</mat-option>
                     </mat-select>
 
@@ -268,6 +283,7 @@
                               <mat-option value="3">Unlikely</mat-option>
                               <mat-option value="4">Unrelated</mat-option>
 
+
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -280,11 +296,14 @@
                             <mat-select aria-labelledby="actionTaken-label" formControlName="AEACN" required>
                               <mat-option>--</mat-option>
                               <mat-option value="0">None</mat-option>
-                              <mat-option value="1">Interrupted</mat-option>
+                              <mat-option value="1">IOL explanted</mat-option>
+                              <mat-option value="2">Secondary surgical intervention</mat-option>
+                              <mat-option value="3">Medication given</mat-option>
+                              <!-- <mat-option value="1">Interrupted</mat-option>
                               <mat-option value="2">Discontinued</mat-option>
                               <mat-option value="3">Dose reduced</mat-option>
-                              <mat-option value="4">Dose increased</mat-option>
-                              <mat-option value="5">Not Applicable</mat-option>
+                              <mat-option value="4">Dose increased</mat-option> -->
+                              <mat-option value="4">Not Applicable</mat-option>
 
                             </mat-select>
                         </mat-form-field>
@@ -295,7 +314,7 @@
                         <div class="col">
 
                             <mat-form-field>
-                                <mat-label id="relationshipIOL-label">Drug/Device Attribution</mat-label>
+                                <mat-label id="relationshipIOL-label">IOL Attribution</mat-label>
                                 <mat-select aria-labelledby="relationshipIOL-label" formControlName="AEDEVREL" required>
                                   <mat-option>--</mat-option>
                                   <mat-option value="0">Definite</mat-option>

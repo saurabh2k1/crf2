@@ -11,6 +11,7 @@ import { SelectStudyComponent } from './select-study/select-study.component';
 import { VisitsComponent } from './visits/visits.component';
 import { Role } from '../models/role';
 import { SaeComponent } from './sae/sae.component';
+import { MedicalHistoryComponent } from './medical-history/medical-history.component';
 
 const siteRoutes: Routes = [
   {
@@ -29,6 +30,7 @@ const siteRoutes: Routes = [
           { path: 'patient/:id', component: PatientCreateComponent, data: {kind: 'edit', breadcrumb: 'Edit'}},
           { path: 'visits', component: VisitsComponent},
           { path: 'visits/:id', component: Visit1Component, },
+          { path: 'visits/medicalhistory/:id', component: MedicalHistoryComponent},
           { path: 'visits/sae/:id', component: SaeComponent},
           { path: 'profile', component: ProfileComponent},
           {path: 'dashboard', component: SiteDashboardComponent, data: {breadcrumb: 'Dashboard'}},
