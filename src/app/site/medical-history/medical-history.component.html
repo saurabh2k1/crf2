@@ -144,7 +144,7 @@
                     <td>{{op.description}}</td>
                     <td>{{op.startDate | date}}</td>
                     <td>{{op.isongoing === '1'? 'Ongoing':  op.endDate | date}}</td>
-                    
+
                   </tr>
                   <button mat-icon-button color="primary" *ngIf="!addOpMedHistory" matTooltip="Add new row" (click)="addOpMedHistory = !addOpMedHistory;" ><mat-icon>add</mat-icon></button>
                   <tr *ngIf="addOpMedHistory">
