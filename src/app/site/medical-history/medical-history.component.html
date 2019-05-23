@@ -24,6 +24,8 @@
     <div class="row">
       <div class="col-md-10"></div>
       <div class="col-md-10" style="border: 1px solid gray;">
+        <mat-icon matTooltip="Patient ID">assignment_ind</mat-icon>
+        {{ getRefNumber(patient?.pat_id, patient?.prefix) }}
         <!-- <form [formGroup]="frmMedHistory"> -->
           <mat-accordion class="example-headers-align">
             <mat-expansion-panel
@@ -123,9 +125,10 @@
                   <mat-icon>map</mat-icon>
                 </mat-panel-description>
               </mat-expansion-panel-header>
+              <form #fop="ngForm">
               <table class="table">
                 <thead>
-                  <tr><th>Indication</th><th>Eye</th><th>Treatment</th><th>Description</th>
+                  <tr><th>#</th><th>Indication</th><th>Eye</th><th>Treatment</th><th>Description</th>
                     <th>Start Date</th><th>End Date/ Ongoing</th>
                   </tr>
                 </thead>
@@ -139,75 +142,76 @@
                     <td>{{op.eye}}</td>
                     <td>{{op.treatment}}</td>
                     <td>{{op.description}}</td>
-                    <td>{{op.startDate}}</td>
-                    <td>{{op.endDate}}</td>
+                    <td>{{op.startDate | date}}</td>
+                    <td>{{op.isongoing === '1'? 'Ongoing':  op.endDate | date}}</td>
+                    
                   </tr>
-                  <button mat-icon-button color="primary" matTooltip="Add new row" (click)="addOpMedHistory = !addOpMedHistory;" ><mat-icon>add</mat-icon></button>
+                  <button mat-icon-button color="primary" *ngIf="!addOpMedHistory" matTooltip="Add new row" (click)="addOpMedHistory = !addOpMedHistory;" ><mat-icon>add</mat-icon></button>
                   <tr *ngIf="addOpMedHistory">
                     <td>
                       <button mat-icon-button color="warn" matTooltip="Remove the row" (click)="addOpMedHistory = !addOpMedHistory;">
-                        <mat-icon>remove</mat-icon>
+                        <mat-icon>visibility_off</mat-icon>
                         </button>
                     </td>
                     <td>
                         <mat-form-field>
-                            <input matInput type="text" placeholder="Indication" />
+                            <input matInput type="text" name="indication" ngModel placeholder="Indication" />
                           </mat-form-field>
                     </td>
                     <td>
                         <mat-form-field>
                             <mat-label>Eye</mat-label>
-                            <mat-select formControlName="AESEV">
+                            <mat-select name="eye" ngModel>
                               <mat-option>--</mat-option>
-                              <mat-option value="OD">O.D.</mat-option>
-                              <mat-option value="OS">O.S.</mat-option>
-                              <mat-option value="OU">O.U.</mat-option>
+                              <mat-option value="O.D.">O.D.</mat-option>
+                              <mat-option value="O.S.">O.S.</mat-option>
+                              <mat-option value="O.U.">O.U.</mat-option>
                             </mat-select>
                           </mat-form-field>
                     </td>
                     <td>
-                        <label id="isongoing-label">Treatment? </label> <br>
-                        <mat-radio-group aria-labelledby="isongoing-label"
-                          formControlName="AEONGO"  name="isongoing"
-                         >
+                        <label id="treatment">Treatment? </label> <br>
+                        <mat-radio-group aria-labelledby="treatment"
+                          name="treatment" ngModel >
                           <mat-radio-button value="Y">Yes</mat-radio-button>
                           <mat-radio-button value="N">No</mat-radio-button>
                         </mat-radio-group>
                     </td>
                     <td>
                         <mat-form-field>
-                            <input matInput type="text" placeholder="Description" />
+                            <input matInput type="text" name="description" ngModel placeholder="Description" />
                           </mat-form-field>
                     </td>
                     <td>
                         <mat-form-field>
-                            <input matInput #dob [matDatepicker]="picker"  placeholder="Start Date" [max]="getToday()"
-                            (click)="picker.open()"  required>
-                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                          <mat-datepicker #picker></mat-datepicker>
+                            <input matInput  [matDatepicker]="picker1" name="startDate" ngModel  placeholder="Start Date" [max]="getToday()"
+                            (click)="picker1.open()" >
+                          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                          <mat-datepicker #picker1></mat-datepicker>
                           <!-- <app-field-error-display [displayError]="isFieldValid(frmMedHistory, 'VISDAT')" errorMsg="Reported date is required"></app-field-error-display> -->
                         </mat-form-field>
                     </td>
                     <td>
                         <label id="isongoing-label">is Ongoing? </label> <br>
                         <mat-radio-group aria-labelledby="isongoing-label"
-                          formControlName="AEONGO" required name="isongoing"
+                           name="isongoing" ngModel
                           (change)="ongoingChange2($event.value)">
                           <mat-radio-button value="1">Yes</mat-radio-button>
                           <mat-radio-button value="0">No</mat-radio-button>
                         </mat-radio-group>
                         <mat-form-field  *ngIf="showEndDate2">
-                            <input matInput  [matDatepicker]="pickerEnd2" formControlName="AEENDAT" placeholder="End date" [max]="getToday()"
-                              (click)="pickerEnd.open()"  >
+                            <input matInput  [matDatepicker]="pickerEnd2" name="endDate" ngModel placeholder="End date" [max]="getToday()"
+                              (click)="pickerEnd2.open()"  >
                             <mat-datepicker-toggle matSuffix [for]="pickerEnd2"></mat-datepicker-toggle>
                             <mat-datepicker #pickerEnd2></mat-datepicker>
                             <!-- <app-field-error-display [displayError]="isFieldValid(frmAEForm, 'AEENDAT')" errorMsg="End date is required"></app-field-error-display> -->
                           </mat-form-field>
-                          <button>Save row</button>
+                          <button (click)="saveOPRow(fop)">Save row</button>
                     </td>
                   </tr>
                 </tbody>
               </table>
+            </form>
               <mat-action-row>
                   <button mat-button color="warn" (click)="prevStep()">Previous</button>
                   <button mat-button color="primary" (click)="nextStep()">Next</button>
@@ -221,28 +225,116 @@
                   <mat-icon>date_range</mat-icon>
                 </mat-panel-description>
               </mat-expansion-panel-header>
+              <form #fmed="ngForm">
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Drug Name</th><th>Indication</th><th>Eye</th><th>Route</th>
+                    <th>#</th><th>Drug Name</th><th>Indication</th><th>Eye</th><th>Route</th>
                     <th>Daily dose</th><th>Start Date</th><th>End Date/ Ongoing</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let med of medicationHistory">
+                    <td>
+                        <button mat-icon-button color="warn" matTooltip="Remove the row" (click)="removeMedRow(i)">
+                            <mat-icon>remove</mat-icon>
+                          </button>
+                    </td>
                     <td>{{med.drugName}}</td>
                     <td>{{med.indication}}</td>
                     <td>{{med.eye}}</td>
                     <td>{{med.route}}</td>
                     <td>{{med.dose}}</td>
-                    <td>{{med.startDate}}</td>
-                    <td>{{med.endDate}}</td>
+                    <td>{{med.startDate | date}}</td>
+                    <td>{{med.isongoing === '1'? 'Ongoing' :  med.endDate | date}}</td>
+                  </tr>
+                  <button mat-icon-button color="primary" *ngIf="!addMedHistory" matTooltip="Add new row" (click)="addMedHistory = !addMedHistory;" ><mat-icon>add</mat-icon></button>
+                  <tr *ngIf="addMedHistory">
+                      <td>
+                          <button mat-icon-button color="warn" matTooltip="Remove the row" (click)="addMedHistory = !addMedHistory;">
+                            <mat-icon>visibility_off</mat-icon>
+                            </button>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput type="text" name="drugName" ngModel placeholder="Drug Name" />
+                              </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput type="text" name="indication" ngModel placeholder="Indication" />
+                              </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <mat-label>Eye</mat-label>
+                                <mat-select name="eye" ngModel>
+                                  <mat-option>--</mat-option>
+                                  <mat-option value="O.D.">O.D.</mat-option>
+                                  <mat-option value="O.S.">O.S.</mat-option>
+                                  <mat-option value="O.U.">O.U.</mat-option>
+                                  <mat-option value="NA">N.A.</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <mat-label>Route</mat-label>
+                                <mat-select name="route" ngModel>
+                                  <mat-option>--</mat-option>
+                                  <mat-option value="p.o">p.o</mat-option>
+                                  <mat-option value="I.M.">I.M.</mat-option>
+                                  <mat-option value="Subq.">Subq.</mat-option>
+                                  <mat-option value="Rectally">Rectally</mat-option>
+                                  <mat-option value="I.V.">I.V.</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <mat-label>Daily Dose</mat-label>
+                                <mat-select name="dose" ngModel>
+                                  <mat-option>--</mat-option>
+                                  <mat-option value="q.d.">q.d.</mat-option>
+                                  <mat-option value="b.i.d.">b.i.d.</mat-option>
+                                  <mat-option value="t.i.d.">t.i.d.</mat-option>
+                                  <mat-option value="q.i.d.">q.i.d.</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput  [matDatepicker]="picker3" name="startDate" ngModel  placeholder="Start Date" [max]="getToday()"
+                                (click)="picker3.open()" >
+                              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                              <mat-datepicker #picker3></mat-datepicker>
+                              <!-- <app-field-error-display [displayError]="isFieldValid(frmMedHistory, 'VISDAT')" errorMsg="Reported date is required"></app-field-error-display> -->
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <label id="isongoing-label">is Ongoing? </label> <br>
+                            <mat-radio-group aria-labelledby="isongoing-label"
+                               name="isongoing" ngModel
+                              (change)="ongoingChange3($event.value)">
+                              <mat-radio-button value="1">Yes</mat-radio-button>
+                              <mat-radio-button value="0">No</mat-radio-button>
+                            </mat-radio-group>
+                            <mat-form-field  *ngIf="showEndDate3">
+                                <input matInput  [matDatepicker]="pickerEnd3" name="endDate" ngModel placeholder="End date" [max]="getToday()"
+                                  (click)="pickerEnd3.open()"  >
+                                <mat-datepicker-toggle matSuffix [for]="pickerEnd3"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerEnd3></mat-datepicker>
+                                <!-- <app-field-error-display [displayError]="isFieldValid(frmAEForm, 'AEENDAT')" errorMsg="End date is required"></app-field-error-display> -->
+                              </mat-form-field>
+                              <button (click)="saveMedRow(fmed)">Save row</button>
+                        </td>
                   </tr>
                 </tbody>
               </table>
+            </form>
               <mat-action-row>
                   <button mat-button color="warn" (click)="prevStep()">Previous</button>
-                  <button mat-button color="primary" (click)="nextStep()">Save</button>
+                  <button mat-button color="primary" (click)="saveForm()">Save</button>
                 </mat-action-row>
             </mat-expansion-panel>
           </mat-accordion>

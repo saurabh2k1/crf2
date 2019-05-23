@@ -16,18 +16,23 @@ export class MedicalHistoryComponent implements OnInit {
 
   patID = '';
   patient: Patient;
-  frmMedHistory: FormGroup;
+  // frmMedHistory: FormGroup;
+  medHistory: any;
   pageTitle = 'Medical History';
   step = 0;
   genMedHistory: Array<{indication: string, diagnosisDate: Date,
     endDate?: string, isongoing?: string, treatment: string, description: string
   }> = [];
-  addGenMedHistory = true;
-  opMedHistory = [{indication: '', eye: '', treatment: '', description: '', startDate: '', endDate: ''}];
-  medicationHistory = [{drugName: '', indication: '', eye: '', route: '', dose: '', startDate: '', endDate: ''}];
+  opMedHistory: Array<{indication: string, eye: string, treatment: string,
+     description: string, startDate: Date, isongoing?: string, endDate?: string}> = [];
+  medicationHistory: Array<{drugName: string, indication: string, eye: string,
+    route: string, dose: string, startDate: Date, endDate?: string, isongoing?: string}> = [];
   showEndDate1 = false;
   showEndDate2 = false;
+  showEndDate3 = false;
+  addGenMedHistory = true;
   addOpMedHistory = false;
+  addMedHistory = false;
   constructor(private siteService: SiteService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder) { }
@@ -37,12 +42,12 @@ export class MedicalHistoryComponent implements OnInit {
     this.siteService.getPatientByID(this.patID).subscribe((data: any) => {
       this.patient = data;
     });
-    this.frmMedHistory = this.fb.group({
-      patID: [this.patID],
-      genMedHistory: this.fb.array([]),
-      opMedHistory: this.fb.array([]),
-      medicationHistory: this.fb.array([]),
-    });
+    // this.frmMedHistory = this.fb.group({
+    //   patID: [this.patID],
+    //   genMedHistory: this.fb.array([]),
+    //   opMedHistory: this.fb.array([]),
+    //   medicationHistory: this.fb.array([]),
+    // });
   }
 
   isFieldValid(form: FormGroup, field: string) {
@@ -67,13 +72,6 @@ export class MedicalHistoryComponent implements OnInit {
     return `${prefix}-` + String('00' + patID).slice(-3);
   }
 
-  ongoingChange1(val) {
-    if (val === '1') {
-       this.showEndDate1 = false;
-    } else {
-      this.showEndDate1 = true;
-    }
-  }
   removeOPRow(index: number) {
     this.opMedHistory.splice(index, 1);
   }
@@ -81,11 +79,32 @@ export class MedicalHistoryComponent implements OnInit {
   removeGMRow(index: number) {
     this.genMedHistory.splice(index, 1);
   }
+
+  removeMedRow(index: number) {
+    this.medicationHistory.splice(index, 1);
+  }
+
   ongoingChange2(val) {
     if (val === '1') {
        this.showEndDate2 = false;
     } else {
       this.showEndDate2 = true;
+    }
+  }
+
+  ongoingChange1(val) {
+    if (val === '1') {
+       this.showEndDate1 = false;
+    } else {
+      this.showEndDate1 = true;
+    }
+  }
+
+  ongoingChange3(val) {
+    if (val === '1') {
+      this.showEndDate3 = false;
+    } else {
+      this.showEndDate3 = true;
     }
   }
 
@@ -95,4 +114,28 @@ export class MedicalHistoryComponent implements OnInit {
     this.addGenMedHistory = false;
   }
 
+  saveOPRow(f: NgForm) {
+    this.opMedHistory.push(f.value);
+    f.reset();
+    this.addOpMedHistory = false;
+  }
+
+  saveMedRow(f: NgForm) {
+    this.medicationHistory.push(f.value);
+    f.reset();
+    this.addMedHistory = false;
+  }
+
+  saveForm() {
+    this.nextStep();
+    this.medHistory = {
+      pat_id: this.patID,
+      genMedHistory: this.genMedHistory,
+      opMedHistory: this.opMedHistory,
+      medicationHistory: this.medicationHistory,
+    };
+
+    console.log(this.medHistory);
+
+  }
 }
