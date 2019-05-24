@@ -15,17 +15,28 @@ export class Visit1Component implements OnInit {
   patID = '';
   patient: Patient;
   visits: any[];
+  study_id: string;
+  site_id: string;
   showAETable = false;
   showAEForm = false;
   showAEField = false;
   pageTitle = 'Visit';
   frmAEForm: FormGroup;
+  frmExclusion: FormGroup;
   aeList: any[] = [];
+  crfExclusion: any;
   showEventNameOther = false;
   showEndDate = false;
   showMalfunction = false;
   showOtherMalfunction = false;
+  showInformedConsent = false;
+  showInclusionExclusion = false;
+  isExclusionDone = false;
+  isExclusionMet = false;
+  visitDate: Date = null;
+  selectedVisit: any;
   aeSeq = 0;
+  ecrfs: any[];
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -39,6 +50,15 @@ export class Visit1Component implements OnInit {
       this.patient = data;
       this.getVisits(this.patID);
     });
+    this.ecrfs = [];
+
+    const study = JSON.parse(localStorage.getItem('study'));
+    const site = JSON.parse(localStorage.getItem('site'));
+    if (study && site ) {
+      this.study_id = study.id;
+      this.site_id = site.id;
+      this.exclusionFormBuild();
+    }
     this.frmAEForm = this.fb.group({
       pat_id: [this.patID],
       VISDAT: ['', Validators.required],
@@ -75,7 +95,80 @@ export class Visit1Component implements OnInit {
     });
   }
 
-  get fae() { return this.frmAEForm.controls;}
+  get exclusion() {
+    return this.frmExclusion.get('exclusion');
+  }
+
+  exclusionFormBuild(): void {
+    this.frmExclusion = this.fb.group({
+      'study_id': [this.study_id],
+      'site_id': [this.site_id],
+      'patient_id': [null],
+      'dov': [null, Validators.required],
+      'exclusion': ['1'],
+      'reason': [null],
+      'isUpdated': [false],
+      'hasQuestion': [false],
+    });
+  }
+
+
+  showVisit(visit) {
+    if (visit.code === 'Visit1') {
+      this.visitDate = this.patient.icf_date;
+    }
+  }
+
+  showIC() {
+    this.closeAllPage();
+    this.showInformedConsent = true;
+  }
+
+  showIncEx() {
+    this.closeAllPage();
+    this.showInclusionExclusion = true;
+    this.siteService.getExclusion(this.patID).subscribe(data => {
+      if (data.dov) {
+        this.isExclusionDone = true;
+        this.crfExclusion = data;
+        if (data.exclusion) {
+          this.isExclusionMet = true;
+        } else {
+          this.isExclusionMet = false;
+        }
+      } else {
+        this.isExclusionDone = false;
+      }
+    });
+  }
+
+  saveExclusion(): void {
+    this.frmExclusion.controls['patient_id'].patchValue(this.patID);
+    this.siteService.saveExclusion(this.frmExclusion.value).subscribe(data => {
+      if (data.form) {
+        alert('Data Saved');
+        this.crfExclusion = data.form;
+        this.isExclusionDone = true;
+        if (data.form.exclusion) {
+          this.isExclusionMet = true;
+        } else {
+          this.isExclusionMet = false;
+        }
+      }
+    });
+  }
+
+
+  showForms(visit) {
+    this.closeAllPage();
+    this.ecrfs = [];
+    this.selectedVisit = visit;
+    this.pageTitle = visit.description;
+    this.showVisit(visit);
+    this.ecrfs = visit.forms;
+  }
+
+  get fae() { return this.frmAEForm.controls; }
 
   isFieldValid(form: FormGroup, field: string) {
     return !form.get(field).valid ;    // && form.get(field).touched
@@ -90,7 +183,9 @@ export class Visit1Component implements OnInit {
   closeAllPage() {
     this.showAETable = false;
     this.showAEForm = false;
-    this.pageTitle = 'Visit';
+    this.showInformedConsent = false;
+    this.showInclusionExclusion = false;
+    // this.pageTitle = 'Visit';
   }
 
   showAE(): void {

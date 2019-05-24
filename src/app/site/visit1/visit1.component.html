@@ -14,33 +14,106 @@
     <br/>
     <div class="row">
       <div class="col-md-2" style="border: 1px solid gray;">
-        <mat-action-list>
-          <a mat-list-item  routerLink="/site/visits/medicalhistory/{{patID}}">Medical History</a>
-        </mat-action-list>
-        <mat-list dense>
-          <p>Visits</p>
-
-          <mat-list-item *ngFor="let visit of visits">
-            <mat-icon mat-list-icon>folder</mat-icon>
-            <h4 mat-line>{{visit.description}}</h4>
-            <p mat-line><span *ngIf="visit.dov">({{visit.dov | date}})</span></p>
-          </mat-list-item>
-          <mat-list-item (click)="showAE()">
-            <mat-icon mat-list-icon>folder</mat-icon>
-            <h4 mat-line>Adverse Events</h4>
-          </mat-list-item>
-          <mat-list-item >
+        <h4>Visits</h4>
+       
+          <mat-action-list dense>
+            <a mat-list-item *ngFor="let visit of visits" (click)="showForms(visit)">
+              <mat-icon mat-list-icon>folder</mat-icon> 
+              <h4 mat-line>{{visit.description}}</h4>
+            </a>
+            <!-- <p mat-line><span *ngIf="visit.dov">({{visit.dov | date}})</span></p> -->
+            <a mat-list-item (click)="showAE()">
+              <mat-icon mat-list-icon>folder</mat-icon>
+              <h4 mat-line>Adverse Events</h4>
+            </a>
+            <a mat-list-item >
               <mat-icon mat-list-icon>folder</mat-icon>
               <h4 mat-line>Concomitant Medication</h4>
-            </mat-list-item>
-        </mat-list>
+            </a>
+          </mat-action-list>
+
         <hr>
-        Dynamic contents (like forms of a visit)
+       <h4>eCRF</h4>
+        <mat-action-list dense>
+          <a mat-list-item *ngIf="selectedVisit?.code === 'Visit1'" (click)="showIC()" > 
+            <mat-icon mat-list-icon>file_copy</mat-icon> 
+            <h4 mat-line>Informed Consent</h4> 
+          </a>
+          <a mat-list-item *ngIf="selectedVisit?.code === 'Visit1'" (click)="showIncEx()" > 
+            <mat-icon mat-list-icon>file_copy</mat-icon> 
+            <h4 mat-line>Inclusion / Exclusion Criteria</h4> 
+          </a>
+          <a mat-list-item *ngIf="selectedVisit?.code === 'Visit1'" routerLink="/site/visits/medicalhistory/{{patID}}">
+            <mat-icon mat-list-icon>file_copy</mat-icon> 
+            <h4 mat-line>Medical History</h4>
+          </a>
+          <a mat-list-item *ngFor="let form of ecrfs">
+            <mat-icon mat-list-icon>file_copy</mat-icon>
+            <h4 mat-line>{{form.name}}</h4>
+          </a>
+          
+        </mat-action-list>
+
       </div>
       <div class="col-md-10" style="border: 1px solid gray;">
 
-            Patient: {{ getRefNumber(patient?.pat_id, patient?.prefix) }} <br/>
-            Page: {{pageTitle}}<br/>
+            Patient: {{ getRefNumber(patient?.pat_id, patient?.prefix) }}   - 
+            Page: {{pageTitle}} - 
+            <span *ngIf="visitDate">Visit Date: {{visitDate | date}}</span>
+        <!-- Informed Consent-->
+        <div *ngIf="showInformedConsent">
+          <table class="table table-bordered">
+            <tr><th>EC approved ICF signed</th><td>{{patient.icf === 1 ? 'Yes' : 'No'}}</td></tr>
+            <tr><th>Date ICF Signed </th><td>{{patient.icf_date | date}}</td></tr>
+          </table>
+        </div>
+        <!-- Inclusion Exclusion-->
+        <div *ngIf="showInclusionExclusion">
+            <div class="col-md-12" *ngIf="!isExclusionDone">
+                <form [formGroup]="frmExclusion">
+                  <div class="row">
+                    <input name="dov" formControlName="dov" [value]="visitDate" type="hidden">
+                    <!-- <div class="col-md-4">
+                      <legend>Date of Visit</legend>
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="picker" [max]="maxDate" placeholder="choose date"
+                          formControlName="dov" (click)="picker.open()" required>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                    </div> -->
+                    <div class="col-md-4">
+                      <legend>Patient met inclusion/exclusion criteria</legend>
+                      <mat-radio-group formControlName="exclusion">
+                        <mat-radio-button value="1">Yes</mat-radio-button>
+                        <mat-radio-button value="0">No</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="col-md-4 mr-auto" *ngIf="exclusion.value === '0'">
+                      <legend>Give Reason</legend>
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="reason" formControlName="reason" type="text" required />
+                        <app-field-error-display [displayError]="" errorMsg=""></app-field-error-display>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <hr>
+                  <div>
+                    <button mat-raised-button class="btn btn-primary" (click)="saveExclusion()">Save</button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-md-12" *ngIf="isExclusionDone">
+                <table class="table table-bordered">
+                  <tr><th>Subject meets inclusion/exclusion criteria?</th><td>{{crfExclusion.exclusion === 1? 'Yes' : 'No'}}</td></tr>
+                  <tr *ngIf="!isExclusionMet"><th>Reason</th>{{crfExclusion.reason}}</tr>
+                </table>
+              </div>
+               
+                 
+                      
+        </div>
+        <!-- End Inclusion Excluson-->        
         <div id="aeTable" *ngIf="showAETable">
           <table class="table table-responsive table-striped responsive">
             <thead class="text-primary">
