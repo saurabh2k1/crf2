@@ -15,10 +15,10 @@
     <div class="row">
       <div class="col-md-2" style="border: 1px solid gray;">
         <h4>Visits</h4>
-       
+
           <mat-action-list dense>
             <a mat-list-item *ngFor="let visit of visits" (click)="showForms(visit)">
-              <mat-icon mat-list-icon>folder</mat-icon> 
+              <mat-icon mat-list-icon>folder</mat-icon>
               <h4 mat-line>{{visit.description}}</h4>
             </a>
             <!-- <p mat-line><span *ngIf="visit.dov">({{visit.dov | date}})</span></p> -->
@@ -34,32 +34,56 @@
 
         <hr>
        <h4>eCRF</h4>
-        <mat-action-list dense>
-          <a mat-list-item *ngIf="selectedVisit?.code === 'Visit1'" (click)="showIC()" > 
-            <mat-icon mat-list-icon>file_copy</mat-icon> 
-            <h4 mat-line>Informed Consent</h4> 
+        <mat-action-list dense *ngIf="visitDate">
+          <a mat-list-item *ngIf="selectedVisit?.code === 'V1'" (click)="showIC()" >
+            <mat-icon mat-list-icon>file_copy</mat-icon>
+            <h4 mat-line>Informed Consent</h4>
           </a>
-          <a mat-list-item *ngIf="selectedVisit?.code === 'Visit1'" (click)="showIncEx()" > 
-            <mat-icon mat-list-icon>file_copy</mat-icon> 
-            <h4 mat-line>Inclusion / Exclusion Criteria</h4> 
+          <a mat-list-item *ngIf="selectedVisit?.code === 'V1'" (click)="showIncEx()" >
+            <mat-icon mat-list-icon>file_copy</mat-icon>
+            <h4 mat-line>Inclusion / Exclusion Criteria</h4>
           </a>
-          <a mat-list-item *ngIf="selectedVisit?.code === 'Visit1'" routerLink="/site/visits/medicalhistory/{{patID}}">
-            <mat-icon mat-list-icon>file_copy</mat-icon> 
+
+          <a mat-list-item *ngIf="selectedVisit?.code === 'V1'" (click)="showDemography()" >
+            <mat-icon mat-list-icon>file_copy</mat-icon>
+            <h4 mat-line>Demography</h4>
+          </a>
+          <a mat-list-item *ngIf="selectedVisit?.code === 'V1'" routerLink="/site/visits/medicalhistory/{{patID}}">
+            <mat-icon mat-list-icon>file_copy</mat-icon>
             <h4 mat-line>Medical History</h4>
           </a>
           <a mat-list-item *ngFor="let form of ecrfs">
             <mat-icon mat-list-icon>file_copy</mat-icon>
             <h4 mat-line>{{form.name}}</h4>
           </a>
-          
+
         </mat-action-list>
 
       </div>
       <div class="col-md-10" style="border: 1px solid gray;">
 
-            Patient: {{ getRefNumber(patient?.pat_id, patient?.prefix) }}   - 
-            Page: {{pageTitle}} - 
+            Patient: {{ getRefNumber(patient?.pat_id, patient?.prefix) }}   -
+            Page: {{pageTitle}} -
             <span *ngIf="visitDate">Visit Date: {{visitDate | date}}</span>
+            <div *ngIf="!visitDate && selectedVisit">
+              <form #fVisit="ngForm">
+                  <legend>Patient skipped the visit?</legend>
+                      <mat-radio-group name="isSkipped" ngModel>
+                        <mat-radio-button value="1">Yes</mat-radio-button>
+                        <mat-radio-button value="0">No</mat-radio-button>
+                      </mat-radio-group>
+                  <mat-form-field>
+                    <input matInput name="comment" ngModel placeholder="Comment">
+                  </mat-form-field>
+                  <mat-form-field >
+                      <input matInput name="visitDate" [matDatepicker]="picker" ngModel placeholder="Event Reported Date" [max]="getToday()"
+                        (click)="picker.open()"  required>
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <button mat-raised-button type="submit" (click)="saveVisit(fVisit)">Save</button>
+              </form>
+            </div>
         <!-- Informed Consent-->
         <div *ngIf="showInformedConsent">
           <table class="table table-bordered">
@@ -109,11 +133,18 @@
                   <tr *ngIf="!isExclusionMet"><th>Reason</th>{{crfExclusion.reason}}</tr>
                 </table>
               </div>
-               
-                 
-                      
+
+
+
         </div>
-        <!-- End Inclusion Excluson-->        
+        <!-- End Inclusion Excluson-->
+        <!-- Demography -->
+          <div *ngIf="showDemographicPage">
+            <table class="table table-bordered">
+              <tr><th>Gender</th><td>{{patient.gender}}</td></tr>
+            </table>
+          </div>
+        <!-- End Demofraphy -->
         <div id="aeTable" *ngIf="showAETable">
           <table class="table table-responsive table-striped responsive">
             <thead class="text-primary">

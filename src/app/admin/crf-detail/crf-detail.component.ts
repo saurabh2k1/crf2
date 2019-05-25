@@ -176,6 +176,10 @@ export class CrfDetailComponent implements OnInit {
     this.field_index = index;
   }
 
+  removeField(index: number) {
+    this.fields.slice(index, 1);
+  }
+
   goToLink(): void {
       const dialogConfig = new MatDialogConfig();
       // dialogConfig.disableClose = true;

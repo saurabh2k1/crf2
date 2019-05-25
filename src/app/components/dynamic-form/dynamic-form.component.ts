@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges  } from '@angular/core';
 import { FieldConfig, Validator } from '../../field.interface';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { validateStyleParams } from '@angular/animations/browser/src/util';
 
 
 @Component({
@@ -29,10 +30,12 @@ export class DynamicFormComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
+    console.log('DynamicForm');
     this.form = this.createControl();
   }
 
   createControl() {
+    console.log('CreateControl');
     const group = this.fb.group({});
     this.fields.forEach(field => {
       if (field.type === 'button') { return; }
@@ -41,17 +44,36 @@ export class DynamicFormComponent implements OnInit {
       );
 
       group.addControl(field.name, control);
+
     });
 
     return group;
   }
 
   bindValidations(validations: any) {
+    console.log('bindValidations');
     if (validations.length > 0) {
       const validList = [];
       validations.forEach(valid => {
-        validList.push(valid.validator);
+        console.log(`Validation: ${valid.name}`);
+        switch (valid.validator) {
+          case 'Validators.min':
+            validList.push(Validators.min(parseInt(valid.value, 10)));
+            break;
+          case 'Validators.max':
+            validList.push(Validators.max(parseInt(valid.value, 10)));
+            break;
+          case 'Validators.pattern':
+            validList.push(Validators.pattern(valid.value));
+            break;
+          case 'Validators.required':
+            validList.push(Validators.required);
+            break;
+          default:
+            break;
+        }
       });
+      console.log(validList);
       return Validators.compose(validList);
     }
     return null;

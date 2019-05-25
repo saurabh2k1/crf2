@@ -2,7 +2,7 @@ import { Patient } from 'src/app/models/patient';
 import { SiteService } from 'src/app/site/site.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import * as moment from 'moment';
 
 @Component({
@@ -31,10 +31,12 @@ export class Visit1Component implements OnInit {
   showOtherMalfunction = false;
   showInformedConsent = false;
   showInclusionExclusion = false;
+  showDemographicPage = false;
   isExclusionDone = false;
   isExclusionMet = false;
   visitDate: Date = null;
   selectedVisit: any;
+  visitData: any;
   aeSeq = 0;
   ecrfs: any[];
   constructor(
@@ -112,6 +114,23 @@ export class Visit1Component implements OnInit {
     });
   }
 
+  saveVisit(f: NgForm) {
+
+    console.log(f.value);
+    const data = {
+      patient_id: this.patID,
+      visit_id: this.selectedVisit._id,
+      visit_date: f.controls['visitDate'].value,
+      comment: f.controls['comment'].value,
+      isSkipped: f.controls['isSkipped'].value,
+    };
+    this.siteService.addVisit(data).subscribe(d => {
+      console.log(d);
+      this.visitDate = f.controls['visitDate'].value;
+      f.reset();
+
+    });
+  }
 
   showVisit(visit) {
     if (visit.code === 'Visit1') {
@@ -142,6 +161,12 @@ export class Visit1Component implements OnInit {
     });
   }
 
+  showDemography() {
+    this.closeAllPage();
+    this.showDemographicPage = true;
+
+  }
+
   saveExclusion(): void {
     this.frmExclusion.controls['patient_id'].patchValue(this.patID);
     this.siteService.saveExclusion(this.frmExclusion.value).subscribe(data => {
@@ -163,6 +188,7 @@ export class Visit1Component implements OnInit {
     this.closeAllPage();
     this.ecrfs = [];
     this.selectedVisit = visit;
+    this.getPatientVisit();
     this.pageTitle = visit.description;
     this.showVisit(visit);
     this.ecrfs = visit.forms;
@@ -185,6 +211,7 @@ export class Visit1Component implements OnInit {
     this.showAEForm = false;
     this.showInformedConsent = false;
     this.showInclusionExclusion = false;
+    this.showDemographicPage = false;
     // this.pageTitle = 'Visit';
   }
 
@@ -193,6 +220,14 @@ export class Visit1Component implements OnInit {
     this.pageTitle = 'Adverse Events';
     this.showAETable = true;
 
+  }
+
+  getPatientVisit() {
+    this.siteService.getPatientVisit(this.patID, this.selectedVisit._id).subscribe(data => {
+      this.visitDate = data[0].visit_date;
+      this.visitData = data[0];
+
+    });
   }
 
   get onlySAEList() {

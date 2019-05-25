@@ -7,7 +7,7 @@ import { FormGroup } from '@angular/forms';
   template: `
   <mat-form-field class="demo-full-width margin-top" [formGroup]="group">
   <mat-select [placeholder]="field.label" [formControlName]="field.name">
-  <mat-option *ngFor="let item of field.options" [value]="item">{{item}}</mat-option>
+  <mat-option *ngFor="let item of field.options" [value]="item.value">{{item.title}}</mat-option>
   </mat-select>
   </mat-form-field>
   `,
@@ -17,7 +17,7 @@ export class SelectComponent implements OnInit {
   field: FieldConfig;
 
   group: FormGroup;
-  
+
   constructor() { }
 
   ngOnInit() {

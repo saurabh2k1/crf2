@@ -78,4 +78,12 @@ export class SiteService {
      return this.http.post(`${this.apiUrl}/site/aeforms/new`, newAE);
    }
 
+   addVisit(data): Observable<any> {
+     return this.http.post(`${this.apiUrl}/patient/addvisit`, data);
+   }
+
+   getPatientVisit(patientID, visitID): Observable<any> {
+     return this.http.get(`${this.apiUrl}/patient/getvisit/${patientID}/${visitID}`);
+   }
+
 }

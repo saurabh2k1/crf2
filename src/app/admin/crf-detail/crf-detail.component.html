@@ -162,7 +162,7 @@
                       </div>
                     </div>
                     <div class="col-md-4">
-                        
+
                     </div>
                   </div>
                   <!-- {{secondFormGroup.value | json}} -->
@@ -205,7 +205,10 @@
                   <td>{{i +1 }}</td>
                   <td>{{field.field_title}}</td>
                   <td>{{field.field_type | uppercase}}</td>
-                  <td><button (click)="editField(i)" title="Edit" class="btn btn-round btn-fab btn-danger" mat-min-fab mat-raised-button><mat-icon>edit</mat-icon></button></td>
+                  <td>
+                    <button (click)="editField(i)" title="Edit" class="btn btn-round btn-fab btn-danger" mat-min-fab mat-raised-button><mat-icon>edit</mat-icon></button>
+                    <button (click)="removeField(i)" title="Remove" class="btn btn-round btn-fab btn-danger" mat-min-fab mat-raised-button><mat-icon>delete</mat-icon></button>
+                  </td>
                 </tr>
               </tbody>
             </table>
