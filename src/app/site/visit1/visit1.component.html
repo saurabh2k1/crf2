@@ -18,7 +18,7 @@
         <h4>Visits</h4>
         <!-- Tree  -->
        <mat-accordion>
-         <mat-expansion-panel hideToggle *ngFor="let visit of visits" (opened)="selectVisit(visit)">
+         <mat-expansion-panel hideToggle [disabled]="visit.code !== 'V1'" *ngFor="let visit of visits" (opened)="selectVisit(visit)">
            <mat-expansion-panel-header>
              <mat-icon >folder</mat-icon>
               {{visit.description}}
