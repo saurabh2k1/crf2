@@ -1,9 +1,12 @@
 import { Patient } from 'src/app/models/patient';
 import { SiteService } from 'src/app/site/site.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import * as moment from 'moment';
+import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
+
+
 
 @Component({
   selector: 'app-visit1',
@@ -32,6 +35,8 @@ export class Visit1Component implements OnInit {
   showInformedConsent = false;
   showInclusionExclusion = false;
   showDemographicPage = false;
+  showVisitSkipDate = false;
+  showVisitSkipComment = false;
   isExclusionDone = false;
   isExclusionMet = false;
   visitDate: Date = null;
@@ -39,6 +44,12 @@ export class Visit1Component implements OnInit {
   visitData: any;
   aeSeq = 0;
   ecrfs: any[];
+  theForm: any;
+  theCRFValue: any;
+  crfFormDone = false;
+  fields: [];
+
+  @ViewChild(DynamicFormComponent) form: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -53,6 +64,19 @@ export class Visit1Component implements OnInit {
       this.getVisits(this.patID);
     });
     this.ecrfs = [];
+    this.siteService.getExclusion(this.patID).subscribe(data => {
+      if (data.dov) {
+        this.isExclusionDone = true;
+        this.crfExclusion = data;
+        if (data.exclusion) {
+          this.isExclusionMet = true;
+        } else {
+          this.isExclusionMet = false;
+        }
+      } else {
+        this.isExclusionDone = false;
+      }
+    });
 
     const study = JSON.parse(localStorage.getItem('study'));
     const site = JSON.parse(localStorage.getItem('site'));
@@ -117,17 +141,28 @@ export class Visit1Component implements OnInit {
   saveVisit(f: NgForm) {
 
     console.log(f.value);
-    const data = {
+    let data = {
       patient_id: this.patID,
       visit_id: this.selectedVisit._id,
-      visit_date: f.controls['visitDate'].value,
-      comment: f.controls['comment'].value,
+
       isSkipped: f.controls['isSkipped'].value,
     };
+    if (f.controls['visitDate']) {
+      data['visit_date']  = f.controls['visitDate'].value;
+    } else {
+      data['visit_date'] = null;
+    }
+    if (f.controls['comment']) {
+     data['comment'] =  f.controls['comment'].value;
+    } else {
+      data['comment'] = '';
+    }
+
     this.siteService.addVisit(data).subscribe(d => {
       console.log(d);
       this.visitDate = f.controls['visitDate'].value;
       f.reset();
+
 
     });
   }
@@ -141,30 +176,20 @@ export class Visit1Component implements OnInit {
   showIC() {
     this.closeAllPage();
     this.showInformedConsent = true;
+    this.pageTitle = 'Informed Consent';
   }
 
   showIncEx() {
     this.closeAllPage();
     this.showInclusionExclusion = true;
-    this.siteService.getExclusion(this.patID).subscribe(data => {
-      if (data.dov) {
-        this.isExclusionDone = true;
-        this.crfExclusion = data;
-        if (data.exclusion) {
-          this.isExclusionMet = true;
-        } else {
-          this.isExclusionMet = false;
-        }
-      } else {
-        this.isExclusionDone = false;
-      }
-    });
+    this.pageTitle = 'Inclusion / Exclusion';
+
   }
 
   showDemography() {
     this.closeAllPage();
     this.showDemographicPage = true;
-
+    this.pageTitle = 'Demography';
   }
 
   saveExclusion(): void {
@@ -183,6 +208,40 @@ export class Visit1Component implements OnInit {
     });
   }
 
+  selectVisit(visit) {
+    this.closeAllPage();
+    this.visitDate = null;
+    this.selectedVisit = visit;
+    this.getPatientVisit();
+  }
+
+  openForm(form, visit): void {
+    this.closeAllPage();
+    this.theForm = form;
+    this.pageTitle = form.name;
+    this.siteService.getCRForm(form._id, this.site_id, this.patID, visit._id)
+      .subscribe(data => {
+        if (data.value) {
+          console.log(data.value);
+          this.theCRFValue = data.value;
+
+          this.crfFormDone = true;
+        } else {
+          this.crfFormDone = false;
+        }
+        if (data.fields) {
+          console.log(data.fields);
+          this.fields = data.fields;
+          this.form = DynamicFormComponent;
+        } else {
+          this.fields = null;
+        }
+      });
+  }
+
+  saveCrForm(value): void {
+
+  }
 
   showForms(visit) {
     this.closeAllPage();
@@ -224,9 +283,10 @@ export class Visit1Component implements OnInit {
 
   getPatientVisit() {
     this.siteService.getPatientVisit(this.patID, this.selectedVisit._id).subscribe(data => {
-      this.visitDate = data[0].visit_date;
-      this.visitData = data[0];
-
+      if (data[0]) {
+        this.visitDate = data[0].visit_date;
+        this.visitData = data[0];
+      }
     });
   }
 
@@ -291,6 +351,16 @@ export class Visit1Component implements OnInit {
      // this.frmAEForm.controls['resolution'].setValue('');
    }
    console.log(this.showEndDate);
+ }
+
+ changeVisitSkip(val) {
+   if (val === '0') {
+    this.showVisitSkipDate = true;
+    this.showVisitSkipComment = false;
+   } else {
+    this.showVisitSkipDate = false;
+    this.showVisitSkipComment = true;
+   }
  }
 
  isSAEChange(val) {

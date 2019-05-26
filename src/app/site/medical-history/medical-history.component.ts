@@ -33,21 +33,31 @@ export class MedicalHistoryComponent implements OnInit {
   addGenMedHistory = true;
   addOpMedHistory = false;
   addMedHistory = false;
+  study_id = '';
+  site_id = '';
   constructor(private siteService: SiteService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder) { }
 
   ngOnInit() {
     this.patID = this.activatedRoute.snapshot.paramMap.get('id');
+    const study = JSON.parse(localStorage.getItem('study'));
+    const site = JSON.parse(localStorage.getItem('site'));
+    if (study && site ) {
+      this.study_id = study.id;
+      this.site_id = site.id;
+    }
     this.siteService.getPatientByID(this.patID).subscribe((data: any) => {
       this.patient = data;
     });
-    // this.frmMedHistory = this.fb.group({
-    //   patID: [this.patID],
-    //   genMedHistory: this.fb.array([]),
-    //   opMedHistory: this.fb.array([]),
-    //   medicationHistory: this.fb.array([]),
-    // });
+    this.siteService.getMedicalHistory(this.patID).subscribe(data => {
+      this.medHistory = data[0];
+      this.genMedHistory = data[0].genmedical;
+      this.opMedHistory = data[0].opmedical;
+      this.medicationHistory = data[0].medical;
+      console.log(this.genMedHistory);
+    });
+
   }
 
   isFieldValid(form: FormGroup, field: string) {
@@ -130,10 +140,15 @@ export class MedicalHistoryComponent implements OnInit {
     this.nextStep();
     this.medHistory = {
       pat_id: this.patID,
+      // site_id: this.site_id,
+      // study_id: this.study_id,
       genMedHistory: this.genMedHistory,
       opMedHistory: this.opMedHistory,
       medicationHistory: this.medicationHistory,
     };
+    this.siteService.saveMedicalHistory(this.medHistory).subscribe(data => {
+      console.log(data);
+    });
 
     console.log(this.medHistory);
 

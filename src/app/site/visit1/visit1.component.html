@@ -7,21 +7,69 @@
           <mat-chip color="primary" [routerLink]="['/site/dashboard']"><mat-icon>dashboard</mat-icon> Dashboard</mat-chip>
           <mat-chip color="primary" [routerLink]="['/site/patients']"><mat-icon>group</mat-icon> Patients</mat-chip>
           <mat-chip color="primary" routerLink="/site/patient/{{patID}}" ><mat-icon>assignment_ind</mat-icon> {{ getRefNumber(patient?.pat_id, patient?.prefix) }} </mat-chip>
-          <mat-chip color="primary" selected><mat-icon>pets</mat-icon>  {{pageTitle}} </mat-chip>
+          <mat-chip color="primary" routerLink="/site/visits/{{patID}}" ><mat-icon>pets</mat-icon> Visits </mat-chip>
+          <mat-chip color="primary" selected><mat-icon>file_copy</mat-icon>  {{pageTitle}} </mat-chip>
         </mat-chip-list>
       </div>
     </div>
     <br/>
     <div class="row">
-      <div class="col-md-2" style="border: 1px solid gray;">
+      <div class="col-md-3" style="border: 1px solid gray;">
         <h4>Visits</h4>
+        <!-- Tree  -->
+       <mat-accordion>
+         <mat-expansion-panel hideToggle *ngFor="let visit of visits" (opened)="selectVisit(visit)">
+           <mat-expansion-panel-header>
+             <mat-icon >folder</mat-icon>
+              {{visit.description}}
+           </mat-expansion-panel-header>
+           <mat-action-list dense>
+              <a mat-list-item *ngIf="visit.code === 'V1'" (click)="showIC()" >
+                  <mat-icon mat-list-icon class="text-success">file_copy</mat-icon>
+                  <h4 mat-line>Informed Consent</h4>
+                </a>
+                <a mat-list-item *ngIf="visit.code === 'V1'" (click)="showIncEx()" >
+                  <mat-icon mat-list-icon [ngClass]="{'text-success': isExclusionDone}">file_copy</mat-icon>
+                  <h4 mat-line>Inclusion / Exclusion Criteria</h4>
+                </a>
 
-          <mat-action-list dense>
+                <a mat-list-item *ngIf="visit.code === 'V1' && isExclusionMet" (click)="showDemography()" >
+                  <mat-icon mat-list-icon class="text-success">file_copy</mat-icon>
+                  <h4 mat-line>Demography</h4>
+                </a>
+                <a mat-list-item *ngIf="visit.code === 'V1' && isExclusionMet" routerLink="/site/visits/medicalhistory/{{patID}}">
+                  <mat-icon mat-list-icon>file_copy</mat-icon>
+                  <h4 mat-line>Medical History</h4>
+                </a>
+                <span *ngIf="isExclusionDone && isExclusionMet">
+                    <a mat-list-item *ngFor="let form of visit.forms" (click)="openForm(form, visit)" >
+                        <mat-icon mat-list-icon [ngClass]="{'text-success': form.isDone}">file_copy</mat-icon>
+                        <h4 mat-line>{{form.name}}</h4>
+                      </a>
+                </span>
+
+           </mat-action-list>
+         </mat-expansion-panel>
+         <mat-expansion-panel (opened)="showAE()">
+            <mat-expansion-panel-header>
+                <mat-icon >folder</mat-icon>
+                Adverse Events
+              </mat-expansion-panel-header>
+         </mat-expansion-panel>
+         <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-icon >folder</mat-icon>
+                Concomitant Medication
+              </mat-expansion-panel-header>
+         </mat-expansion-panel>
+       </mat-accordion>
+        <!-- End Tree -->
+          <!-- <mat-action-list dense>
             <a mat-list-item *ngFor="let visit of visits" (click)="showForms(visit)">
               <mat-icon mat-list-icon>folder</mat-icon>
               <h4 mat-line>{{visit.description}}</h4>
             </a>
-            <!-- <p mat-line><span *ngIf="visit.dov">({{visit.dov | date}})</span></p> -->
+            <!-- <p mat-line><span *ngIf="visit.dov">({{visit.dov | date}})</span></p>
             <a mat-list-item (click)="showAE()">
               <mat-icon mat-list-icon>folder</mat-icon>
               <h4 mat-line>Adverse Events</h4>
@@ -57,82 +105,152 @@
             <h4 mat-line>{{form.name}}</h4>
           </a>
 
-        </mat-action-list>
+        </mat-action-list> -->
 
       </div>
-      <div class="col-md-10" style="border: 1px solid gray;">
+      <div class="col-md-9" style="border: 1px solid gray;">
+        <!-- <table class="table table-bordered">
+          <tr><td>Patient ID: {{ getRefNumber(patient?.pat_id, patient?.prefix) }}</td>
+            <td class="text-center">{{pageTitle}}</td>
+            <td class="text-right"><span *ngIf="visitDate">Date of Visit: {{visitDate | date}}</span></td>
+          </tr>
+        </table> -->
 
-            Patient: {{ getRefNumber(patient?.pat_id, patient?.prefix) }}   -
-            Page: {{pageTitle}} -
-            <span *ngIf="visitDate">Visit Date: {{visitDate | date}}</span>
             <div *ngIf="!visitDate && selectedVisit">
+              <mat-card>
               <form #fVisit="ngForm">
-                  <legend>Patient skipped the visit?</legend>
-                      <mat-radio-group name="isSkipped" ngModel>
-                        <mat-radio-button value="1">Yes</mat-radio-button>
-                        <mat-radio-button value="0">No</mat-radio-button>
+                <mat-card-content>
+                  <legend>Patient present on the visit?</legend>
+                      <mat-radio-group name="isSkipped"  ngModel (change)="changeVisitSkip($event.value)">
+                        <mat-radio-button value="0">Yes</mat-radio-button>
+                        <mat-radio-button value="1">No</mat-radio-button>
                       </mat-radio-group>
-                  <mat-form-field>
-                    <input matInput name="comment" ngModel placeholder="Comment">
+                  <mat-form-field *ngIf="showVisitSkipComment">
+                    <input matInput name="comment" ngModel placeholder="Comment" required>
                   </mat-form-field>
-                  <mat-form-field >
-                      <input matInput name="visitDate" [matDatepicker]="picker" ngModel placeholder="Event Reported Date" [max]="getToday()"
+                  <mat-form-field *ngIf="showVisitSkipDate">
+                      <input matInput name="visitDate" [matDatepicker]="picker" ngModel placeholder="Date of Visit" [max]="getToday()"
                         (click)="picker.open()"  required>
                       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                       <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
-                    <button mat-raised-button type="submit" (click)="saveVisit(fVisit)">Save</button>
+                  </mat-card-content>
+                  <mat-card-actions>
+                      <button *ngIf="showVisitSkipComment || showVisitSkipDate" mat-raised-button color="primary" type="submit" (click)="saveVisit(fVisit)">Save</button>
+                  </mat-card-actions>
+
               </form>
+            </mat-card>
             </div>
+        <!-- the eCRF -->
+        <div *ngIf="theForm">
+          <div class="card">
+              <form>
+                  <div class="card-header card-header-rose card-header-icon">
+                    <!-- <div class="card-text">
+                        <h4 class="card-title">{{theForm.name}}</h4>
+                      </div> -->
+                    <div class="card-icon">
+                      <mat-icon>library_books</mat-icon>
+                    </div>
+                    <h4 class="card-title">{{theForm.name}}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted" *ngIf="visitDate">Date of Visit: {{visitDate | date}}</h6>
+                    <div *ngIf="!visitDate">
+                        <legend>Date of Visit</legend>
+                        <mat-form-field >
+                            <input matInput #dov style="color:black;" [matDatepicker]="picker" placeholder="Date of Visit" (click)="picker.open()">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="card-body" *ngIf="fields" >
+                      <div *ngIf="crfFormDone">
+                        <table class="table table-bordered">
+                          <thead></thead>
+                          <tbody>
+                            <tr *ngFor="let field of fields">
+                              <td>{{field.label}} </td><td>{{theCRFValue[field.name]}}</td>
+                            </tr>
+                          </tbody>
+                          <tfoot>
+                            <tr class="bg-primary text-white"><td colspan="2">Data submitted by <b>{{theCRFValue.created_by}}</b>  at <em>{{theCRFValue.created_at | date:'medium'}}</em> from ip address: {{theCRFValue.created_on}}</td></tr>
+                          </tfoot>
+                        </table>
+                      </div>
+                      <div *ngIf="!crfFormDone">
+                        <dynamic-form [fields]="fields" (submit)="saveCrForm($event)" >
+                        </dynamic-form>
+                      </div>
+                    </div>
+                    </form>
+          </div>
+          </div>
+        <!-- end The eCRF-->
         <!-- Informed Consent-->
         <div *ngIf="showInformedConsent">
-          <table class="table table-bordered">
-            <tr><th>EC approved ICF signed</th><td>{{patient.icf === 1 ? 'Yes' : 'No'}}</td></tr>
-            <tr><th>Date ICF Signed </th><td>{{patient.icf_date | date}}</td></tr>
-          </table>
+            <div class="card">
+                <div class="card-header card-header-rose card-header-icon">
+                    <div class="card-icon">
+                        <mat-icon>library_books</mat-icon>
+                      </div>
+                      <h4 class="card-title">Informed Consent</h4>
+                      <h6 class="card-subtitle mb-2 text-muted" *ngIf="visitDate">Date of Visit: {{visitDate | date}}</h6>
+                </div>
+                <div class="card-body">
+                  	<table class="table table-bordered">
+                        <tr><th>EC approved ICF signed</th><td>{{patient.icf === 1 ? 'Yes' : 'No'}}</td></tr>
+                        <tr><th>Date ICF Signed </th><td>{{patient.icf_date | date}}</td></tr>
+                      </table>
+                </div>
+            </div>
+
         </div>
         <!-- Inclusion Exclusion-->
         <div *ngIf="showInclusionExclusion">
-            <div class="col-md-12" *ngIf="!isExclusionDone">
-                <form [formGroup]="frmExclusion">
-                  <div class="row">
-                    <input name="dov" formControlName="dov" [value]="visitDate" type="hidden">
-                    <!-- <div class="col-md-4">
-                      <legend>Date of Visit</legend>
-                      <mat-form-field>
-                        <input matInput [matDatepicker]="picker" [max]="maxDate" placeholder="choose date"
-                          formControlName="dov" (click)="picker.open()" required>
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                      </mat-form-field>
-                    </div> -->
-                    <div class="col-md-4">
-                      <legend>Patient met inclusion/exclusion criteria</legend>
-                      <mat-radio-group formControlName="exclusion">
-                        <mat-radio-button value="1">Yes</mat-radio-button>
-                        <mat-radio-button value="0">No</mat-radio-button>
-                      </mat-radio-group>
+          <div class="card">
+              <div class="card-header card-header-rose card-header-icon">
+                  <div class="card-icon">
+                      <mat-icon>library_books</mat-icon>
                     </div>
-                    <div class="col-md-4 mr-auto" *ngIf="exclusion.value === '0'">
-                      <legend>Give Reason</legend>
-                      <mat-form-field class="example-full-width">
-                        <input matInput placeholder="reason" formControlName="reason" type="text" required />
-                        <app-field-error-display [displayError]="" errorMsg=""></app-field-error-display>
-                      </mat-form-field>
+                    <h4 class="card-title">Inclusion / Exclusion</h4>
+                    <h6 class="card-subtitle mb-2 text-muted" *ngIf="visitDate">Date of Visit: {{visitDate | date}}</h6>
+              </div>
+              <div class="card-body">
+                  <div class="col-md-12" *ngIf="!isExclusionDone">
+                      <form [formGroup]="frmExclusion">
+                        <div class="row">
+                          <input name="dov" formControlName="dov" [value]="visitDate" type="hidden">
+                          <div class="col-md-4">
+                            <legend>Patient met inclusion/exclusion criteria</legend>
+                            <mat-radio-group formControlName="exclusion">
+                              <mat-radio-button value="1">Yes</mat-radio-button>
+                              <mat-radio-button value="0">No</mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                          <div class="col-md-4 mr-auto" *ngIf="exclusion.value === '0'">
+                            <legend>Give Reason</legend>
+                            <mat-form-field class="example-full-width">
+                              <input matInput placeholder="reason" formControlName="reason" type="text" required />
+                              <app-field-error-display [displayError]="" errorMsg=""></app-field-error-display>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <hr>
+                        <div>
+                          <button mat-raised-button color="primary" (click)="saveExclusion()">Save</button>
+                        </div>
+                      </form>
                     </div>
-                  </div>
-                  <hr>
-                  <div>
-                    <button mat-raised-button class="btn btn-primary" (click)="saveExclusion()">Save</button>
-                  </div>
-                </form>
+                    <div class="col-md-12" *ngIf="isExclusionDone">
+                      <table class="table table-bordered">
+                        <tr><th>Subject meets inclusion/exclusion criteria?</th><td>{{crfExclusion.exclusion === 1? 'Yes' : 'No'}}</td></tr>
+                        <tr *ngIf="!isExclusionMet"><th>Reason</th>{{crfExclusion.reason}}</tr>
+                      </table>
+                    </div>
               </div>
-              <div class="col-md-12" *ngIf="isExclusionDone">
-                <table class="table table-bordered">
-                  <tr><th>Subject meets inclusion/exclusion criteria?</th><td>{{crfExclusion.exclusion === 1? 'Yes' : 'No'}}</td></tr>
-                  <tr *ngIf="!isExclusionMet"><th>Reason</th>{{crfExclusion.reason}}</tr>
-                </table>
-              </div>
+            </div>
+
 
 
 
@@ -140,43 +258,61 @@
         <!-- End Inclusion Excluson-->
         <!-- Demography -->
           <div *ngIf="showDemographicPage">
-            <table class="table table-bordered">
-              <tr><th>Gender</th><td>{{patient.gender}}</td></tr>
-            </table>
+              <div class="card">
+                  <div class="card-header card-header-rose card-header-icon">
+                      <div class="card-icon">
+                          <mat-icon>library_books</mat-icon>
+                        </div>
+                        <h4 class="card-title">Demography</h4>
+                        <h6 class="card-subtitle mb-2 text-muted" *ngIf="visitDate">Date of Visit: {{visitDate | date}}</h6>
+                  </div>
+                  <div class="card-body">
+                      <table class="table table-bordered">
+                          <tr><th>Gender</th><td>{{patient.gender}}</td></tr>
+                        </table>
+                  </div>
+              </div>
           </div>
         <!-- End Demofraphy -->
         <div id="aeTable" *ngIf="showAETable">
-          <table class="table table-responsive table-striped responsive">
-            <thead class="text-primary">
-              <tr><th>#</th><th>Reported Date</th><th>Adverse Event</th><th>Start Date</th><th>End Date</th><th>Outcome</th>
-                <th>Severity/Grade</th><th>Serious?</th><th>AE Treatment</th><th>Study Attribution</th>
-                <th>Action Taken</th><th>Drug/Device Attribution</th>
-                <!-- <th>PI / PI Initial Date</th> -->
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let ae of aeList; let i = index">
-                <td>{{ae.aeSeq}}
-                  <button *ngIf="ae.AESER === '1'" mat-raised-button color="primary" >SAE</button>
-                </td>
-                <td>{{ae.VISDAT | date}}</td>
-                <td>{{ ae.eventName === 'Other'?  ae.otherEventName : ae.eventName}}</td>
-                <td>{{ae.AESTDATE | date}}</td>
-                <td>{{ae.AEONGO === '1'? 'Ongoing' : ae.AEENDAT | date}}</td>
-                <td>{{ae.AEOUT}}</td>
-                <td>{{ae.AESEV}}</td>
-                <td>{{ae.AESER}}</td>
-                <td>{{ae.AEACNOTH}}</td>
-                <td>{{ae.AEREL}}</td>
-                <td>{{ae.AEACN}}</td>
-                <td>{{ae.AEDEVREL}}</td>
-                <!-- <td>{{ae.submitted_at | date}}</td> -->
-              </tr>
-            </tbody>
-            <tfoot ><tr><td colspan="7"><button (click)="addAE()" mat-button color="primary">Add a new Log line</button></td></tr></tfoot>
-          </table>
-          <hr>
-          <h3>SAE</h3>
+          <div class="card">
+            <div class="card-header card-header-rose card-header-icon">
+              <div class="card-icon"><mat-icon>library_books</mat-icon></div>
+              <h4 class="card-title">Adverse Event</h4>
+
+            </div>
+            <div class="card-body">
+                <table class="table table-responsive table-striped responsive">
+                    <thead class="text-primary">
+                      <tr><th>#</th><th>Reported Date</th><th>Adverse Event</th><th>Start Date</th><th>End Date</th><th>Outcome</th>
+                        <th>Severity/Grade</th><th>Serious?</th><th>AE Treatment</th><th>Study Attribution</th>
+                        <th>Action Taken</th><th>Drug/Device Attribution</th>
+                        <!-- <th>PI / PI Initial Date</th> -->
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let ae of aeList; let i = index">
+                        <td>{{ae.aeSeq}}
+                          <button *ngIf="ae.AESER === '1'" mat-raised-button color="primary" >SAE</button>
+                        </td>
+                        <td>{{ae.VISDAT | date}}</td>
+                        <td>{{ ae.eventName === 'Other'?  ae.otherEventName : ae.eventName}}</td>
+                        <td>{{ae.AESTDATE | date}}</td>
+                        <td>{{ae.AEONGO === '1'? 'Ongoing' : ae.AEENDAT | date}}</td>
+                        <td>{{ae.AEOUT}}</td>
+                        <td>{{ae.AESEV}}</td>
+                        <td>{{ae.AESER}}</td>
+                        <td>{{ae.AEACNOTH}}</td>
+                        <td>{{ae.AEREL}}</td>
+                        <td>{{ae.AEACN}}</td>
+                        <td>{{ae.AEDEVREL}}</td>
+                        <!-- <td>{{ae.submitted_at | date}}</td> -->
+                      </tr>
+                    </tbody>
+                    <tfoot ><tr><td colspan="7"><button (click)="addAE()" mat-button color="primary">Add a new Log line</button></td></tr></tfoot>
+                  </table>
+                  <mat-divider></mat-divider>
+                  <h3>SAE</h3>
           <table class="table table-striped">
             <thead class="text-primary">
                 <tr><th>#</th><th>Reported Date</th><th>SAE Event</th><th>SAE Classification</th>
@@ -209,8 +345,18 @@
                   </tr>
                 </tbody>
           </table>
+            </div>
+          </div>
         </div>
         <div id="aeForm" *ngIf="showAEForm">
+          <div class="card">
+            <div class="card-header card-header-rose card-header-icon">
+              <div class="card-icon"><mat-icon>library_books</mat-icon></div>
+              <h4 class="card-title">Adverse Event - Line</h4>
+
+            </div>
+            <div class="card-body">
+
           <form [formGroup]="frmAEForm">
             <div class="row">
               <div class="col">
@@ -576,6 +722,8 @@
             </div>
 
           </form>
+        </div>
+      </div>
         </div>
       </div>
     </div>

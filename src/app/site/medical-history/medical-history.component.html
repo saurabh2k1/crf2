@@ -14,6 +14,7 @@
             ><mat-icon>assignment_ind</mat-icon>
             {{ getRefNumber(patient?.pat_id, patient?.prefix) }}
           </mat-chip>
+          <mat-chip color="primary" routerLink="/site/visits/{{patID}}" ><mat-icon>pets</mat-icon> Visits </mat-chip>
           <mat-chip color="primary" selected
             ><mat-icon>pets</mat-icon> {{ pageTitle }}
           </mat-chip>
@@ -22,8 +23,8 @@
     </div>
     <br />
     <div class="row">
-      <div class="col-md-10"></div>
-      <div class="col-md-10" style="border: 1px solid gray;">
+      <!-- <div class="col-md-2"></div> -->
+      <div class="col-md-12" style="border: 1px solid gray;">
         <mat-icon matTooltip="Patient ID">assignment_ind</mat-icon>
         {{ getRefNumber(patient?.pat_id, patient?.prefix) }}
         <!-- <form [formGroup]="frmMedHistory"> -->
@@ -58,7 +59,7 @@
                     <td>{{gm.treatment}}</td>
                     <td>{{gm.description}}</td>
                   </tr>
-                  <button mat-icon-button color="primary" *ngIf="!addGenMedHistory" matTooltip="Add new row" (click)="addGenMedHistory = true;" ><mat-icon>add</mat-icon></button>
+                  <button mat-icon-button color="primary" *ngIf="!addGenMedHistory" matTooltip="Add new row" (click)="addGenMedHistory = true;" ><mat-icon>add</mat-icon> Add new record</button>
                   <tr *ngIf="addGenMedHistory">
 
                     <td><button mat-icon-button color="danger" matTooltip="Remove the row" (click)="addGenMedHistory = !addGenMedHistory;">
@@ -146,7 +147,7 @@
                     <td>{{op.isongoing === '1'? 'Ongoing':  op.endDate | date}}</td>
 
                   </tr>
-                  <button mat-icon-button color="primary" *ngIf="!addOpMedHistory" matTooltip="Add new row" (click)="addOpMedHistory = !addOpMedHistory;" ><mat-icon>add</mat-icon></button>
+                  <button mat-icon-button color="primary" *ngIf="!addOpMedHistory" matTooltip="Add new row" (click)="addOpMedHistory = !addOpMedHistory;" ><mat-icon>add</mat-icon>Add new record</button>
                   <tr *ngIf="addOpMedHistory">
                     <td>
                       <button mat-icon-button color="warn" matTooltip="Remove the row" (click)="addOpMedHistory = !addOpMedHistory;">
@@ -234,7 +235,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let med of medicationHistory">
+                  <tr *ngFor="let med of medicationHistory; let i = index;">
                     <td>
                         <button mat-icon-button color="warn" matTooltip="Remove the row" (click)="removeMedRow(i)">
                             <mat-icon>remove</mat-icon>

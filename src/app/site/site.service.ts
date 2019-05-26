@@ -86,4 +86,12 @@ export class SiteService {
      return this.http.get(`${this.apiUrl}/patient/getvisit/${patientID}/${visitID}`);
    }
 
+   getMedicalHistory(patientID): Observable<any> {
+     return this.http.get(`${this.apiUrl}/getmedicalhistory/${patientID}`);
+   }
+
+   saveMedicalHistory(medicalHistory): Observable<any> {
+    return this.http.post(`${this.apiUrl}/getmedicalhistory`, medicalHistory);
+  }
+
 }
