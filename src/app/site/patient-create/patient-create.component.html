@@ -19,7 +19,7 @@
                 <i class="material-icons">create</i>
               </div>
               <h4 class="card-title">Patient Details {{btnText}}</h4>
-              <span class="text-right"><a routerLink="/site/visits/{{patID}}">Visits</a></span>
+              <span class="text-right"><a mat-raised-button color="primary" routerLink="/site/visits/{{patID}}">Go to Visits</a></span>
             </div>
             <div class="card-body">
               <br>
@@ -103,7 +103,7 @@
                 <table class="table table-striped changelog" *ngIf="showChangeLog" >
                   <tr><th>Changed Field</th><th>Old value to New value</th><th>Updated By</th><th>Timestamp</th></tr>
                   <tr *ngFor="let a of changes" >
-                    
+
                     <td>{{a.field | uppercase}}</td>
                     <td>{{a.old_value}} => {{a.new_value}}</td>
                     <td>{{a.changedBy}}</td>

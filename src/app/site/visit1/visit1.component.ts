@@ -281,6 +281,10 @@ export class Visit1Component implements OnInit {
 
   }
 
+  showMedical(): void {
+    this.router.navigate([`/site/visits/medicalhistory/${this.patID}`]);
+  }
+
   getPatientVisit() {
     this.siteService.getPatientVisit(this.patID, this.selectedVisit._id).subscribe(data => {
       if (data[0]) {

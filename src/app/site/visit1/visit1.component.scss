@@ -9,6 +9,7 @@
 
 .mat-radio-button ~ .mat-radio-button {
   margin-left: 16px;
+  margin-right: 16px !important;
 }
 
 .mat-tooltip {
@@ -31,4 +32,9 @@
 .mat-expansion-panel-body {
   padding: 0px !important;
 }
+
+.mat-radio-label-content {
+  padding-right: 8px !important;
+}
+
 

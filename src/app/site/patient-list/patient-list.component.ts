@@ -44,7 +44,7 @@ export class PatientListComponent implements OnInit {
   }
 
   getRefNumber(patID, prefix) {
-    return `${prefix}/` + String('000' + patID).slice(-4);
+    return `${prefix}-` + String('00' + patID).slice(-3);
   }
 
 }

@@ -18,7 +18,7 @@
         <h4>Visits</h4>
         <!-- Tree  -->
        <mat-accordion>
-         <mat-expansion-panel hideToggle [disabled]="visit.code !== 'V1'" *ngFor="let visit of visits" (opened)="selectVisit(visit)">
+         <mat-expansion-panel hideToggle  *ngFor="let visit of visits" (opened)="selectVisit(visit)">
            <mat-expansion-panel-header>
              <mat-icon >folder</mat-icon>
               {{visit.description}}
@@ -56,7 +56,7 @@
                 Adverse Events
               </mat-expansion-panel-header>
          </mat-expansion-panel>
-         <mat-expansion-panel>
+         <mat-expansion-panel (opened)="showMedical()">
             <mat-expansion-panel-header>
                 <mat-icon >folder</mat-icon>
                 Concomitant Medication
@@ -317,7 +317,7 @@
             <thead class="text-primary">
                 <tr><th>#</th><th>Reported Date</th><th>SAE Event</th><th>SAE Classification</th>
                   <th>Start Date</th><th>End Date</th>
-                  <th>Severity/Grade</th> <th>Study Attribution</th>
+                  <th>Severity/Grade</th> <th>Procedure / Drug Relatedness</th>
                   <th>Outcome</th>
                   <!-- <th>Serious?</th><th>AE Treatment</th>
                   <th>Action Taken</th><th>Drug/Device Attribution</th> -->
@@ -524,7 +524,7 @@
                     <div class="col">
 
                         <mat-form-field>
-                            <mat-label id="relationshipIOL-label">Study Attribution/Relatedness</mat-label>
+                            <mat-label id="relationshipIOL-label">Procedure / Drug Relatedness</mat-label>
                             <mat-select aria-labelledby="relationshipIOL-label" formControlName="AEREL" required>
                               <mat-option>--</mat-option>
                               <mat-option value="0">Definite</mat-option>
@@ -539,27 +539,7 @@
                     </div>
                     <div class="col"></div>
                   </div>
-                  <div class="row">
-                      <div class="col">
-                        <mat-form-field>
-                            <mat-label id="actionTaken-label">Action Taken with Study Intervention </mat-label>
-                            <mat-select aria-labelledby="actionTaken-label" formControlName="AEACN" required>
-                              <mat-option>--</mat-option>
-                              <mat-option value="0">None</mat-option>
-                              <mat-option value="1">IOL explanted</mat-option>
-                              <mat-option value="2">Secondary surgical intervention</mat-option>
-                              <mat-option value="3">Medication given</mat-option>
-                              <!-- <mat-option value="1">Interrupted</mat-option>
-                              <mat-option value="2">Discontinued</mat-option>
-                              <mat-option value="3">Dose reduced</mat-option>
-                              <mat-option value="4">Dose increased</mat-option> -->
-                              <mat-option value="4">Not Applicable</mat-option>
 
-                            </mat-select>
-                        </mat-form-field>
-                       </div>
-                       <div class="col"></div>
-                    </div>
                     <div class="row">
                         <div class="col">
 
@@ -578,6 +558,27 @@
                         </div>
                         <div class="col"></div>
                       </div>
+                      <div class="row">
+                          <div class="col">
+                            <mat-form-field>
+                                <mat-label id="actionTaken-label">Action Taken </mat-label>
+                                <mat-select aria-labelledby="actionTaken-label" formControlName="AEACN" required>
+                                  <mat-option>--</mat-option>
+                                  <mat-option value="0">None</mat-option>
+                                  <mat-option value="1">IOL explanted</mat-option>
+                                  <mat-option value="2">Secondary surgical intervention</mat-option>
+                                  <mat-option value="3">Medication given</mat-option>
+                                  <!-- <mat-option value="1">Interrupted</mat-option>
+                                  <mat-option value="2">Discontinued</mat-option>
+                                  <mat-option value="3">Dose reduced</mat-option>
+                                  <mat-option value="4">Dose increased</mat-option> -->
+                                  <mat-option value="4">Not Applicable</mat-option>
+
+                                </mat-select>
+                            </mat-form-field>
+                           </div>
+                           <div class="col"></div>
+                        </div>
             <div *ngIf="showAEField">
                 <div class="row">
                     <div class="col">

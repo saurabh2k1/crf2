@@ -10,65 +10,130 @@
     <app-footer></app-footer>
   </div>
 </div> -->
-<mat-sidenav-container >
-    <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
-    [attr.role]="(isHandset$ | async) ? 'dialog': 'navigation'"
-    [mode] = "(isHandset$ | async) ? 'over' : 'side'"
-    [ngClass]="{'hidden': !(isHandset$ | async)}"
-
-    [opened]="!(isHandset$ | async)" >
+<mat-sidenav-container>
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport="true"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [ngClass]="{ hidden: !(isHandset$ | async) }"
+    [opened]="!(isHandset$ | async)"
+  >
     <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list>
-        <mat-nav-list>
-            <mat-list-item routerLinkActive="active" *ngFor="let menuitem of menuItems" >
-              <!--If is a single link-->
-              <a [routerLink]="[menuitem.path]" *ngIf="menuitem.type === 'link'" mat-list-item class="nav-link">
-                <mat-icon matListIcon>{{menuitem.icontype}}</mat-icon>
-                {{menuitem.title}}
-              </a>
-              <!--If it have a submenu-->
-              <a data-toggle="collapse" href="#{{menuitem.collapse}}" *ngIf="menuitem.type === 'sub'" (click)="updatePS()"
-                class="nav-link">
-                <i class="material-icons">{{menuitem.icontype}}</i>
-                <p>{{menuitem.title}}<b class="caret"></b></p>
-              </a>
 
-              <!-- Display the submenu items-->
-              <div id="{{menuitem.collapse}}" class="collapse" *ngIf="menuitem.type === 'sub'">
-                <ul class="nav">
-                  <li routerLinkActive="active" *ngFor="let childitem of menuitem.children" class="nav-item">
-                    <a [routerLink]="[menuitem.path, childitem.path]" class="nav-link">
-                      <span class="sidebar-mini">{{childitem.ab}}</span>
-                      <span class="sidebar-normal">{{childitem.title}}</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </mat-list-item>
-            <li class="nav-item d-lg-none">
-              <a class="nav-link" href="#" (click)="logout()">
-                <i class="material-icons">power_settings_new</i>
-                <p>
-                  <span class="d-lg-none d-md-block">Logout</span>
-                </p>
+    <mat-nav-list>
+
+      <mat-list-item
+        routerLinkActive="active"
+        *ngFor="let menuitem of menuItems"
+      >
+        <!--If is a single link-->
+        <a
+          [routerLink]="[menuitem.path]"
+          *ngIf="menuitem.type === 'link'"
+          mat-list-item
+          class="nav-link"
+        >
+          <mat-icon matListIcon>{{ menuitem.icontype }}</mat-icon>
+          {{ menuitem.title }}
+        </a>
+        <!--If it have a submenu-->
+        <a
+          data-toggle="collapse"
+          href="#{{ menuitem.collapse }}"
+          *ngIf="menuitem.type === 'sub'"
+          (click)="updatePS()"
+          class="nav-link"
+        >
+          <i class="material-icons">{{ menuitem.icontype }}</i>
+          <p>{{ menuitem.title }}<b class="caret"></b></p>
+        </a>
+
+        <!-- Display the submenu items-->
+        <div
+          id="{{ menuitem.collapse }}"
+          class="collapse"
+          *ngIf="menuitem.type === 'sub'"
+        >
+          <ul class="nav">
+
+            <li
+              routerLinkActive="active"
+              *ngFor="let childitem of menuitem.children"
+              class="nav-item"
+            >
+              <a
+                [routerLink]="[menuitem.path, childitem.path]"
+                class="nav-link"
+              >
+                <span class="sidebar-mini">{{ childitem.ab }}</span>
+                <span class="sidebar-normal">{{ childitem.title }}</span>
               </a>
             </li>
-        </mat-nav-list>
+          </ul>
+        </div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item routerLinkActive="active">
+          <a routerLink="/site/profile" class="nav-link" mat-list-item >
+            <mat-icon matListIcon>face</mat-icon>
+            My Profile
+          </a>
+      </mat-list-item>
+      <mat-list-item>
+          <a routerLink="/changepassword" class="nav-link" mat-list-item >
+            <mat-icon matListIcon>lock</mat-icon>
+            Change Password
+          </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a  (click)="logout()" class="nav-link" menu-list-item >
+          <mat-icon matListIcon>power_settings_new</mat-icon>
+          Logout
+        </a>
+      </mat-list-item>
+
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-      <mat-toolbar color="primary">
-          <button type="button" mat-icon-button *ngIf="isHandset$ | async" (click)="drawer.toggle()">
-            <mat-icon>menu</mat-icon>
-          </button>
-          <a class="navbar-brand" href="#">
-            <img src="/assets/img/QdataEDC.png" style="width:190px; " >
-            </a>
-        </mat-toolbar>
-        <!-- <app-breadcrumb></app-breadcrumb> -->
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        mat-icon-button
+        *ngIf="isHandset$ | async"
+        (click)="drawer.toggle()"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img src="/assets/img/QdataEDC.png" style="width:190px; " />
+      </a>
+      <span class="example-fill-remaining-space"></span>
+      <button mat-icon-button [matMenuTriggerFor]="topMenu" aria-label="Menu"  [ngClass]="{ hidden: (isHandset$ | async) }" ><mat-icon>menu</mat-icon></button>
+      <mat-menu #topMenu="matMenu">
+        <button routerLink="/site/dashboard" mat-menu-item>
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </button>
+
+        <mat-divider></mat-divider>
+        <button routerLink="/site/profile" mat-menu-item>
+          <mat-icon>face</mat-icon>
+          <span>My Profile</span>
+        </button>
+        <button mat-menu-item routerLink="/changepassword">
+          <mat-icon>lock</mat-icon>
+          <span>Change Password</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>power_settings_new</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
     <router-outlet></router-outlet>
     <app-footer></app-footer>
   </mat-sidenav-content>
-
 </mat-sidenav-container>
-
