@@ -15,7 +15,7 @@ import { FormGroup } from '@angular/forms';
   </ng-container>
   </mat-form-field>
   `,
-  styles: []
+  styles: ['.hidden { display: none !important;}']
 })
 export class DateComponent implements OnInit {
   field: FieldConfig;
@@ -25,6 +25,16 @@ export class DateComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+  isShown(): Boolean {
+    if (this.field.ngShow_field && this.field.ngShow_value) {
+      if (this.group.controls[this.field.ngShow_field].value === this.field.ngShow_value) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

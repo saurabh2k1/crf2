@@ -41,6 +41,7 @@ export class Visit1Component implements OnInit {
   isExclusionMet = false;
   visitDate: Date = null;
   selectedVisit: any;
+  visitID = '';
   visitData: any;
   aeSeq = 0;
   ecrfs: any[];
@@ -212,6 +213,7 @@ export class Visit1Component implements OnInit {
     this.closeAllPage();
     this.visitDate = null;
     this.selectedVisit = visit;
+    this.visitID = visit._id;
     this.getPatientVisit();
   }
 
@@ -232,6 +234,7 @@ export class Visit1Component implements OnInit {
         if (data.fields) {
           console.log(data.fields);
           this.fields = data.fields;
+          if (this.form) { this.form.fields = this.fields; }
           this.form = DynamicFormComponent;
         } else {
           this.fields = null;
@@ -240,9 +243,36 @@ export class Visit1Component implements OnInit {
   }
 
   saveCrForm(value): void {
-
+    console.log(value);
+    const crfForm = {
+      'form_id': this.theForm._id,
+      'site_id': this.site_id,
+      'subject_id': this.patID,
+      'visit_id': this.visitID,
+      'dov': new Date(),
+    };
+    this.theCRFValue = Object.assign(crfForm, value);
+    this.siteService.saveCRForm(this.theCRFValue).subscribe(data => {
+      alert(data.msg);
+      this.crfFormDone = true;
+    });
   }
 
+  getValue(field) {
+    const val = this.theCRFValue[field.name];
+    const a =  field.options.find(x => x.value === val);
+    return a.title;
+  }
+
+  hideField(field) {
+    if (field.ngShow_field && field.ngShow_value) {
+      if (this.theCRFValue[field.ngShow_field] === field.ngShow_value) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
   showForms(visit) {
     this.closeAllPage();
     this.ecrfs = [];
@@ -271,6 +301,8 @@ export class Visit1Component implements OnInit {
     this.showInformedConsent = false;
     this.showInclusionExclusion = false;
     this.showDemographicPage = false;
+    this.theForm = null;
+
     // this.pageTitle = 'Visit';
   }
 
@@ -278,7 +310,10 @@ export class Visit1Component implements OnInit {
     this.closeAllPage();
     this.pageTitle = 'Adverse Events';
     this.showAETable = true;
-
+    this.siteService.getAERecordsByPatient(this.patID).subscribe(data => {
+      console.log(data);
+      this.aeList = data;
+    });
   }
 
   showMedical(): void {
@@ -313,10 +348,18 @@ export class Visit1Component implements OnInit {
       // });
       this.aeSeq++;
       this.frmAEForm.controls['aeSeq'].setValue(`${this.getRefNumber(this.patient.pat_id, this.patient.prefix)}-${this.aeSeq}`);
-      this.aeList.push(this.frmAEForm.value);
-      this.frmAEForm.reset();
-      this.closeAllPage();
-      this.showAETable = true;
+      // this.aeList.push(this.frmAEForm.value);
+      this.siteService.saveAERecord(this.frmAEForm.value).subscribe(data => {
+        if (data.AE) {
+          this.aeList.push(data.AE);
+          this.frmAEForm.reset();
+          this.closeAllPage();
+          this.showAETable = true;
+        }
+      }, err => {
+        console.log(err);
+      });
+
     }
 
   }

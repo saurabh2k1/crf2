@@ -30,7 +30,7 @@ export class MedicalHistoryComponent implements OnInit {
   showEndDate1 = false;
   showEndDate2 = false;
   showEndDate3 = false;
-  addGenMedHistory = true;
+  addGenMedHistory = false;
   addOpMedHistory = false;
   addMedHistory = false;
   study_id = '';

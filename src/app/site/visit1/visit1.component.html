@@ -15,12 +15,12 @@
     <br/>
     <div class="row">
       <div class="col-md-3" style="border: 1px solid gray;">
-        <h4>Visits</h4>
+        <!-- <h4>Visits</h4> -->
         <!-- Tree  -->
        <mat-accordion>
          <mat-expansion-panel hideToggle  *ngFor="let visit of visits" (opened)="selectVisit(visit)">
            <mat-expansion-panel-header>
-             <mat-icon >folder</mat-icon>
+             <mat-icon [ngClass]="{'text-success': visit.isDone, 'text-warning': visit.dov && !visit.isDone }">folder</mat-icon>
               {{visit.description}}
            </mat-expansion-panel-header>
            <mat-action-list dense>
@@ -38,7 +38,7 @@
                   <h4 mat-line>Demography</h4>
                 </a>
                 <a mat-list-item *ngIf="visit.code === 'V1' && isExclusionMet" routerLink="/site/visits/medicalhistory/{{patID}}">
-                  <mat-icon mat-list-icon>file_copy</mat-icon>
+                  <mat-icon mat-list-icon  [ngClass]="{'text-success': visit.medicalHistory}">file_copy</mat-icon>
                   <h4 mat-line>Medical History</h4>
                 </a>
                 <span *ngIf="isExclusionDone && isExclusionMet">
@@ -50,13 +50,13 @@
 
            </mat-action-list>
          </mat-expansion-panel>
-         <mat-expansion-panel (opened)="showAE()">
+         <mat-expansion-panel hideToggle (opened)="showAE()">
             <mat-expansion-panel-header>
                 <mat-icon >folder</mat-icon>
                 Adverse Events
               </mat-expansion-panel-header>
          </mat-expansion-panel>
-         <mat-expansion-panel (opened)="showMedical()">
+         <mat-expansion-panel hideToggle (opened)="showMedical()">
             <mat-expansion-panel-header>
                 <mat-icon >folder</mat-icon>
                 Concomitant Medication
@@ -142,6 +142,11 @@
               </form>
             </mat-card>
             </div>
+            <div *ngIf="visitDate && selectedVisit && !showAETable">
+              <mat-card>
+                  <h6 class="card-subtitle mb-2 text-muted">Date of Visit: {{visitDate | date}}</h6>
+              </mat-card>
+            </div>
         <!-- the eCRF -->
         <div *ngIf="theForm">
           <div class="card">
@@ -155,22 +160,36 @@
                     </div>
                     <h4 class="card-title">{{theForm.name}}</h4>
                     <h6 class="card-subtitle mb-2 text-muted" *ngIf="visitDate">Date of Visit: {{visitDate | date}}</h6>
-                    <div *ngIf="!visitDate">
+                    <!-- <div *ngIf="!visitDate">
                         <legend>Date of Visit</legend>
                         <mat-form-field >
                             <input matInput #dov style="color:black;" [matDatepicker]="picker" placeholder="Date of Visit" (click)="picker.open()">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                           </mat-form-field>
-                    </div>
+                    </div> -->
                   </div>
                   <div class="card-body" *ngIf="fields" >
                       <div *ngIf="crfFormDone">
                         <table class="table table-bordered">
                           <thead></thead>
                           <tbody>
-                            <tr *ngFor="let field of fields">
-                              <td>{{field.label}} </td><td>{{theCRFValue[field.name]}}</td>
+                            <tr *ngFor="let field of fields" [ngClass]="{'hidden': hideField(field)}">
+                              <td>{{field.label}} </td><td>
+                                <span *ngIf="field.type === 'date'">{{theCRFValue[field.name] | date}}</span>
+
+                                <span *ngIf="field.type !== 'date'">
+                                  <span *ngIf="field.hasOption">
+                                    {{getValue(field)}}
+                                  </span>
+                                  <span *ngIf="!field.hasOption">
+                                      {{theCRFValue[field.name]}}
+                                  </span>
+                                  </span>
+                               <b> {{field.unit}}</b>
+                              </td>
+                              <td><button mat-icon-button><mat-icon>edit</mat-icon></button></td>
+                              <td><button mat-icon-button><mat-icon>question_answer</mat-icon></button></td>
                             </tr>
                           </tbody>
                           <tfoot>
@@ -199,7 +218,7 @@
                 </div>
                 <div class="card-body">
                   	<table class="table table-bordered">
-                        <tr><th>EC approved ICF signed</th><td>{{patient.icf === 1 ? 'Yes' : 'No'}}</td></tr>
+                        <tr><th>EC approved ICF signed</th><td>{{patient.icf === true ? 'Yes' : 'No'}}</td></tr>
                         <tr><th>Date ICF Signed </th><td>{{patient.icf_date | date}}</td></tr>
                       </table>
                 </div>
@@ -284,9 +303,9 @@
             <div class="card-body">
                 <table class="table table-responsive table-striped responsive">
                     <thead class="text-primary">
-                      <tr><th>#</th><th>Reported Date</th><th>Adverse Event</th><th>Start Date</th><th>End Date</th><th>Outcome</th>
-                        <th>Severity/Grade</th><th>Serious?</th><th>AE Treatment</th><th>Study Attribution</th>
-                        <th>Action Taken</th><th>Drug/Device Attribution</th>
+                      <tr><th>#</th><th>Reported Date</th><th>Adverse Event</th><th>Start Date</th><th>Ongoing / End Date</th><th>Outcome</th>
+                        <th>Severity/Grade</th><th>Serious?</th><th>AE Treatment</th><th>Procedure / Drug Relatedness</th>
+                        <th>IOL Attribution</th><th>Action Taken</th>
                         <!-- <th>PI / PI Initial Date</th> -->
                       </tr>
                     </thead>
@@ -298,14 +317,15 @@
                         <td>{{ae.VISDAT | date}}</td>
                         <td>{{ ae.eventName === 'Other'?  ae.otherEventName : ae.eventName}}</td>
                         <td>{{ae.AESTDATE | date}}</td>
-                        <td>{{ae.AEONGO === '1'? 'Ongoing' : ae.AEENDAT | date}}</td>
+                        <td>{{ae.AEONGO? 'Ongoing' : ae.AEENDAT | date}}</td>
                         <td>{{ae.AEOUT}}</td>
                         <td>{{ae.AESEV}}</td>
                         <td>{{ae.AESER}}</td>
                         <td>{{ae.AEACNOTH}}</td>
                         <td>{{ae.AEREL}}</td>
-                        <td>{{ae.AEACN}}</td>
+
                         <td>{{ae.AEDEVREL}}</td>
+                        <td>{{ae.AEACN}}</td>
                         <!-- <td>{{ae.submitted_at | date}}</td> -->
                       </tr>
                     </tbody>
@@ -317,7 +337,7 @@
             <thead class="text-primary">
                 <tr><th>#</th><th>Reported Date</th><th>SAE Event</th><th>SAE Classification</th>
                   <th>Start Date</th><th>End Date</th>
-                  <th>Severity/Grade</th> <th>Procedure / Drug Relatedness</th>
+                  <th>Severity/Grade</th> <th>IOL Attribution</th>
                   <th>Outcome</th>
                   <!-- <th>Serious?</th><th>AE Treatment</th>
                   <th>Action Taken</th><th>Drug/Device Attribution</th> -->
@@ -338,7 +358,7 @@
 
                     <td>{{ae.AESEV}}</td>
 
-                    <td>{{ae.AEREL}}</td>
+                    <td>{{ae.AEDEVREL}}</td>
 
                     <td>{{ae.AEOUT}}</td>
                     <!-- <td>{{ae.submitted_at | date}}</td> -->

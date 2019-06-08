@@ -16,4 +16,15 @@ export class InputComponent implements OnInit {
   ngOnInit() {
   }
 
+  isShown(): Boolean {
+    if (this.field.ngShow_field && this.field.ngShow_value) {
+      if (this.group.controls[this.field.ngShow_field].value === this.field.ngShow_value) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }

@@ -94,4 +94,12 @@ export class SiteService {
     return this.http.post(`${this.apiUrl}/getmedicalhistory`, medicalHistory);
   }
 
+  getAERecordsByPatient(patID): Observable<any> {
+    return this.http.get(`${this.apiUrl}/patient/aerecords/${patID}`);
+  }
+
+  saveAERecord(AERecord): Observable<any> {
+    return this.http.post(`${this.apiUrl}/aerecords`, AERecord);
+  }
+
 }
