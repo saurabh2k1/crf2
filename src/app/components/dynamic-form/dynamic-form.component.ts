@@ -34,6 +34,7 @@ export class DynamicFormComponent implements OnInit {
     this.form = this.createControl();
   }
 
+
   createControl() {
     console.log('CreateControl');
     const group = this.fb.group({});

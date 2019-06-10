@@ -101,5 +101,8 @@ export class SiteService {
   saveAERecord(AERecord): Observable<any> {
     return this.http.post(`${this.apiUrl}/aerecords`, AERecord);
   }
+  saveCrfChange(changes): Observable<any> {
+    return this.http.post(`${this.apiUrl}/crfchange`, changes);
+  }
 
 }

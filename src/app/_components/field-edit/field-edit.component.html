@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Change Log</h2>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Old Value</th>
+      <th>New Value</th>
+      <th>Changed on/ by</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let change of field.changes">
+      <td>{{ change.old_value }}</td>
+      <td>{{ change.new_value }}</td>
+      <td>
+        {{ change.created_at | date }} by {{ change.creator.first_name }}
+        {{ change.creator.last_name }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+<h2 mat-dialog-title>{{ field.label }} Edit</h2>
+<mat-dialog-content [formGroup]="form">
+  <ng-container dynamicField [field]="field" [group]="form"> </ng-container>
+  <mat-form-field>
+    <input matInput placeholder="Reason" formControlName="reason" required />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button (click)="close()">Close</button>
+  <button mat-raised-button mat-primary (click)="save()">Save</button>
+</mat-dialog-actions>

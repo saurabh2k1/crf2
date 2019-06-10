@@ -5,6 +5,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import * as moment from 'moment';
 import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { FieldEditComponent } from 'src/app/_components/field-edit/field-edit.component';
 
 
 
@@ -56,6 +58,7 @@ export class Visit1Component implements OnInit {
     private router: Router,
     private siteService: SiteService,
     private fb: FormBuilder,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -103,22 +106,8 @@ export class Visit1Component implements OnInit {
       AEACN: ['', Validators.required],
       AEDEVREL: [''],
       aeSeq: [''],
-      // isEyeAffected: [false, Validators.required],
-
-      // eventOccurOn: [null, Validators.required],
-
-
 
       SAECLASS: [''],
-      // causalityIOL: ['', Validators.required],
-      // causalitySurgical: ['', Validators.required],
-      // isDeviceMalfunction: ['', Validators.required],
-      // deviceMalfunction: [''],
-      // otherMalfunction: [''],
-
-
-
-
     });
   }
 
@@ -136,6 +125,43 @@ export class Visit1Component implements OnInit {
       'reason': [null],
       'isUpdated': [false],
       'hasQuestion': [false],
+    });
+  }
+
+  openDialog(field) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '500px';
+    dialogConfig.height = '500px';
+    dialogConfig.data = {
+      field: field,
+    };
+    const dialogRef = this.dialog.open(FieldEditComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe( data => {
+      console.log('Dialog Data:', data);
+      const diaData = data;
+      Object.entries(diaData).forEach(([key, value]) => {
+        if (key !== 'reason') {
+          diaData['newValue'] = value;
+        }
+      });
+      const editData = {
+        patient_id: this.patID,
+        visit_id: this.theCRFValue.visit_id,
+        row_id: this.theCRFValue.id,
+        form_id: this.theForm._id,
+        field_code: field.name,
+        old_value: this.theCRFValue[field.name],
+        new_value: diaData.newValue,
+        reason: diaData.reason,
+      };
+      this.siteService.saveCrfChange(editData).subscribe(cdata => {
+        console.log('CrfChange Save Result', cdata);
+      });
+
+      console.log('Edit Data', editData);
     });
   }
 
@@ -218,6 +244,7 @@ export class Visit1Component implements OnInit {
   }
 
   openForm(form, visit): void {
+    this.fields = null;
     this.closeAllPage();
     this.theForm = form;
     this.pageTitle = form.name;
@@ -234,7 +261,6 @@ export class Visit1Component implements OnInit {
         if (data.fields) {
           console.log(data.fields);
           this.fields = data.fields;
-          if (this.form) { this.form.fields = this.fields; }
           this.form = DynamicFormComponent;
         } else {
           this.fields = null;
@@ -318,6 +344,10 @@ export class Visit1Component implements OnInit {
 
   showMedical(): void {
     this.router.navigate([`/site/visits/medicalhistory/${this.patID}`]);
+  }
+
+  showConco(): void {
+    this.router.navigate([`/site/visits/conco/${this.patID}`]);
   }
 
   getPatientVisit() {

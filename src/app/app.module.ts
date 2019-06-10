@@ -22,6 +22,7 @@ import { ErrorInterceptor } from './helpers/error-interceptor';
 import { HomeComponent } from './home/home.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { LoaderComponent } from './shared/loader/loader.component';
+import { FieldEditComponent } from './_components/field-edit/field-edit.component';
 
 
 
@@ -37,6 +38,7 @@ import { LoaderComponent } from './shared/loader/loader.component';
     HomeComponent,
     ChangePasswordComponent,
     LoaderComponent,
+    FieldEditComponent,
 
 
   ],
@@ -59,6 +61,7 @@ import { LoaderComponent } from './shared/loader/loader.component';
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [FieldEditComponent]
 })
 export class AppModule { }

@@ -56,7 +56,7 @@
                 Adverse Events
               </mat-expansion-panel-header>
          </mat-expansion-panel>
-         <mat-expansion-panel hideToggle (opened)="showMedical()">
+         <mat-expansion-panel hideToggle (opened)="showConco()">
             <mat-expansion-panel-header>
                 <mat-icon >folder</mat-icon>
                 Concomitant Medication
@@ -64,58 +64,8 @@
          </mat-expansion-panel>
        </mat-accordion>
         <!-- End Tree -->
-          <!-- <mat-action-list dense>
-            <a mat-list-item *ngFor="let visit of visits" (click)="showForms(visit)">
-              <mat-icon mat-list-icon>folder</mat-icon>
-              <h4 mat-line>{{visit.description}}</h4>
-            </a>
-            <!-- <p mat-line><span *ngIf="visit.dov">({{visit.dov | date}})</span></p>
-            <a mat-list-item (click)="showAE()">
-              <mat-icon mat-list-icon>folder</mat-icon>
-              <h4 mat-line>Adverse Events</h4>
-            </a>
-            <a mat-list-item >
-              <mat-icon mat-list-icon>folder</mat-icon>
-              <h4 mat-line>Concomitant Medication</h4>
-            </a>
-          </mat-action-list>
-
-        <hr>
-       <h4>eCRF</h4>
-        <mat-action-list dense *ngIf="visitDate">
-          <a mat-list-item *ngIf="selectedVisit?.code === 'V1'" (click)="showIC()" >
-            <mat-icon mat-list-icon>file_copy</mat-icon>
-            <h4 mat-line>Informed Consent</h4>
-          </a>
-          <a mat-list-item *ngIf="selectedVisit?.code === 'V1'" (click)="showIncEx()" >
-            <mat-icon mat-list-icon>file_copy</mat-icon>
-            <h4 mat-line>Inclusion / Exclusion Criteria</h4>
-          </a>
-
-          <a mat-list-item *ngIf="selectedVisit?.code === 'V1'" (click)="showDemography()" >
-            <mat-icon mat-list-icon>file_copy</mat-icon>
-            <h4 mat-line>Demography</h4>
-          </a>
-          <a mat-list-item *ngIf="selectedVisit?.code === 'V1'" routerLink="/site/visits/medicalhistory/{{patID}}">
-            <mat-icon mat-list-icon>file_copy</mat-icon>
-            <h4 mat-line>Medical History</h4>
-          </a>
-          <a mat-list-item *ngFor="let form of ecrfs">
-            <mat-icon mat-list-icon>file_copy</mat-icon>
-            <h4 mat-line>{{form.name}}</h4>
-          </a>
-
-        </mat-action-list> -->
-
       </div>
       <div class="col-md-9" style="border: 1px solid gray;">
-        <!-- <table class="table table-bordered">
-          <tr><td>Patient ID: {{ getRefNumber(patient?.pat_id, patient?.prefix) }}</td>
-            <td class="text-center">{{pageTitle}}</td>
-            <td class="text-right"><span *ngIf="visitDate">Date of Visit: {{visitDate | date}}</span></td>
-          </tr>
-        </table> -->
-
             <div *ngIf="!visitDate && selectedVisit">
               <mat-card>
               <form #fVisit="ngForm">
@@ -160,14 +110,7 @@
                     </div>
                     <h4 class="card-title">{{theForm.name}}</h4>
                     <h6 class="card-subtitle mb-2 text-muted" *ngIf="visitDate">Date of Visit: {{visitDate | date}}</h6>
-                    <!-- <div *ngIf="!visitDate">
-                        <legend>Date of Visit</legend>
-                        <mat-form-field >
-                            <input matInput #dov style="color:black;" [matDatepicker]="picker" placeholder="Date of Visit" (click)="picker.open()">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                          </mat-form-field>
-                    </div> -->
+
                   </div>
                   <div class="card-body" *ngIf="fields" >
                       <div *ngIf="crfFormDone">
@@ -175,7 +118,9 @@
                           <thead></thead>
                           <tbody>
                             <tr *ngFor="let field of fields" [ngClass]="{'hidden': hideField(field)}">
-                              <td>{{field.label}} </td><td>
+                              <td>{{field.label}}
+
+                              </td><td>
                                 <span *ngIf="field.type === 'date'">{{theCRFValue[field.name] | date}}</span>
 
                                 <span *ngIf="field.type !== 'date'">
@@ -188,7 +133,7 @@
                                   </span>
                                <b> {{field.unit}}</b>
                               </td>
-                              <td><button mat-icon-button><mat-icon>edit</mat-icon></button></td>
+                              <td><button mat-icon-button (click)="openDialog(field)"><mat-icon [ngClass]="{'text-warning': field.changes?.length}">edit</mat-icon></button></td>
                               <td><button mat-icon-button><mat-icon>question_answer</mat-icon></button></td>
                             </tr>
                           </tbody>
@@ -263,7 +208,7 @@
                     </div>
                     <div class="col-md-12" *ngIf="isExclusionDone">
                       <table class="table table-bordered">
-                        <tr><th>Subject meets inclusion/exclusion criteria?</th><td>{{crfExclusion.exclusion === 1? 'Yes' : 'No'}}</td></tr>
+                        <tr><th>Subject meets inclusion/exclusion criteria?</th><td>{{crfExclusion.exclusion === '1' || crfExclusion.exclusion === 1 ? 'Yes' : 'No'}}</td></tr>
                         <tr *ngIf="!isExclusionMet"><th>Reason</th>{{crfExclusion.reason}}</tr>
                       </table>
                     </div>
