@@ -13,6 +13,7 @@ import { Role } from '../models/role';
 import { SaeComponent } from './sae/sae.component';
 import { MedicalHistoryComponent } from './medical-history/medical-history.component';
 import { ConcoComponent } from './conco/conco.component';
+import { FileuploadComponent } from './fileupload/fileupload.component';
 
 const siteRoutes: Routes = [
   {
@@ -33,6 +34,7 @@ const siteRoutes: Routes = [
           { path: 'visits/:id', component: Visit1Component, },
           { path: 'visits/medicalhistory/:id', component: MedicalHistoryComponent},
           { path: 'visits/conco/:id', component: ConcoComponent},
+          { path: 'visits/fileupload/:patID/:visitID', component: FileuploadComponent},
           { path: 'visits/sae/:id', component: SaeComponent},
           { path: 'profile', component: ProfileComponent},
           {path: 'dashboard', component: SiteDashboardComponent, data: {breadcrumb: 'Dashboard'}},

@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://api.qascentresearch.com',
-  baseUrl: 'http://qdata.qascentresearch.com',
+  apiUrl: 'https://api.qascentresearch.com',
+  baseUrl: 'https://qdata.qascentresearch.com',
 };

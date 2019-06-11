@@ -27,6 +27,7 @@ import { Visit1Component } from './visit1/visit1.component';
 import { SaeComponent } from './sae/sae.component';
 import { MedicalHistoryComponent } from './medical-history/medical-history.component';
 import { ConcoComponent } from './conco/conco.component';
+import { FileuploadComponent } from './fileupload/fileupload.component';
 
 
 
@@ -43,6 +44,7 @@ import { ConcoComponent } from './conco/conco.component';
     SaeComponent,
     MedicalHistoryComponent,
     ConcoComponent,
+    FileuploadComponent,
   ],
   imports: [
     CommonModule,

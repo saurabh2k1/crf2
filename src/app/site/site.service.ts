@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpEventType } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -103,6 +103,23 @@ export class SiteService {
   }
   saveCrfChange(changes): Observable<any> {
     return this.http.post(`${this.apiUrl}/crfchange`, changes);
+  }
+
+  public uploadFile(data) {
+    return this.http.post<any>(`${this.apiUrl}/upload`, data, {
+      reportProgress: true,
+      observe: 'events'
+    }).pipe(map((event) => {
+      switch (event.type) {
+        case HttpEventType.UploadProgress:
+          const progress = Math.round(100 * event.loaded / event.total);
+          return { status: 'progress', message: progress };
+        case HttpEventType.Response:
+          return event.body;
+        default:
+          return `Unhandled event: ${event.type}`;
+      }
+    }));
   }
 
 }
