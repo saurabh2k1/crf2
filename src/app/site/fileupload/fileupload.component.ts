@@ -14,6 +14,7 @@ export class FileuploadComponent implements OnInit {
   error: string;
   uploadResponse = { status: '', message: '', filePath: ''};
   patID = '';
+  visitID = '';
   pageTitle = 'File Upload';
   patient: any;
 
@@ -24,6 +25,7 @@ export class FileuploadComponent implements OnInit {
 
   ngOnInit() {
     this.patID = this.activatedRoute.snapshot.paramMap.get('patID');
+    this.visitID = this.activatedRoute.snapshot.paramMap.get('visitID');
     this.siteService.getPatientByID(this.patID).subscribe((data: any) => {
       this.patient = data;
     });
@@ -46,6 +48,8 @@ export class FileuploadComponent implements OnInit {
   onSubmit() {
     const formData = new FormData();
     formData.append('file', this.form.get('file').value);
+    formData.append('patient_id', this.patID);
+    formData.append('visit_id', this.visitID);
     this.siteService.uploadFile(formData).subscribe(
       (res) => this.uploadResponse = res,
       (err) => this.error = err
