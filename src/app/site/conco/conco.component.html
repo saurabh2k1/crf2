@@ -1,6 +1,7 @@
 <div class="main-content">
   <div class="container-fluid">
     <br />
+    <app-alert></app-alert>
     <div class="row">
       <div>
         <mat-chip-list>
@@ -47,7 +48,7 @@
                   <td>{{med.route}}</td>
                   <td>{{med.dose}}</td>
                   <td>{{med.startDate | date}}</td>
-                  <td>{{med.isongoing? 'Ongoing' :  med.endDate | date}}</td>
+                  <td>{{med.isongoing? 'Ongoing' :  med.enddate | date}}</td>
                 </tr>
                 <button mat-icon-button color="primary" *ngIf="!addMedHistory" matTooltip="Add new row" (click)="addMedHistory = !addMedHistory;" ><mat-icon>add</mat-icon></button>
                 <tr *ngIf="addMedHistory">
@@ -121,7 +122,7 @@
                             <mat-radio-button value="0">No</mat-radio-button>
                           </mat-radio-group>
                           <mat-form-field  *ngIf="showEndDate3">
-                              <input matInput  [matDatepicker]="pickerEnd3" name="endDate" ngModel placeholder="End date" [max]="getToday()"
+                              <input matInput  [matDatepicker]="pickerEnd3" name="enddate" ngModel placeholder="End date" [max]="getToday()"
                                 (click)="pickerEnd3.open()"  >
                               <mat-datepicker-toggle matSuffix [for]="pickerEnd3"></mat-datepicker-toggle>
                               <mat-datepicker #pickerEnd3></mat-datepicker>
@@ -134,5 +135,7 @@
             </table>
           </form>
     </div>
+    <mat-divider></mat-divider>
+    <button mat-raised-button color="primary" routerLink="/site/visits/{{patID}}">Back</button>
   </div>
 </div>

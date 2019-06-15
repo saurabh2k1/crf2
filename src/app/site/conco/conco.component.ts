@@ -3,6 +3,8 @@ import { Patient } from 'src/app/models/patient';
 import { SiteService } from '../site.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, NgForm } from '@angular/forms';
+import { AlertService } from 'src/app/alert.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-conco',
@@ -18,13 +20,15 @@ export class ConcoComponent implements OnInit {
   site_id = '';
   medicationHistory: Array<{
     drugName: string, indication: string, eye: string,
-    route: string, dose: string, startDate: Date, endDate?: string, isongoing?: string
+    route: string, dose: string, startDate: Date, enddate?: string, isongoing?: string,
+    creator?: any
   }> = [];
   addMedHistory = false;
   showEndDate3 = false;
   constructor(
     private siteService: SiteService,
     private activatedRoute: ActivatedRoute,
+    private alertService: ToastrService,
   ) { }
 
   ngOnInit() {
@@ -38,6 +42,7 @@ export class ConcoComponent implements OnInit {
     this.siteService.getPatientByID(this.patID).subscribe((data: any) => {
       this.patient = data;
     });
+    this.siteService.getConco(this.patID).subscribe(data => this.medicationHistory = data)
   }
 
   getRefNumber(patID, prefix) {
@@ -65,8 +70,19 @@ export class ConcoComponent implements OnInit {
   }
 
   saveMedRow(f: NgForm) {
-    this.medicationHistory.push(f.value);
-    f.reset();
-    this.addMedHistory = false;
+    let val = f.value;
+    val['patient_id'] = this.patID;
+    this.siteService.saveConco(f.value).subscribe(data => {
+      console.log('Data: ', data);
+      this.medicationHistory.push(f.value);
+      f.reset();
+      this.addMedHistory = false;
+      if (data && data.msg) {
+        this.alertService.success(data.msg);
+      }
+    }, err => {
+      this.alertService.error(err);
+    });
+
   }
 }

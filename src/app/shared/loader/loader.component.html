@@ -1,5 +1,11 @@
-<div [class.hidden]="!show">
+<!-- <div [class.hidden]="!show">
     <div class="loader-overlay">
       <div *ngIf="show" class="loader"></div>
     </div>
+  </div> -->
+  <div class="overlay" *ngIf="isLoading | async">
+    <mat-progress-spinner class="spinner"
+    [color]="color"
+    [mode]="mode"
+    [value]="value"></mat-progress-spinner>
   </div>

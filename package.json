@@ -39,6 +39,7 @@
     "jquery-validation": "^1.18.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.23",
+    "ngx-toastr": "^10.0.4",
     "perfect-scrollbar": "^1.4.0",
     "popper.js": "^1.14.5",
     "rxjs": "~6.3.3",

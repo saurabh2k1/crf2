@@ -94,6 +94,14 @@ export class SiteService {
     return this.http.post(`${this.apiUrl}/getmedicalhistory`, medicalHistory);
   }
 
+  saveConco(medication): Observable<any> {
+    return this.http.post(`${this.apiUrl}/site/conco`, medication);
+  }
+
+  getConco(patID): Observable<any> {
+    return this.http.get(`${this.apiUrl}/site/conco/${patID}`);
+  }
+
   getAERecordsByPatient(patID): Observable<any> {
     return this.http.get(`${this.apiUrl}/patient/aerecords/${patID}`);
   }
@@ -104,6 +112,16 @@ export class SiteService {
   saveCrfChange(changes): Observable<any> {
     return this.http.post(`${this.apiUrl}/crfchange`, changes);
   }
+
+  getFile(patID, visitID): Observable<any> {
+    return this.http.get(`${this.apiUrl}/upload/${patID}/${visitID}`);
+  }
+
+  getCrfCount(studyID, siteID): Observable<any> {
+    return this.http.get(`${this.apiUrl}/dashboard/crfcount/${studyID}/${siteID}`);
+  }
+
+
 
   public uploadFile(data) {
     return this.http.post<any>(`${this.apiUrl}/upload`, data, {

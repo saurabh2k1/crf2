@@ -26,6 +26,15 @@ export class SiteDashboardComponent implements OnInit {
   openQuery = 0;
   stickyNotes = 0;
   overDue = 0;
+
+  dashboardCount = {
+    skippedVisitCount: 'NA',
+    completedCount: 'NA',
+    pendingCount: 'NA',
+    updated_at: 'NA',
+    AECount: 'NA',
+    SAE: 'NA'
+  };
   @ViewChild(MatPaginator) Paginator: MatPaginator;
   constructor(private studyService: StudyService,
     private siteService: SiteService,
@@ -57,6 +66,9 @@ export class SiteDashboardComponent implements OnInit {
     this.siteService.getSiteStatics(this.siteId, this.studyId).subscribe((data: any) => {
       console.log(data);
       this.patientCount = data.pat_count;
+    });
+    this.siteService.getCrfCount(this.studyId, this.siteId).subscribe((data: any) => {
+      this.dashboardCount = data;
     });
   }
   enterStudy(study: any) {

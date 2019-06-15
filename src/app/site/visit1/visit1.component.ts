@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-form.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { FieldEditComponent } from 'src/app/_components/field-edit/field-edit.component';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -45,6 +46,8 @@ export class Visit1Component implements OnInit {
   selectedVisit: any;
   visitID = '';
   visitData: any;
+  visitSkipped = false;
+  visitSkipped_comment = '';
   aeSeq = 0;
   ecrfs: any[];
   theForm: any;
@@ -59,6 +62,7 @@ export class Visit1Component implements OnInit {
     private siteService: SiteService,
     private fb: FormBuilder,
     private dialog: MatDialog,
+    private alert: ToastrService,
   ) { }
 
   ngOnInit() {
@@ -181,17 +185,24 @@ export class Visit1Component implements OnInit {
     }
     if (f.controls['comment']) {
      data['comment'] =  f.controls['comment'].value;
+
+
     } else {
       data['comment'] = '';
     }
 
     this.siteService.addVisit(data).subscribe(d => {
       console.log(d);
-      this.visitDate = f.controls['visitDate'].value;
+      this.alert.success(d.msg);
+      if (data.isSkipped) {
+        this.visitSkipped = true;
+        this.visitSkipped_comment = data['comment'];
+      } else {
+        this.visitDate = f.controls['visitDate'].value;
+      }
       f.reset();
-
-
     });
+
   }
 
   showVisit(visit) {
@@ -223,7 +234,7 @@ export class Visit1Component implements OnInit {
     this.frmExclusion.controls['patient_id'].patchValue(this.patID);
     this.siteService.saveExclusion(this.frmExclusion.value).subscribe(data => {
       if (data.form) {
-        alert('Data Saved');
+        this.alert.success('Data Saved');
         this.crfExclusion = data.form;
         this.isExclusionDone = true;
         if (data.form.exclusion) {
@@ -236,7 +247,13 @@ export class Visit1Component implements OnInit {
   }
 
   selectVisit(visit) {
+    const index = this.visits.indexOf(visit);
     this.closeAllPage();
+    if (index > 0 && !this.visits[index - 1].isDone) {
+      this.alert.warning('Previous visit not completed yet');
+      this.selectedVisit = '';
+      return;
+    }
     this.visitDate = null;
     this.selectedVisit = visit;
     this.visitID = visit._id;
@@ -279,14 +296,18 @@ export class Visit1Component implements OnInit {
     };
     this.theCRFValue = Object.assign(crfForm, value);
     this.siteService.saveCRForm(this.theCRFValue).subscribe(data => {
-      alert(data.msg);
+      this.alert.info(data.msg);
       this.crfFormDone = true;
     });
   }
 
   getValue(field) {
     const val = this.theCRFValue[field.name];
-    const a =  field.options.find(x => x.value === val);
+    const a =  field.options.find(function(x){
+      if (x.value == val) {
+        return x;
+      }
+    });
     return a.title;
   }
 
@@ -353,8 +374,19 @@ export class Visit1Component implements OnInit {
   getPatientVisit() {
     this.siteService.getPatientVisit(this.patID, this.selectedVisit._id).subscribe(data => {
       if (data[0]) {
-        this.visitDate = data[0].visit_date;
+        if (data[0].isSkipped) {
+          this.visitSkipped = true;
+          this.visitSkipped_comment = data[0].comments;
+          this.selectedVisit.isDone = true;
+        } else {
+          this.visitSkipped = false;
+          this.visitSkipped_comment = '';
+          this.visitDate = data[0].visit_date;
+        }
         this.visitData = data[0];
+      } else {
+        this.visitSkipped = false;
+        this.visitSkipped_comment = '';
       }
     });
   }
@@ -387,7 +419,7 @@ export class Visit1Component implements OnInit {
           this.showAETable = true;
         }
       }, err => {
-        console.log(err);
+        this.alert.error(err);
       });
 
     }

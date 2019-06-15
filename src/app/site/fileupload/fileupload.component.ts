@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SiteService } from '../site.service';
 import { ActivatedRoute } from '@angular/router';
-import { AlertService } from 'src/app/alert.service';
+import { ToastrService } from 'ngx-toastr';
+import { LoaderService } from 'src/app/_services/loader.service';
 
 @Component({
   selector: 'app-fileupload',
@@ -20,22 +21,25 @@ export class FileuploadComponent implements OnInit {
   patient: any;
   fileName = '';
   approvedType: string[] = ['image/jpeg', 'image/png', 'image/tiff'];
-  fileTypeMark = 'close';
-  fileSizeMark = 'close';
+  fileTypeMark: any = 'close';
+  fileSizeMark: any  = 'close';
 
 
     constructor(
     private siteService: SiteService,
     private fb: FormBuilder,
-    private alert: AlertService,
-    private activatedRoute: ActivatedRoute) { }
+    private alert: ToastrService,
+    private activatedRoute: ActivatedRoute,
+    private loading: LoaderService) { }
 
   ngOnInit() {
+    this.loading.show();
     this.patID = this.activatedRoute.snapshot.paramMap.get('patID');
     this.visitID = this.activatedRoute.snapshot.paramMap.get('visitID');
     this.siteService.getPatientByID(this.patID).subscribe((data: any) => {
       this.patient = data;
     });
+    this.siteService.getFile(this.patID, this.visitID).subscribe(res => {this.fileName = res.file; this.loading.hide(); });
     this.form = this.fb.group({
       file: ['', Validators.required]
     });

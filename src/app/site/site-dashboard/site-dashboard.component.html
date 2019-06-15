@@ -78,16 +78,18 @@
             </div>
             <div class="card-body">
               <table class="table table-striped">
-                <tr><td class="text-left">Pending</td><td>0</td></tr>
-                <tr><td class="text-left">Complete</td><td>0</td></tr>
+                <tr><td class="text-left">Pending</td><td>{{dashboardCount.pendingCount}}</td></tr>
+                <tr><td class="text-left">Complete</td><td>{{dashboardCount.completedCount}}</td></tr>
                 <tr><td class="text-left">Verified</td><td>0</td></tr>
                 <tr><td class="text-left">Locked</td><td>0</td></tr>
+                <tr><td class="text-left">Skipped Visit</td><td>{{dashboardCount.skippedVisitCount}}</td></tr>
               </table>
             </div>
 
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">local_offer</i>
+                <i class="material-icons">date_range</i>
+                Last updated at {{dashboardCount.updated_at}}
               </div>
             </div>
           </div>
@@ -106,11 +108,14 @@
                 <tr><td class="text-left">Open Queries</td><td>{{openQuery}}</td></tr>
                 <tr><td class="text-left">Responded Queries</td><td>{{overDue}}</td></tr>
                 <tr><td class="text-left">Closed Queries</td><td>{{overDue}}</td></tr>
+                <tr><td class="text-left">Adverse Events</td><td>{{dashboardCount.AECount}}</td></tr>
+                <tr><td class="text-left">SAE</td><td>{{dashboardCount.SAE}}</td></tr>
               </table>
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">date_range</i> Last 24 Hours
+                <i class="material-icons">date_range</i>
+                Last updated at {{dashboardCount.updated_at}}
               </div>
             </div>
           </div>

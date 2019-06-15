@@ -18,12 +18,12 @@
         <!-- <h4>Visits</h4> -->
         <!-- Tree  -->
        <mat-accordion>
-         <mat-expansion-panel hideToggle  *ngFor="let visit of visits" (opened)="selectVisit(visit)">
+         <mat-expansion-panel hideToggle  *ngFor="let visit of visits; let i = index;" (opened)="selectVisit(visit)">
            <mat-expansion-panel-header>
              <mat-icon [ngClass]="{'text-success': visit.isDone, 'text-warning': visit.dov && !visit.isDone }">folder</mat-icon>
               {{visit.description}}
            </mat-expansion-panel-header>
-           <mat-action-list dense>
+           <mat-action-list dense *ngIf="i == 0 || visits[i - 1].isDone">
               <a mat-list-item *ngIf="visit.code === 'V1'" (click)="showIC()" >
                   <mat-icon mat-list-icon class="text-success">file_copy</mat-icon>
                   <h4 mat-line>Informed Consent</h4>
@@ -41,14 +41,14 @@
                   <mat-icon mat-list-icon  [ngClass]="{'text-success': visit.medicalHistory}">file_copy</mat-icon>
                   <h4 mat-line>Medical History</h4>
                 </a>
-                <span *ngIf="isExclusionDone && isExclusionMet">
+                <span *ngIf="isExclusionDone && isExclusionMet && !visitSkipped">
                     <a mat-list-item *ngFor="let form of visit.forms" (click)="openForm(form, visit)" >
                         <mat-icon mat-list-icon [ngClass]="{'text-success': form.isDone}">file_copy</mat-icon>
                         <h4 mat-line>{{form.name}}</h4>
                       </a>
                 </span>
-                <a mat-list-item routerLink="/site/visits/fileupload/{{patID}}/{{visit._id}}" >
-                  <mat-icon mat-list-icon >file_copy</mat-icon>
+                <a mat-list-item *ngIf="isExclusionMet && !visitSkipped" routerLink="/site/visits/fileupload/{{patID}}/{{visit._id}}" >
+                  <mat-icon mat-list-icon [ngClass]="{'text-success': visit.fileDone}" >file_copy</mat-icon>
                   <h4 mat-line>File Upload</h4>
                 </a>
 
@@ -70,7 +70,7 @@
         <!-- End Tree -->
       </div>
       <div class="col-md-9" style="border: 1px solid gray;">
-            <div *ngIf="!visitDate && selectedVisit">
+            <div *ngIf="!visitDate && selectedVisit && !visitSkipped">
               <mat-card>
               <form #fVisit="ngForm">
                 <mat-card-content>
@@ -99,6 +99,11 @@
             <div *ngIf="visitDate && selectedVisit && !showAETable">
               <mat-card>
                   <h6 class="card-subtitle mb-2 text-muted">Date of Visit: {{visitDate | date}}</h6>
+              </mat-card>
+            </div>
+            <div *ngIf="selectedVisit && visitSkipped">
+              <mat-card>
+                <mat-card-title>Patient skipped the visit due to {{visitSkipped_comment}}</mat-card-title>
               </mat-card>
             </div>
         <!-- the eCRF -->
