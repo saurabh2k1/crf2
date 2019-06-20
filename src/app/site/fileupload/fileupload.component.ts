@@ -20,6 +20,8 @@ export class FileuploadComponent implements OnInit {
   pageTitle = 'File Upload';
   patient: any;
   fileName = '';
+  file_id = '';
+  updateMode = false;
   approvedType: string[] = ['image/jpeg', 'image/png', 'image/tiff'];
   fileTypeMark: any = 'close';
   fileSizeMark: any  = 'close';
@@ -39,7 +41,10 @@ export class FileuploadComponent implements OnInit {
     this.siteService.getPatientByID(this.patID).subscribe((data: any) => {
       this.patient = data;
     });
-    this.siteService.getFile(this.patID, this.visitID).subscribe(res => {this.fileName = res.file; this.loading.hide(); });
+    this.siteService.getFile(this.patID, this.visitID).subscribe(res => {
+      this.fileName = res.file; 
+      this.file_id= res.id; 
+      this.loading.hide(); });
     this.form = this.fb.group({
       file: ['', Validators.required]
     });
@@ -49,6 +54,10 @@ export class FileuploadComponent implements OnInit {
     return `${prefix}-` + String('00' + patID).slice(-3);
   }
 
+  changeMode() {
+    this.updateMode = true;
+    this.fileName = '';
+  }
   onFileChange(event) {
     this.fileTypeMark = 'close';
     this.fileSizeMark = 'close';
@@ -81,16 +90,32 @@ export class FileuploadComponent implements OnInit {
       formData.append('file', this.form.get('file').value);
       formData.append('patient_id', this.patID);
       formData.append('visit_id', this.visitID);
-      this.siteService.uploadFile(formData).subscribe(
-        (res) => {
-          this.uploadResponse = res;
-          if (res.status === 'success') {
-            this.alert.success(res.message);
-            this.fileName = res.filePath;
-          }
-        },
-        (err) => { this.error = err; this.alert.error(err); }
-      );
+      if (this.updateMode ){
+        this.siteService.updateFile(this.file_id, formData).subscribe(
+          (res) => {
+            this.uploadResponse = res;
+            if (res.status === 'success') {
+              this.alert.success(res.message);
+              this.fileName = res.filePath;
+              this.file_id = res.id;
+            }
+          },
+          (err) => { this.error = err; this.alert.error(err); }
+        );
+      } else {
+        this.siteService.uploadFile(formData).subscribe(
+          (res) => {
+            this.uploadResponse = res;
+            if (res.status === 'success') {
+              this.alert.success(res.message);
+              this.fileName = res.filePath;
+              this.file_id = res.id;
+            }
+          },
+          (err) => { this.error = err; this.alert.error(err); }
+        );
+      }
+      
     }
   }
 

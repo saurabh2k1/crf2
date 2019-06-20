@@ -1,7 +1,10 @@
+import { Study } from './../../models/study';
+
+import { StudyService } from './../../study.service';
 import { Component, OnInit } from '@angular/core';
-import { StudyService } from 'src/app/study.service';
+
 import { Router } from '@angular/router';
-import { Study } from 'src/app/models/study';
+
 
 @Component({
   selector: 'app-select-study',
