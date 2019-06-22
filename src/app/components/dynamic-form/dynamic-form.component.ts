@@ -52,11 +52,11 @@ export class DynamicFormComponent implements OnInit {
   }
 
   bindValidations(validations: any) {
-    console.log('bindValidations');
+    // console.log('bindValidations');
     if (validations.length > 0) {
       const validList = [];
       validations.forEach(valid => {
-        console.log(`Validation: ${valid.name}`);
+        // console.log(`Validation: ${valid.name}`);
         switch (valid.validator) {
           case 'Validators.min':
             validList.push(Validators.min(parseInt(valid.value, 10)));
@@ -74,7 +74,7 @@ export class DynamicFormComponent implements OnInit {
             break;
         }
       });
-      console.log(validList);
+      // console.log(validList);
       return Validators.compose(validList);
     }
     return null;

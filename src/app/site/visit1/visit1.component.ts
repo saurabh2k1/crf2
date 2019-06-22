@@ -8,7 +8,7 @@ import { DynamicFormComponent } from 'src/app/components/dynamic-form/dynamic-fo
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { FieldEditComponent } from 'src/app/_components/field-edit/field-edit.component';
 import { ToastrService } from 'ngx-toastr';
-
+import { SelectOptions } from 'src/app/models/select-options';
 
 
 @Component({
@@ -18,6 +18,48 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class Visit1Component implements OnInit {
 
+  outcomeOpt: SelectOptions[] = [
+    {title: 'Fatal', value: 0},
+    {title: 'Not recovered/not resolved', value:1},
+    {title: 'Recovered w/sequelae', value: 2},
+    {title: 'Recovered w/o sequelae', value: 3},
+    {title: 'Recovering/Resolving', value: 4}
+  ];
+
+  severityOpt: SelectOptions[] = [
+    {title: 'Mild', value:1 },
+    {title: 'Moderate', value:2 },
+    {title: 'Severe', value:3 },
+    {title: 'Life Threatening', value:4 },
+    {title: 'Death (Fatal)', value:5 },
+  ];
+  aeTreatmentOpt: SelectOptions[] = [
+    {title: 'None', value:0 },
+    {title: 'Medication(s)', value:1 },
+    {title: 'Non-medication TX', value: 2},
+  ];
+  procedureOpt: SelectOptions[] = [
+    { value: 0, title: 'Definite'},
+    { value: 1, title: 'Probable'},
+    { value: 2, title: 'Possible'},
+    { value: 3, title: 'Unlikely'},
+    { value: 4, title: 'Unrelated'},
+  ];
+  iolOpt: SelectOptions[] = [
+    { value: 0, title: 'Definite'},
+    { value: 1, title: 'Probable'},
+    { value: 2, title: 'Possible'},
+    { value: 3, title: 'Unlikely'},
+    { value: 4, title: 'Unrelated'},
+    { value: 5, title: 'Not Applicable'},
+  ];
+  actionOpt: SelectOptions[] = [
+    { value: 0, title: 'None'},
+    { value: 1, title: 'IOL explanted'},
+    { value: 2, title: 'Secondary surgical intervention'},
+    { value: 3, title: 'Medication given'},
+    { value: 4, title: 'Not Applicable'},
+  ];
   patID = '';
   patient: Patient;
   visits: any[];
@@ -258,6 +300,10 @@ export class Visit1Component implements OnInit {
       return;
     }
     this.visitDate = null;
+    if (visit.code == 'V1'){
+      this.visitDate = this.patient.icf_date;
+    }
+
     this.selectedVisit = visit;
     this.visitID = visit._id;
     this.getPatientVisit();
@@ -312,6 +358,11 @@ export class Visit1Component implements OnInit {
       }
     });
     return a.title;
+  }
+
+  getOptionValue(objArray: SelectOptions[], val: any){
+    const result = objArray.find(obj => obj.value == val);
+    return result.title;
   }
 
   hideField(field) {
@@ -395,7 +446,7 @@ export class Visit1Component implements OnInit {
   }
 
   get onlySAEList() {
-    return this.aeList.filter( ae => ae.AESER === '1');
+    return this.aeList.filter( ae => ae.AESER == '1');
   }
 
 
@@ -419,6 +470,7 @@ export class Visit1Component implements OnInit {
           this.aeList.push(data.AE);
           this.frmAEForm.reset();
           this.closeAllPage();
+          this.alert.success('Record saved successfully');
           this.showAETable = true;
         }
       }, err => {

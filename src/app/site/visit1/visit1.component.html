@@ -172,7 +172,7 @@
                 </div>
                 <div class="card-body">
                   	<table class="table table-bordered">
-                        <tr><th>EC approved ICF signed</th><td>{{patient.icf === true ? 'Yes' : 'No'}}</td></tr>
+                        <tr><th>EC approved ICF signed</th><td>{{patient.icf == '1' ? 'Yes' : 'No'}}</td></tr>
                         <tr><th>Date ICF Signed </th><td>{{patient.icf_date | date}}</td></tr>
                       </table>
                 </div>
@@ -272,14 +272,14 @@
                         <td>{{ ae.eventName === 'Other'?  ae.otherEventName : ae.eventName}}</td>
                         <td>{{ae.AESTDATE | date}}</td>
                         <td>{{ae.AEONGO? 'Ongoing' : ae.AEENDAT | date}}</td>
-                        <td>{{ae.AEOUT}}</td>
-                        <td>{{ae.AESEV}}</td>
-                        <td>{{ae.AESER}}</td>
-                        <td>{{ae.AEACNOTH}}</td>
-                        <td>{{ae.AEREL}}</td>
+                        <td>{{getOptionValue(outcomeOpt, ae.AEOUT)}}</td>
+                        <td>{{getOptionValue(severityOpt, ae.AESEV)}}</td>
+                        <td>{{ae.AESER? 'Yes': 'No'}}</td>
+                        <td>{{getOptionValue( aeTreatmentOpt ,ae.AEACNOTH)}}</td>
+                        <td>{{getOptionValue(procedureOpt, ae.AEREL)}}</td>
 
-                        <td>{{ae.AEDEVREL}}</td>
-                        <td>{{ae.AEACN}}</td>
+                        <td>{{getOptionValue( iolOpt, ae.AEDEVREL)}}</td>
+                        <td>{{getOptionValue( actionOpt, ae.AEACN)}}</td>
                         <!-- <td>{{ae.submitted_at | date}}</td> -->
                       </tr>
                     </tbody>
@@ -287,7 +287,7 @@
                   </table>
                   <mat-divider></mat-divider>
                   <h3>SAE</h3>
-          <table class="table table-striped">
+          <table class="table table-responsive table-striped responsive">
             <thead class="text-primary">
                 <tr><th>#</th><th>Reported Date</th><th>SAE Event</th><th>SAE Classification</th>
                   <th>Start Date</th><th>End Date</th>
@@ -310,11 +310,11 @@
                     <td>{{ae.AESTDATE | date}}</td>
                     <td>{{ae.AEONGO === '1'? 'Ongoing' : ae.AEENDAT | date}}</td>
 
-                    <td>{{ae.AESEV}}</td>
+                    <td>{{getOptionValue(severityOpt, ae.AESEV)}}</td>
 
-                    <td>{{ae.AEDEVREL}}</td>
+                    <td>{{getOptionValue( iolOpt, ae.AEDEVREL)}}</td>
 
-                    <td>{{ae.AEOUT}}</td>
+                    <td>{{getOptionValue(outcomeOpt, ae.AEOUT)}}</td>
                     <!-- <td>{{ae.submitted_at | date}}</td> -->
                   </tr>
                 </tbody>
@@ -442,12 +442,7 @@
                            <mat-label id="resolution-label">Outcome </mat-label>
                            <mat-select aria-labelledby="resolution-label" formControlName="AEOUT" required>
                              <mat-option>--</mat-option>
-                             <mat-option value="0">Fatal</mat-option>
-                             <mat-option value="1">Not recovered/not resolved</mat-option>
-                             <mat-option value="2">Recovered w/sequelae</mat-option>
-                             <mat-option value="3">Recovered w/o sequelae</mat-option>
-                             <mat-option value="4">Recovering/Resolving</mat-option>
-
+                             <mat-option *ngFor="let outcome of outcomeOpt" [value]="outcome.value">{{outcome.title}}</mat-option>
                            </mat-select>
                            <app-field-error-display [displayError]="isFieldValid(frmAEForm, 'AEOUT')" errorMsg="Outcome is required"></app-field-error-display>
                        </mat-form-field>
@@ -460,11 +455,7 @@
                           <mat-label>Severity/Grade</mat-label>
                           <mat-select formControlName="AESEV">
                             <mat-option>--</mat-option>
-                            <mat-option value="1">Mild</mat-option>
-                            <mat-option value="2">Moderate</mat-option>
-                            <mat-option value="3">Severe</mat-option>
-                            <mat-option value="4">Life Threatening</mat-option>
-                            <mat-option value="5">Death (Fatal)</mat-option>
+                            <mat-option *ngFor="let se of severityOpt" [value]="se.value">{{se.title}}</mat-option>
                           </mat-select>
                         </mat-form-field>
                       </div>
@@ -486,9 +477,7 @@
                       <mat-label>AE Treatment</mat-label>
                       <mat-select formControlName="AEACNOTH">
                         <mat-option>--</mat-option>
-                        <mat-option value="0">None</mat-option>
-                        <mat-option value="1">Medication(s)</mat-option>
-                        <mat-option value="2">Non-medication TX</mat-option>
+                        <mat-option *ngFor="let ae of aeTreatmentOpt" [value]="ae.value">{{ae.title}}</mat-option>
                       </mat-select>
                     </mat-form-field>
                   </div>
@@ -501,13 +490,7 @@
                             <mat-label id="relationshipIOL-label">Procedure / Drug Relatedness</mat-label>
                             <mat-select aria-labelledby="relationshipIOL-label" formControlName="AEREL" required>
                               <mat-option>--</mat-option>
-                              <mat-option value="0">Definite</mat-option>
-                              <mat-option value="1">Probable</mat-option>
-                              <mat-option value="2">Possible</mat-option>
-                              <mat-option value="3">Unlikely</mat-option>
-                              <mat-option value="4">Unrelated</mat-option>
-
-
+                              <mat-option *ngFor="let pr of procedureOpt" [value]="pr.value">{{pr.title}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -521,12 +504,7 @@
                                 <mat-label id="relationshipIOL-label">IOL Attribution</mat-label>
                                 <mat-select aria-labelledby="relationshipIOL-label" formControlName="AEDEVREL" required>
                                   <mat-option>--</mat-option>
-                                  <mat-option value="0">Definite</mat-option>
-                                  <mat-option value="1">Probable</mat-option>
-                                  <mat-option value="2">Possible</mat-option>
-                                  <mat-option value="3">Unlikely</mat-option>
-                                  <mat-option value="4">Unrelated</mat-option>
-                                  <mat-option value="5">Not Applicable</mat-option>
+                                  <mat-option *ngFor="let io of iolOpt" [value]="io.value">{{io.title}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -538,16 +516,7 @@
                                 <mat-label id="actionTaken-label">Action Taken </mat-label>
                                 <mat-select aria-labelledby="actionTaken-label" formControlName="AEACN" required>
                                   <mat-option>--</mat-option>
-                                  <mat-option value="0">None</mat-option>
-                                  <mat-option value="1">IOL explanted</mat-option>
-                                  <mat-option value="2">Secondary surgical intervention</mat-option>
-                                  <mat-option value="3">Medication given</mat-option>
-                                  <!-- <mat-option value="1">Interrupted</mat-option>
-                                  <mat-option value="2">Discontinued</mat-option>
-                                  <mat-option value="3">Dose reduced</mat-option>
-                                  <mat-option value="4">Dose increased</mat-option> -->
-                                  <mat-option value="4">Not Applicable</mat-option>
-
+                                  <mat-option *ngFor="let ae of actionOpt" [value]="ae.value">{{ae.title}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                            </div>

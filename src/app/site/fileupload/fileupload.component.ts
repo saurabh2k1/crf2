@@ -109,6 +109,7 @@ export class FileuploadComponent implements OnInit {
               this.alert.success(res.message);
               this.fileName = res.filePath;
               this.file_id = res.id;
+              this.ngOnInit();
             }
           },
           (err) => { this.error = err; this.alert.error(err); }
