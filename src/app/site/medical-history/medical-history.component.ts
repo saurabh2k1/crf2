@@ -148,6 +148,7 @@ export class MedicalHistoryComponent implements OnInit {
     };
     this.siteService.saveMedicalHistory(this.medHistory).subscribe(data => {
       console.log(data);
+      this.setStep(0);
     });
 
     console.log(this.medHistory);

@@ -144,6 +144,9 @@ export class Visit1Component implements OnInit {
     const dialogRef = this.dialog.open(FieldEditComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe( data => {
+      if (!data) {
+        return;
+      }
       console.log('Dialog Data:', data);
       const diaData = data;
       Object.entries(diaData).forEach(([key, value]) => {
@@ -163,6 +166,7 @@ export class Visit1Component implements OnInit {
       };
       this.siteService.saveCrfChange(editData).subscribe(cdata => {
         console.log('CrfChange Save Result', cdata);
+        this.openForm(this.theForm, this.selectedVisit);
       });
 
       console.log('Edit Data', editData);
@@ -221,7 +225,6 @@ export class Visit1Component implements OnInit {
     this.closeAllPage();
     this.showInclusionExclusion = true;
     this.pageTitle = 'Inclusion / Exclusion';
-
   }
 
   showDemography() {
@@ -374,7 +377,7 @@ export class Visit1Component implements OnInit {
   getPatientVisit() {
     this.siteService.getPatientVisit(this.patID, this.selectedVisit._id).subscribe(data => {
       if (data[0]) {
-        if (data[0].isSkipped) {
+        if (data[0].isSkipped == '1') {
           this.visitSkipped = true;
           this.visitSkipped_comment = data[0].comments;
           this.selectedVisit.isDone = true;

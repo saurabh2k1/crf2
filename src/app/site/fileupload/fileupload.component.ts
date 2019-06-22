@@ -22,9 +22,11 @@ export class FileuploadComponent implements OnInit {
   fileName = '';
   file_id = '';
   updateMode = false;
+  fileHistory: any[];
   approvedType: string[] = ['image/jpeg', 'image/png', 'image/tiff'];
   fileTypeMark: any = 'close';
   fileSizeMark: any  = 'close';
+  showHistory = false;
 
 
     constructor(
@@ -42,12 +44,21 @@ export class FileuploadComponent implements OnInit {
       this.patient = data;
     });
     this.siteService.getFile(this.patID, this.visitID).subscribe(res => {
-      this.fileName = res.file; 
-      this.file_id= res.id; 
+      this.fileName = res.file;
+      this.file_id= res.id;
+      this.fileHistory = res.changes;
       this.loading.hide(); });
     this.form = this.fb.group({
       file: ['', Validators.required]
     });
+  }
+
+  onHistoryView(){
+    this.showHistory = true;
+  }
+
+  closeHistoryView() {
+    this.showHistory = false;
   }
 
   getRefNumber(patID, prefix) {
@@ -115,7 +126,7 @@ export class FileuploadComponent implements OnInit {
           (err) => { this.error = err; this.alert.error(err); }
         );
       }
-      
+
     }
   }
 

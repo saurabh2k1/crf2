@@ -5,6 +5,7 @@
     <tr>
       <th>Old Value</th>
       <th>New Value</th>
+      <th>Reason</th>
       <th>Changed on/ by</th>
     </tr>
   </thead>
@@ -12,6 +13,7 @@
     <tr *ngFor="let change of field.changes">
       <td>{{ change.old_value }}</td>
       <td>{{ change.new_value }}</td>
+      <td>{{change.reason}}</td>
       <td>
         {{ change.created_at | date }} by {{ change.creator.first_name }}
         {{ change.creator.last_name }}

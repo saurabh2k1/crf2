@@ -59,7 +59,7 @@
                   [value]="uploadResponse.message"
                 ></mat-progress-bar>
                 <div *ngIf="fileName">
-                  Uploaded File : {{ fileName | uppercase }}
+                  Uploaded File : {{ fileName | uppercase }} <br><br>
                   <button mat-raised-button color="warn" (click)="changeMode()">Change File</button>
                 </div>
               </mat-card-content>
@@ -70,7 +70,25 @@
                   routerLink="/site/visits/{{ patID }}"
                   >Back</a
                 >
+                <button mat-button color="warn" *ngIf="fileHistory" (click)="onHistoryView()" >view change log</button>
               </mat-card-actions>
+            </mat-card>
+          </div>
+          <div class="col-md-6" *ngIf="fileName && showHistory">
+            <mat-card>
+              <mat-card-header><mat-card-title>Change Log</mat-card-title>
+                <button mat-icon-button color="primary" (click)="closeHistoryView()">X</button>
+              </mat-card-header>
+              <mat-card-content>
+                <table class="table table-bordered">
+                  <thead><tr><th>#</th><th>Uploaded at</th><th>uploaded by</th></tr></thead>
+                  <tbody>
+                  <tr *ngFor="let ch of fileHistory; let i = index;">
+                    <td>{{i+1}}</td><td>{{ch.created_at | date:'full'}}</td><td>{{ch.first_name}} {{ch.last_name}}</td>
+                  </tr>
+                </tbody>
+                </table>
+              </mat-card-content>
             </mat-card>
           </div>
           <div class="col-md-6" *ngIf="!fileName" >
