@@ -1,3 +1,11 @@
 .card {
     min-height: 450px !important;
 }
+
+table {
+  width: 100%;
+}
+
+th.mat-column-status {
+  text-align: end;
+}

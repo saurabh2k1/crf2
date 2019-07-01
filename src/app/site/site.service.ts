@@ -121,6 +121,10 @@ export class SiteService {
     return this.http.get(`${this.apiUrl}/dashboard/crfcount/${studyID}/${siteID}`);
   }
 
+  getPatientStatus(studyID, siteID): Observable<any> {
+    return this.http.get(`${this.apiUrl}/dashboard/patientstatus/${studyID}/${siteID}`);
+  }
+
 
 
   public uploadFile(data) {

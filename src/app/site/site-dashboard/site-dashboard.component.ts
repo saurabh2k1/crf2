@@ -20,7 +20,7 @@ export class SiteDashboardComponent implements OnInit {
   studies: Study[] = [];
   patients: any;
   patientCount = '';
-  displayedColumn: string[] = ['patid', 'initials'];
+  displayedColumn: string[] = ['patid',  'status'];
   dataSource: MatTableDataSource<Patient>;
   nonConformant = 0;
   openQuery = 0;
@@ -54,12 +54,18 @@ export class SiteDashboardComponent implements OnInit {
   }
 
   getPatients() {
-    this.siteService.getPatients(this.siteId, this.studyId).subscribe(data => {
-      console.log(data);
+    this.siteService.getPatientStatus(this.siteId, this.studyId).subscribe(data => {
       this.patients = data;
       this.dataSource = new MatTableDataSource<Patient>(data);
       this.dataSource.paginator = this.Paginator;
     });
+
+    // this.siteService.getPatients(this.siteId, this.studyId).subscribe(data => {
+    //   console.log(data);
+    //   this.patients = data;
+    //   this.dataSource = new MatTableDataSource<Patient>(data);
+    //   this.dataSource.paginator = this.Paginator;
+    // });
   }
 
   getDashboard() {

@@ -13,4 +13,8 @@ export class MonitorService {
   getSites(studyId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/monitor/study/${studyId}/sites`);
   }
+
+  getSiteSummery(siteID: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/monitor/site/${siteID}/summery`);
+  }
 }

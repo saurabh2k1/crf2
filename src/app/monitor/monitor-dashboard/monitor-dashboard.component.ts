@@ -35,20 +35,27 @@ export class MonitorDashboardComponent implements OnInit {
   //   })
   // );
 
-  constructor(private breakpointObserver: BreakpointObserver,
+  constructor(
+    // private breakpointObserver: BreakpointObserver,
     private monitorService: MonitorService,
     private toastr: ToastrService) {}
 
   ngOnInit(): void {
     if (localStorage.getItem('study')) {
       this.studyID = JSON.parse(localStorage.getItem('study')).id;
-    } 
+    }
     this.monitorService.getSites(this.studyID).subscribe(data => {
       if (data.sites) {
         this.sites = data.sites;
       }
-    }, 
+    },
     err=>{
       this.toastr.error(err);
     });
-  }}
+  }
+
+  onSelectSite(site: Site) {
+    this.toastr.info(`You have selected ${site.name}`);
+    localStorage.setItem('selectedSite', JSON.stringify(site));
+  }
+}

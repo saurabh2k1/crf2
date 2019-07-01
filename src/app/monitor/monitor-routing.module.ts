@@ -5,6 +5,7 @@ import { MonitorComponent } from './monitor/monitor.component';
 import { MonitorDashboardComponent } from './monitor-dashboard/monitor-dashboard.component';
 import { Role } from '../models/role';
 import { SelectStudyComponent } from './select-study/select-study.component';
+import { SitePageComponent } from './site-page/site-page.component';
 
 const monitorRoutes: Routes = [
   {
@@ -17,6 +18,9 @@ const monitorRoutes: Routes = [
       {
         path: '', component: SelectStudyComponent
       },
+      {
+        path: 'page/site', component: SitePageComponent
+      }
     ]
   }
 ];

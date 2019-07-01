@@ -29,12 +29,30 @@
         <mat-card-title>Sites</mat-card-title>
       </mat-card-header>
       <mat-card-content class="dashboard-card-content">
-        <div class="row">
-            <div class="col" *ngFor="let site of sites">
-                <button mat-raised-button  >{{site.name}}</button>
-              </div>
-        </div>
-        
+        <table class="table responsive">
+          <thead>
+            <tr><th>Code</th><th class="text-left">Name</th><th class="text-left">Contact Person</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let site of sites; let i = index;" (click)="onSelectSite(site)">
+              <td>{{site.code}}</td>
+              <td class="text-left">{{site.name}}</td>
+              <td class="text-left">{{site.contact_person}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="col">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          Something
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        Body
       </mat-card-content>
     </mat-card>
   </div>
