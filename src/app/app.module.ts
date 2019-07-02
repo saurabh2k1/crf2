@@ -1,3 +1,4 @@
+
 import { MonitorModule } from './monitor/monitor.module';
 import { LoaderInterceptorService } from './helpers/loader-interceptor';
 import { BrowserModule } from '@angular/platform-browser';
@@ -25,6 +26,8 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { LoaderComponent } from './shared/loader/loader.component';
 import { FieldEditComponent } from './_components/field-edit/field-edit.component';
 import { LoaderService } from './_services/loader.service';
+import { TimeoutService } from './_services/timeout.service';
+
 
 
 
@@ -56,7 +59,7 @@ import { LoaderService } from './_services/loader.service';
       closeButton: true,
     }),
   ],
-  providers: [ LoaderService,
+  providers: [ LoaderService, TimeoutService,
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptorService, multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

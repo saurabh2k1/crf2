@@ -1,3 +1,4 @@
+
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NavbarComponent } from 'src/app/shared/navbar/navbar.component';
@@ -67,8 +68,16 @@ export class SiteComponent implements OnInit, AfterViewInit {
   constructor(private router: Router, location: Location,
     private siteService: SiteService,
     private authService: AuthService,
-    private breakpointObserver: BreakpointObserver) {
+    private breakpointObserver: BreakpointObserver,
+   
+    ) {
     this.location = location;
+    // this.timeOutService.startWatching(30).subscribe((res) => {
+    //   console.log('Continue');
+    //   if (res) {
+    //     this.toastr.error('Session Expired!');
+    //   }
+    // });
    }
 
    ngOnInit() {

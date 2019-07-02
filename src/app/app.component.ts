@@ -1,5 +1,9 @@
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
+import { TimeoutService } from './_services/timeout.service';
 import { Component } from '@angular/core';
-// import { HTTPStatus } from './helpers/jwt-interceptor';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-root',
@@ -8,12 +12,19 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'QDATA EDC';
-  HTTPActivity: boolean;
 
-  // constructor(private httpStatus: HTTPStatus) {
-  //   this.httpStatus.getHttpStatus().subscribe((status: boolean) => {
-  //     this.HTTPActivity = status;
-  //     console.log(status);
-  //   });
-  // }
+  constructor(private timeOutService: TimeoutService,
+    private toastr: ToastrService,
+    private authService: AuthService,
+    private router: Router) {
+    this.timeOutService.startWatching(30).subscribe((res) => {
+      if(res) {
+       
+        this.authService.logout();
+        this.router.navigate(['/login']);
+        this.toastr.warning('Session Expired!');
+        
+      }
+    });
+  }
 }
