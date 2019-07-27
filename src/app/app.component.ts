@@ -12,18 +12,19 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AppComponent {
   title = 'QDATA EDC';
+  user = '';
 
   constructor(private timeOutService: TimeoutService,
     private toastr: ToastrService,
     private authService: AuthService,
     private router: Router) {
-    this.timeOutService.startWatching(30).subscribe((res) => {
+    this.timeOutService.startWatching(300).subscribe((res) => {
       if(res) {
-       
+
         this.authService.logout();
         this.router.navigate(['/login']);
         this.toastr.warning('Session Expired!');
-        
+
       }
     });
   }

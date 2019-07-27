@@ -5,6 +5,7 @@ import { User } from '../models/user';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import * as moment from 'moment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -30,16 +31,37 @@ export class AuthService {
      return this.currentUserSubject.value;
    }
 
+  // login(email: string, password: string) {
+  //   return this.http.post<any>(`${this.apiUrl}/login`, {email, password})
+  //   .pipe(map(user => {
+  //     if (user && user.token) {
+  //       localStorage.setItem('currentUser', JSON.stringify(user));
+  //       this.currentUserSubject.next(user);
+  //     }
+
+  //     return user;
+  //   }));
+  // }
+
   login(email: string, password: string) {
     return this.http.post<any>(`${this.apiUrl}/login`, {email, password})
-    .pipe(map(user => {
-      if (user && user.token) {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
+    .pipe(map(data => {
+      if (data.user && data.token) {
+        data.user.role = data.role;
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
+        this.currentUserSubject.next(data.user);
+        this.setSession(data);
+
       }
 
-      return user;
+      return data;
     }));
+  }
+
+  private setSession(authResult) {
+    const expiresAt = moment().add(authResult.expires, 'second');
+    localStorage.setItem('token', authResult.token);
+    localStorage.setItem('expires', JSON.stringify(expiresAt.valueOf()));
   }
 
   sendResetLink(frm): Observable<any> {
@@ -56,7 +78,22 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
+    localStorage.removeItem('expires');
     localStorage.clear();
     this.currentUserSubject.next(null);
+  }
+
+  public isLoggedIn() {
+    return moment().isBefore(this.getExpiration());
+  }
+
+  isLoggedOut() {
+    return !this.isLoggedIn();
+  }
+
+  getExpiration() {
+    const expires = JSON.parse(localStorage.getItem("expires"));
+    return moment(expires);
   }
 }
